@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.htzhny.dao.Order_itemDao">
+	<resultMap id="Order_itemQuery" type="com.htzhny.entity.Order_itemQuery">
+		<id column="id" property="id"/>
+		<result column="goods_name" property="goods_name"/>
+		<result column="order_id" property="order_id"/>
+		<result column="goods_amount" property="goods_amount"/>
+		<result column="goods_low_price" property="goods_low_price"/>
+		<result column="goods_high_price" property="goods_high_price"/>
+		<result column="goods_real_price" property="goods_real_price"/>
+	</resultMap>
+	<insert id="addOrder_item" parameterType="com.htzhny.entity.Order_item">
+		insert into order_item(id,goods_id,order_id,goods_amount) 
+		values(#{id},#{goods_id},#{order_id},#{goods_amount})
+	</insert>
+	<update id="updateRealPrice">
+		update order_item set goods_real_price=#{0} where id=#{1}
+	</update>
+	<select id="selectCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(1) from order_item where order_id=#{order_id}
+	</select>
+	<select id="selectAllByOrderId" resultMap="Order_itemQuery">
+		select a.id,b.goods_name,a.order_id,a.goods_amount,b.goods_low_price,b.goods_high_price,a.goods_real_price from order_item a inner join goods b on a.goods_id=b.id where order_id=#{2} limit #{0},#{1}
+	</select>
+	<select id="selectAllItemRealPrice" parameterType="java.lang.String" resultType="java.lang.Double">
+		select goods_real_price from order_item where order_id=#{order_id}
+	</select>
+</mapper>

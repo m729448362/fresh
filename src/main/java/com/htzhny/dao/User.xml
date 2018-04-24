@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.htzhny.dao.UserDao">
+<select id="findUserByUserName" parameterType="java.lang.String" resultType="com.htzhny.entity.User">  
+	select * from user where user_name=#{user_name}
+</select>
+<insert id="addUser" parameterType="com.htzhny.entity.User" >
+	insert into user(user_name,password,user_phone,user_id_type,user_id_card,user_birthday,user_company,create_time,user_last_login_time,status,user_img)
+	values(#{user_name},#{password},#{user_phone},#{user_id_type},#{user_id_card},#{user_birthday},#{user_company},#{create_time},#{user_last_login_time},#{status},#{user_img})
+</insert>
+<update id="updatePassword" >
+	update user set password=#{1} where user_name=#{0}
+</update>
+<update id="updateMessage" parameterType="com.htzhny.entity.User">
+	update user set user_phone=#{user_phone},user_id_type=#{user_id_type},user_id_card=#{user_id_card},
+	user_birthday=#{user_birthday},user_company=#{user_company},user_img=#{user_img} where user_name=#{user_name}
+</update>
+</mapper>
