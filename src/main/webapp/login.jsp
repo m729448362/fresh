@@ -9,7 +9,7 @@ pageEncoding="UTF-8"%>
 <body>
 <form action="user/login.action" method="post">
 <label>账号：</label>
-<input type="text" id="txtUsername" name="user_name" placeholder="请输入账号" /><br/>
+<input type="text" id="txtUsername" name="username" placeholder="请输入账号" /><br/>
 <label>密码：</label>
 <input type="password" id="txtPassword" name="password" placeholder="请输入密码" /><br/>
 <input type="submit" value="提交" />

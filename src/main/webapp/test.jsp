@@ -13,7 +13,6 @@
 	<br>
 	<input type="button" id="b1" value="提交">
 	<input type="button" id="b2" value="测试">
-	<input type="button" id="b3" value="测试1">
 	<br>
 </body>
 <script>
@@ -59,23 +58,6 @@
                 contentType : 'application/json;charset=UTF-8', //contentType很重要  
                 success: function (data) {      //成功，回调函数
                 	alert("5454");
-                    alert(data.result);
-                },
-                error: function (er) {          //失败，回调函数
-                    alert(er);
-                }
-            });
-        })
-         $("#b3").click(function () {
-            $.ajax({
-                url: "/fresh/user/list.action",        //后台url
-                data: {                          //数据
-                    name:$("input[name='name']").val(),
-                    pw:$("input[name='pw']").val()
-                },
-                type: "POST",                   //类型，POST或者GET
-                dataType: 'json',              //数据返回类型，可以是xml、json等
-                success: function (data) {      //成功，回调函数
                     alert(data.result);
                 },
                 error: function (er) {          //失败，回调函数

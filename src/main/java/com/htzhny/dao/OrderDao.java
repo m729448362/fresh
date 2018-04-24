@@ -13,4 +13,5 @@ public interface OrderDao {
 	public Integer updateStatus(Integer status,String id);
 	public Integer updateRealPrice(double price,String id);
 	public Integer updatePayStatus(Integer pay_status,String id);
+	
 }

@@ -23,6 +23,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 </head>
 
-<body>欢迎您，尊敬的${user['user_name']}
+<body>欢迎您，尊敬的${user['name']}
 </body>
 </html>
