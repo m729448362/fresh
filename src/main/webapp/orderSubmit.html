@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="css/pintuer.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="orderSubmit.css">
+<script src="js/jquery.js"></script>
+<script src="js/pintuer.js"></script>
+<script src="js/JquerySession.js"></script>
+<script>
+	var orderId = sessionStorage.getItem("order_id");
+	$(document).ready(function(c) {
+		$.ajax({//根据用户id查询用户收货地址
+	            url: "/fresh/address/findAddressByUserId.action",        //后台url
+	            data: {                          //数据
+	              //  userId:user.id
+	            },
+	            type: "POST",                   //类型，POST或者GET
+	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            success: function (data) {      //成功，回调函数
+	                alert(data.result);
+	                data = data.addressList;
+	                var obj = document.getElementById('address');
+	                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+						obj.options.add(new Option(data[i].address_detail,data[i].id));
+	                }
+	            },
+	            error: function (er) {          //失败，回调函数
+	                alert(er);
+	          //    var data =  {"addressList":[{"address_detail":"dsadad","create_time":"sadada","id":1,"receiver":"dsa","status":1,"user_id":2},{"address_detail":"贵阳市贵阳二中","create_time":"2018-3-6","id":2,"receiver":"李四","status":0,"user_id":2}]}
+	          //  	var obj = document.getElementById('address');
+	          //  	data = data.addressList;
+	           //     for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+				//		obj.options.add(new Option(data[i].address_detail,data[i].id));
+	            //    }
+	            }
+	        });
+	});
+	function returnLastPage(){//返回上一页
+		window.history.go(-1); 
+	}
+	function addOrderAddress(){
+			//判断用户是否登录
+		$.ajax({//保存订单收货地址
+            url: "/fresh/buyCart/submitOrder.action",        //后台url
+            data: {                          //数据
+            	order_id:order_id,//订单id
+                addressId:document.getElementById("address").value,
+                deliveryDate:document.getElementById("deliveryDate").value
+            },
+            type: "POST",                   //类型，POST或者GET
+            dataType: 'json',              //数据返回类型，可以是xml、json等
+            success: function (data) {      //成功，回调函数
+                alert(data.result);
+                sessionStorage.setItem("orderStatus",1);//订单状态为待报价
+                window.location.href="./userOrderList.html";
+            },
+            error: function (er) {          //失败，回调函数
+                alert(er);
+            }
+        });
+	}
+	
+</script>
+</head>
+<body>
+<form method="post" action="" id="listform">
+  <div class="panel admin-panel">
+  	<div class=""><a></a></div>
+    <div class="panel-head"><strong>我的菜篮 </strong></div>
+    <table class="table table-hover text-center">
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
+      <volist name="list" id="vo">
+      	<tr>
+          <td>
+          
+          	<ul id="ulid">
+          		<li style="float:left; list-style:none">
+          			<a href="./index.html">返回首页</a>
+          		</li>
+          		<li style="float:right; list-style:none">
+          			<a href="javascript:returnLastPage()">返回上一级</a>
+          		</li>
+          	</ul>
+          	
+          	 </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><label>菜单订单号:</label></td>
+          <td><label>user2018111</label></td>
+        </tr>
+        <tr>
+          <td><label>请选择收货地址：</label></td>
+          <td>
+			<select id ="address">
+				
+			</select>
+		  </td>
+        </tr>
+   		<tr>
+          <td><label>请选择配送日期：</label></td>
+          <td><input id="deliveryDate" type="date" value="2014-01-13"/></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><input type="submit" value="提交订单" onclick="addOrderAddress()"></input></td>
+        </tr>
+    </table>
+  </div>
+</form>
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>

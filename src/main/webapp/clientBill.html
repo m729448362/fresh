@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="css/pintuer.css">
+<link rel="stylesheet" href="css/admin.css">
+<script src="js/jquery.js"></script>
+<script src="js/pintuer.js"></script>
+<script src="js/JquerySession.js"></script>
+<script>
+var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
+var user =JSON.parse(obj);//user对象 
+	$(document).ready(function(c) {
+			//初始化方法
+	 	 var date=new Date;
+		 var year=date.getFullYear(); 
+		 var month=date.getMonth()+1;
+		 month =(month<10 ? "0"+month:month); 
+		 mydate = (year.toString()+"-"+month.toString());//当前年月
+		 if($.cookie("mydate")=="history"){//历史账单
+		 	mydate="";
+		 }
+		 $.ajax({//根据userId查找本月账单
+             url: "/fresh/goods/getBill.action",        //后台url
+             data: {                          //数据
+                 userId:user.id,//userId //用户id
+                 month:mydate
+             },
+             type: "POST",                   //类型，POST或者GET
+             dataType: 'json',              //数据返回类型，可以是xml、json等
+             success: function (data) {      //成功，回调函数    画页面
+             	var totalPrice=0;
+                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                	$("#myBillList").append("<tr><td>data[i].orderId</td><td>data[i].totalPrice</td><td>data[i].deliveryDate</td><td>data[i].address</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
+                	totalPrice+=data[i].totalPrice;
+                }
+               	$("#account").html(totalPrice+"元");//本月应付金额
+                $("#total").html(data.totalPrice+"元");//本月所有用户应付金额
+                 
+             },
+             error: function (er) {          //失败，回调函数
+                 alert(er);
+             }
+         });	
+	});
+	function getThisMonthBill(){//获取本月账单
+		sessionStorage.setItem("mydate","");
+		window.location.reload();
+	}
+	function getHistoryBill(){
+		sessionStorage.setItem("mydate","history");
+		window.location.reload();
+	}
+	function getOrderDetail(orderId){//进入订单详情
+		sessionStorage.setItem("orderId",orderId);
+	 	window.location.href="./clientBillDetail.html"; 
+	}
+</script>
+</head>
+<body>
+<form method="post" action="" id="listform">
+  <div class="panel admin-panel">
+  	<header class="panel-head" ><strong class="icon-reorder">本月账单</strong></header> 
+  	<table>
+  		<th><td>
+  			<div class="title">
+		    	<ul>
+			    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
+		    	</ul>
+		    </div>
+  		</td></th>
+  	</table>
+    	<ul id="billTitle">
+    		<li style="float:left;padding:0.2em;"><a href="javascript:getThisMonthBill()">本月账单</a></li>
+    		<li style="float:left;padding:0.2em;"><a href="javascript:getHistoryBill()">历史账单</a></li>
+    	</ul>
+    <div>
+	  	<strong style="float:right;"><b>本月所有用户应结金额：</b>
+	  		<b id="totalPrice">￥27.9 元</b>
+	  	</strong>
+	  </div>
+    <table class="table table-hover text-center" id="myBillList">
+      <tr>
+        <th style="text-align:center; padding:0.5em 2em;">订单号</th>
+        <th>金额(元)</th>
+        <th>配送日期</th>
+        <th>收货地址</th>
+        <th>操作</th>
+      </tr>
+    </table>
+  </div>
+  <div>
+  	<strong style="float:right;"><b>本月应付金额为：</b>
+  		<b id="account">￥27.9 元</b>
+  	</strong>
+  </div>
+</form>
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>

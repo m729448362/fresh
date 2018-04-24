@@ -1,0 +1,158 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>首页</title>
+<link href="index.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/pintuer.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/admin.css" rel="stylesheet" type="text/css" media="all" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<!-- -->
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/JquerySession.js"></script>
+<script type="text/javascript" src="js/include.js"></script>
+<script type="text/javascript">
+	<!-- 用户对象 -->
+	//获取登录用户信息
+	var user_type = sessionStorage.getItem('user_type');//
+	//if(user_type==""||user_type==null){
+		//user_type=1;
+	//}
+    $(function(){
+       $.ajax({//查询推荐商品
+            url: "/fresh/goods/selectRecommendedGoods.action",        //后台url
+            data: {                          //数据
+           	
+            },
+            type: "POST",                   //类型，POST或者GET
+            dataType: 'json',              //数据返回类型，可以是xml、json等
+            success: function (data) {      //成功，回调函数
+                //alert(data.result);
+                //var data={"list1":[{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗莲花白","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"莲花白","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":3},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗芹菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"芹菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":4},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗花菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"花菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":5},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗韭菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"韭菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":6}]}
+                //alert(data.list1);
+                data=data.list1;
+                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                	$("#recommendDishes1").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
+                	$("#recommendDishes2").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
+                }
+            },
+            error: function (er) {          //失败，回调函数
+                alert(er);
+                //var data={"list1":[{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗莲花白","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"莲花白","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":3},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗芹菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"芹菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":4},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗花菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"花菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":5},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗韭菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"韭菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":6}]}
+                //alert(data.list1);
+                //data=data.list1;
+                //for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                //	$("#recommendDishes1").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
+              //  	$("#recommendDishes2").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
+              //  }
+            }
+       });
+        if(user_type==1){
+    		document.getElementById('user').style.display="block";
+    		document.getElementById('userRecommend').style.display="block";
+    		
+    	}else{
+    	    document.getElementById('supplier').style.display="block";
+    	    document.getElementById('modifyPrice').style.display="block";
+    	    document.getElementById('supplierRecommend').style.display="block";
+    	}
+    });
+    function joinMyBasket(obj){//加入菜篮   取消本地cookie存储
+    	var td = obj.parentNode;//父节点
+    	var goodsId=td.firstChild.value;
+    	$.ajax({//
+             url: "/fresh/buyCart/addGoods.action",        //后台url
+             data: {                          //数据
+                 goodsId:goodsId,
+                 amount:1
+             },
+             type: "POST",                   //类型，POST或者GET
+             dataType: 'json',              //数据返回类型，可以是xml、json等
+             success: function (data) {      //成功，回调函数    画页面
+                 	//alert(data.result);
+                   },
+             error: function (er) {          //失败，回调函数
+                 alert(er);
+             }
+         });
+    }
+</script>
+</head>
+<body>
+	<div id="user" style="display:none;">
+		<div class="container"></div>
+		<table>
+			<th><td><b>农业精准扶贫客户端</b></td></th>
+			<tr>
+				<td>
+				<div class="title">
+			    	<ul>
+				    	<li style="float:left;padding:0.2em;"><a href="./goodsList.html">去买菜</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="./myBasket.html">我的菜篮</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="./userOrderList.html">我的订单</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="./userBill.html">结算中心</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="./userInfo.html">个人中心</a></li>
+			    	</ul>
+			    </div>
+			</td></tr>
+		  </table>  	
+  	</div>
+  	<div id="supplier" style="display:none;">
+	<div class="container"></div>
+	  
+	  	<table>
+	  		<th><td><b>农业精准扶贫供应商端</b></td></th>
+	  		<tr><td>
+	  			<div class="title">
+			    	<ul>
+				    	<li style="float:left;padding:0.2em;"><a href="./pendingQuateOrder.html">待报价</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="./clientOrderList.html">订单处理</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="./clientBill.html">账单中心</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="./vegetableCenter.html">菜品中心</a></li>
+			    	</ul>
+			    </div>
+	  		</td></tr>
+	  	</table>
+  	
+  </div>
+  <div class="panel admin-panel">
+  		<div class="panel-head"><strong> 市场行情</strong> <a href="#" style="float:right;display:none;" id="modifyPrice">修改行情价格</a></div>
+    <table class="table table-hover text-center" id="market">
+      <tr>
+        <th style="text-align:center; padding:20px; display:none">ID</th>
+        <th>品名</th>
+        <th>地区</th>
+        <th>日期</th>
+        <th>均价</th>
+      </tr>
+    </table>
+  </div>
+   <div class="panel admin-panel" id="supplierRecommend" style="display:none">
+  		<div class="panel-head"><strong>推荐菜品</strong> <a href="editRecommendDishes.html" style="float:right;" id="modifyRecommend">修改推荐菜品</a></div>
+  		<table class="table table-hover text-center" id="recommendDishes1">
+	      <tr>
+	        <td>蔬菜名称</td>
+	        <td>蔬菜价格</td>
+	        <td>操作</td>
+	      </tr>
+       </table> 
+  </div>
+  <div class="panel admin-panel" id="userRecommend" style="display:none">
+  		<div class="panel-head"><strong>今日推荐</strong>
+  		<table class="table table-hover text-center" id="recommendDishes2">
+	      <tr>
+	        <td>蔬菜名称</td>
+	        <td>蔬菜价格</td>
+	        <td>操作</td>
+	      </tr>
+	      </table>
+	     </div> 
+  </div>
+</body>
+<script>
+	$('#market').load('./marketList.html');
+</script>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="css/pintuer.css">
+<link rel="stylesheet" href="css/admin.css">
+<script src="js/jquery.js"></script>
+<script src="js/pintuer.js"></script>
+<script src="js/JquerySession.js"></script>
+<script>
+	$(document).ready(function(c) {
+		$.ajax({//根据用户id查询菜篮中数据
+	            url: "fresh/buyCart/selectBuyCart.action",        //后台url
+	            data: {                          //数据
+	            },
+	            type: "POST",                   //类型，POST或者GET
+	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            success: function (data) {      //成功，回调函数
+	                //alert(data.result);
+	                //var data = {"buyCart":{"goodsAmount":6.0,"goodsTotalHighPrice":92.4,"goodsTotalLowPrice":83.0,"items":[{"amount":4,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一棵大白菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":14.5,"goods_name":"白菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":1}},{"amount":2,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一颗大青菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":12.5,"goods_name":"青菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":0,"id":2}}]}}
+	                data = data.buyCart.items;
+	                
+	                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+						$("#myBasket").append("<tr><td style='display:none;'>"+data[i].goods.id+"</td><td>"+data[i].goods.goods_name+"</td><td>"+data[i].goods.goods_low_price+"~"+data[i].goods.goods_high_price+"</td><td><input id='amount' type='number' min='0' value='"+data[i].amount+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods("+data[i].goods.id+")\"/></td></tr>");
+	                }
+	            },
+	            error: function (er) {          //失败，回调函数
+	                alert(er);
+	             //     var data = {"buyCart":{"goodsAmount":6.0,"goodsTotalHighPrice":92.4,"goodsTotalLowPrice":83.0,"items":[{"amount":4,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一棵大白菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":14.5,"goods_name":"白菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":1}},{"amount":2,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一颗大青菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":12.5,"goods_name":"青菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":0,"id":2}}]}}
+	              //  data = data.buyCart.items;
+	                
+	               // for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+	                //	$("#myBasket").append("<tr><td style='display:none;'>"+data[i].goods.id+"</td><td>"+data[i].goods.goods_name+"</td><td>"+data[i].goods.goods_low_price+"~"+data[i].goods.goods_high_price+"</td><td><input id='amount' type='number' min='0' value='"+data[i].amount+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods("+data[i].goods.id+")\"/></td></tr>");
+	                //}
+	            }
+	        });
+	});
+	function returnLastPage(){//返回上一页
+		window.history.go(-1); // 返回上一页  
+	}
+	function createOrder(){//生成订单
+		$.ajax({
+	            url: "fresh/buyCart/createOrder.action",        //后台url
+	            data: {                          //数据
+	            },
+	            type: "POST",                   //类型，POST或者GET
+	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            success: function (data) {      //成功，回调函数
+	                //alert(data.result);
+	                sessionStorage.setItem("order_id",order_id);
+	                window.location.href="orderSubmit.html"; 
+	            },
+	            error: function (er) {          //失败，回调函数
+	                alert(er);
+	            }
+	        });
+	}
+	function deleteGoods(goodsId){//删除一个购物项
+		$.ajax({
+	            url: "/fresh/buyCart/deleteItem.action",        //后台url
+	            data: { 
+	            	goods_id:goodsId                         //数据
+	            },
+	            type: "POST",                   //类型，POST或者GET
+	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            success: function (data) {      //成功，回调函数
+	                alert(data.result);
+	                window.location.reload; 
+	            },
+	            error: function (er) {          //失败，回调函数
+	                alert(er);
+	            }
+	        });
+	}
+	function deleteAllGoods(){//清空购物车
+		$.ajax({
+	            url: "/fresh/buyCart/clearGoods.action",        //后台url
+	            data: { 
+	            },
+	            type: "POST",                   //类型，POST或者GET
+	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            success: function (data) {      //成功，回调函数
+	                alert(data.result);
+	               // window.location.href="orderSubmit.html"; 
+	            },
+	            error: function (er) {          //失败，回调函数
+	                alert(er);
+	            }
+	        });
+	}
+</script>
+</head>
+<body>
+<form method="post" action="" id="listform">
+   <div class="panel admin-panel">
+  	<header class="panel-head" ><strong> 我的菜篮</strong></header> 
+  	<table>
+  		<th><td>
+  			<div class="title">
+		    	<ul>
+			    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
+			    	<li style="float:left;padding:0.2em;"><a href="javascript:returnLastPage()">返回上一级</a></li>
+		    	</ul>
+		    </div>
+  		</td></th>
+  	</table>
+    <div class="panel-head"><strong> 您购买了如下产品：</strong></div>
+    <table class="table table-hover text-center" id="myBasket">
+      <tr>
+        <th style="text-align:center; padding:20px; display:none;">ID</th>
+        <th>品名</th>
+        <th>单价</th>
+        <th>数量</th>
+        <th>操作</th>
+      </tr>
+      <!-- <volist name="list" id="vo"> -->
+        
+    </table>
+  </div>
+  <div class="button-group">  <a class="button border-red" href="javascript:createOrder()"><span class="icon-trash-o"></span> 结算</a> </div>
+  <div class="button-group">  <a class="button border-red" href="javascript:deleteAllGoods()"><span class="icon-trash-o"></span> 清空</a> </div>
+</form>
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>

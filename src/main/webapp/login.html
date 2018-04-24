@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>登录</title>
+<link href="login.css" rel="stylesheet" type="text/css" media="all" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<!-- -->
+<script type="text/script">
+	
+</script>
+<script src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="js/JquerySession.js"></script>
+<script type="text/javascript" src="js/json.js"></script>
+<script>
+	$(document).ready(function(c) {
+			//初始化方法
+			
+	});
+	function login(){
+		
+		checkMobile();
+		var user_name=document.getElementById("userLoginAccount").value;
+		var password=document.getElementById("password").value;
+		var user={
+				"user_name":user_name,
+				"password":password
+			}
+		$.ajax({
+	             url: "/fresh/user/login.action",        //后台url
+	             data: JSON.stringfy(user),
+	             type: "POST",                   //类型，POST或者GET
+	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             contentType:'application/json;charset=UTF-8',
+	             success: function (data) {
+	                 sessionStorage.setItem("user",JSON.stringify(data.user));
+	                 window.location.href="./index.html"; 
+	             },
+	             error: function (er) {          //失败，回调函数
+	                 var data={
+						  "result": "0",
+						  "user_type": 2
+						}//
+	                 sessionStorage.setItem("user",user);
+	                 window.location.href="./index.html"; 
+	                 alert(er);
+	             }
+	         });
+	}
+	function checkMobile(){ //手机号和密码验证
+	    var sMobile = document.getElementById("userLoginAccount").value;
+	    if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(sMobile))){ 
+	        alert("不是完整的11位手机号或者正确的手机号前七位"); 
+	        document.mobileform.mobile.focus(); 
+	        return false; 
+	    }
+	    var pPattern = /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/;
+		//输出 true
+		if(!pPattern.test(document.getElementById("password").value)){
+			alert("密码最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符");
+			document.mobileform.mobile.focus(); 
+			return false;
+		} 
+	     
+	} 
+	function openPage(){
+		var mychar = document.getElementById("login").style.display ="none";
+		var showchar = document.getElementById("forgetPassword").style.display ="block";
+	}
+	function getMyPassword(){
+		alert(document.getElementById("userAccount").value);
+	}
+</script>
+</head>
+<body>
+<!-- contact-form -->	
+<div class="message warning" id="login">
+<div class="inset" >
+	<div class="login-head">
+		<h1>用户登录</h1>
+	</div>
+	<form>
+		<li>
+			<input type="text" class="text" value="请输入账号" id="userLoginAccount" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Username';}"><a href="#" class=" icon user"></a>
+		</li>
+			<div class="clear"> </div>
+		<li>
+			<input type="password" autocomplete="new-password" value="请输入密码" id="password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"> <a href="#" class="icon lock"></a>
+		</li>
+		<li>
+			<div id="showMsg"></div>
+		</li>
+		<div class="clear"> </div>
+		<div class="submit">
+			<input  type="button"  onclick="login()" value="登录" dir="rtl"/>
+				<!-- <h4><a onclick="javascript:openPage()">忘记密码</a></h4> -->
+				<h4><a href="register.html">注册成为新用户</a></h4>
+						  <div class="clear">  </div>	
+			 </div>
+			
+	</form>
+	</div>					
+</div>
+<div class="message warning" id="forgetPassword" style="display:none;">
+<div class="inset">
+	<div class="login-head" >
+		<h1>忘记密码</h1>
+		 <!-- <div class="alert-close"> </div> --> 			
+	</div>
+		<form>
+			<li>
+				<input type="text" class="text" value="请输入账号" id="userAccount" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Username';}"><a href="#" class=" icon user"></a>
+			</li>
+				<div class="clear"> </div>
+			<li>
+				<input type="password" autocomplete="new-password"  value="请输入验证码" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"> <a href="#" class="icon lock"></a>
+			</li>
+			<div class="clear"> </div>
+			<div class="submit">
+				<input  type="button" onclick="getMyPassword()" value="找回" dir="rtl">
+					<h4><a href="register.html">注册成为新用户</a></h4>
+							  <div class="clear">  </div>	
+				</input>
+ 			 </div>
+				
+		</form>
+</div>
+	<div class="clear"> </div>
+</div>
+<!--- footer --->
+</body>
+</html>

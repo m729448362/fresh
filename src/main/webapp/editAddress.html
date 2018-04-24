@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="css/pintuer.css">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="orderSubmit.css">
+<script src="js/jquery.js"></script>
+<script src="js/pintuer.js"></script>
+<script src="js/JquerySession.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var addressId=sessionStorage.getItem('addressId');//全局变量
+	var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
+	var user =JSON.parse(obj);//user对象 
+	$(document).ready(function(c) {
+		//var addressId=$.cookie('addressId');
+		
+		if(addressId!=null&&addressId!=undefined&&addressId!=""){
+			$.ajax({//根据用户id查询用户收货地址
+	            url: "/fresh/user/getUserAddress.action",        //后台url
+	            data: {                          //数据
+	                userId:user.id,//用户id
+	                addressId:addressId
+	            },
+	            type: "POST",                   //类型，POST或者GET
+	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            success: function (data) {      //成功，回调函数
+	                //alert(data.result);
+	                $('#address').val(data[i].address);
+	                $('#phone').val(data[i].phone);
+	                $('#receiver').val(data[i].receiver);
+	            },
+	            error: function (er) {          //失败，回调函数
+	                alert(er);
+	            }
+	        });
+		}
+		
+	});
+	function returnLastPage(){//返回上一页
+		window.history.go(-1); 
+	}
+	function updateAddress(){
+		var address=$('address').val();//地址
+		var phone=$('phone').val();//电话
+		var receiver=$('receiver').val();//收货人
+		$.ajax({//更新用户收货地址
+	            url: "/fresh/user/updateUserAddress.action",        //后台url
+	            data: {                          //数据
+	                userId:user.id,//用户id
+	                addressId:addressId,
+	                address:address,
+	                phone:phone,
+	                receiver:receiver
+	            },
+	            type: "POST",                   //类型，POST或者GET
+	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            success: function (data) {      //成功，回调函数
+	                alert("更新成功");
+	            },
+	            error: function (er) {          //失败，回调函数
+	                alert(er);
+	            }
+	        });
+	}
+	
+</script>
+</head>
+<body>
+<form method="post" action="" id="listform">
+  <div class="panel admin-panel">
+  	<div class=""><a></a></div>
+    <div class="panel-head"><strong>我的收获地址 </strong></div>
+    <table class="table table-hover text-center">
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
+      	<tr>
+          <td>
+          	<ul id="ulid">
+          		<li style="float:left; list-style:none">
+          			<a href="./index.html">返回首页</a>
+          		</li>
+          		<li style="float:center; list-style:none">
+          			<a href="javascript:returnLastPage()">返回上一级</a>
+          		</li>
+          	</ul>
+          	
+          	 </td>
+          <td></td>
+        </tr>
+        <tr>
+        	<td>地址：</td>
+        	<td><input type="text" id="address"></input></td>
+        </tr>
+        <tr>
+        	<td>电话：</td>
+        	<td><input type="text" id="phone"></input></td>
+        </tr>
+        <tr>
+        	<td>收货人：</td>
+        	<td><input type="text" id="receiver"></input></td>
+        </tr>
+        <tr><td colspan="2" style="float:center;"><input type="button" onclick="updateAddress()" value="保存"/></td></tr>
+    </table>
+  </div>
+</form>
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="css/pintuer.css">
+<link rel="stylesheet" href="css/admin.css">
+<script src="js/jquery.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/pintuer.js"></script>
+<script src="js/include.js"></script>
+<script src="js/uploadImg.js"></script>
+<script src="js/JquerySession.js"></script>
+<script>
+var orderStatus = sessionStorage.getItem('orderStatus');
+var orderId = sessionStorage.getItem("orderId");
+var pages=1;
+var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成"};
+
+var totalPrice=0//总计金额
+	$(document).ready(function(c) {
+			//初始化方法
+		//$("#reason").val("有两千kg是坏的");//更改售后原因
+    	//$("#reason").attr("disabled",true);//更改售后原因不可编辑
+    	//$("#img").html("");
+    	//$("#price").html("");
+    	//$("#dealWith").html("<strong><b>处理方式：</b><b>更换</b></strong>");//处理方式
+    	//$("#afterSaleStatus").html("<strong><b>售后状态：</b><b>已处理</b></strong>");//售后状态
+		//$("#price").attr("display","none");//更改售后原因不可编辑
+		//$("#price").html("<strong><b>总计：</b><b>￥19.30元</b></strong>");
+		$.ajax({//根据订单id查询订单详情
+             url: "/fresh/order_item/selectAllByOrderId.action",        //后台url
+             data: {                          //数据
+                 id:orderId, //orderId
+                 currentPage:pages
+             },
+             type: "POST",                   //类型，POST或者GET
+             dataType: 'json',              //数据返回类型，可以是xml、json等
+             success: function (data) {      //成功，回调函数
+                 data = data.list1;
+                 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                        $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>data[i].goods_amount</td><td>"+data[i].id+"</td><td>"+data[i].goods_real_price+"</td></tr>");
+                    	totalPrice=data[i].goods_amount*data[i].goods_real_price+totalPrice;
+                    }
+                    if(orderStatus!='1'){//非售后订单详情
+                    	$("#price").html("<strong><b>总计：</b><b>"+totalPrice+"</b></strong>");
+						document.getElementById("afterSales").style.display="none";
+						document.getElementById("price").style.display="block";
+                    }else{
+                    	document.getElementById("price").style.display="none";
+                    	document.getElementById("afterSales").style.display="block";
+                    	$("#reason").val(data.reason);//更改售后原因
+                    	$("#reason").attr("disabled",true);//更改售后原因不可编辑
+                    	$("#img").html("");
+                    	$("#dealWith").html("<strong><b>处理方式：</b><b>"+data.dealWith+"</b></strong>");//处理方式
+                    	$("#afterSaleStatus").html("<strong><b>售后状态：</b><b>"+afterSaleStatusName[data.afterSaleStatus]+"</b></strong>");//售后状态
+                    }
+             },
+             error: function (er) {          //失败，回调函数
+                 alert(er);
+             }
+         });
+	});
+</script>
+</head>
+<body>
+<form method="post" action="" id="listform">
+  <div class="panel admin-panel">
+  	<div class=""><a></a></div>
+    <div class="panel-head"><strong> 订单详情</strong></div>
+    <table class="table table-hover text-center" id="order">
+      <tr>
+        <th>菜名</th>
+        <th>数量</th>
+        <th>基地</th>
+        <th>报价(元)</th>
+      </tr>
+      <volist name="list" id="vo">
+    </table>
+  </div>
+   <div class="footer">
+	<a href="javaScript:findMoreOrderByStatus()">查看更多</a>
+</div>
+  <div id="price" style="float:right;"> 
+  </div>
+ </form>
+  <div id="afterSales">
+  	<div >
+  		<strong>
+  			<b>申请售后原因：</b>
+  		</strong>
+  		<input type="textarea" value="售后原因" id="reason"></input>
+  	</div>
+  	<div id="dealWith">
+  	</div>
+  	<div id="afterSaleStatus">
+  	</div>
+  	<div id="img">
+		
+	</div>
+	
+  </div>
+<script type="text/javascript">
+</script>
+</body>
+</html>

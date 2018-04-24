@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="css/pintuer.css">
+<link rel="stylesheet" href="css/admin.css">
+<script src="js/jquery.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/pintuer.js"></script>
+<script src="js/include.js"></script>
+<script src="js/uploadImg.js"></script>
+<script src="js/JquerySession.js"></script>
+<script>
+	var orderId = sessionStorage.getItem("orderId");
+	var orderStatusName={"1":"待报价","2":"待确认","3":"待发货","4":"待收货","5":"售后处理中","6":"已完成"};
+	var orderStatus = sessionStorage.getItem("orderStatus");
+	var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成"};
+	var pages=1;
+	var totalPrice=0;//实际总金额
+     var totalLowPrice=0;//待报价订单，总计最低价
+     var tatilHighPrice=0;//待报价订单，总计最高价
+	$(document).ready(function(c) {
+			//初始化方法
+		$.ajax({//根据订单id查询订单详情
+             url: "/fresh/order_item/selectAllByOrderId.action",        //后台url
+             data: {                          //数据
+                 id:orderId,   //orderId
+                 currentPage:pages
+             },
+             type: "POST",                   //类型，POST或者GET
+             dataType: 'json',              //数据返回类型，可以是xml、json等
+             success: function (data) {      //成功，回调函数
+                 //alert(data.result);
+                 data = data.list1;
+                 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                        $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_real_price+"</td></tr>");
+                    	totalPrice=data[i].goods_amount*data[i].goods_real_price+totalPrice;
+                    	totalLowPrice=data[i].goods_amount*data[i].goods_low_price+totalLowPrice;
+                    	tatilHighPrice=data[i].goods_amount*data[i].goods_high_price+totalLowPrice;
+                    }
+                    $("#orderStatus").text(orderStatusName[orderStatus]);//更改订单状态
+                    if(orderStatus!=1){
+                    	$("#account").text("￥"+totalPrice+"元");//更改订单金额
+                    }else{
+                    	$("#account").text("￥"+totalLowPrice+"~"+tatilHighPrice+"元");//更改订单金额
+                    }
+                    if(orderStatus==2){//确认订单详情页面
+                    	//$('#confirm').attr("display","block");
+                    	document.getElementById("confirm").style.display ="block";
+                    }
+                    if(orderStatus==4){//待收货订单详情页面。可以提交售后信息
+                    	document.getElementById("afterSales").style.display ="block";
+                    }
+                    if(orderStatus==5||orderStatus==6){
+                    	document.getElementById("afterSales").style.display ="block";
+                    	findAfterSaleInfo(data.id);//售后信息查询
+                    }
+                    
+             },
+             error: function (er) {          //失败，回调函数
+                 alert(er);
+             }
+         });
+	});
+	function confirmOrder(){//确认订单
+		$.ajax({//订单状态查找订单
+          url: "/fresh/order/updateStatus.action",        //后台url
+          data: {                          //数据
+              status:3,//订单状态  待收货
+              id:orderId
+          },
+          type: "POST",                   //类型，POST或者GET
+          dataType: 'json',              //数据返回类型，可以是xml、json等
+          success: function (data) {      //成功，回调函数
+          	if(data.result==1){
+          		alert("修改成功");
+          		sessionStorage.setItem("orderStatus",3);
+          		window.location.reload();
+           	}
+          },
+          error: function (er) {          //失败，回调函数
+              alert(er);
+          }
+      });
+	}
+	function cancelOrder(){//取消订单
+		$.ajax({//订单状态查找订单
+          url: "/fresh/order/updateStatus.action",        //后台url
+          data: {                          //数据
+              status:0,//订单状态  已取消
+              id:orderId
+          },
+          type: "POST",                   //类型，POST或者GET
+          dataType: 'json',              //数据返回类型，可以是xml、json等
+          success: function (data) {      //成功，回调函数
+          	if(data.result==1){
+          		alert("修改成功");
+          		sessionStorage.setItem("orderStatus",1);
+          		window.location.href="./userOrderList.html";
+           	}
+          },
+          error: function (er) {          //失败，回调函数
+              alert(er);
+          }
+      });
+	}
+	function findAfterSaleInfo(id){//查询售后信息
+		$.ajax({
+          url: "/fresh/after_sale/selectOneById.action",        //后台url
+          data: {                          //数据
+              id:id
+          },
+          type: "POST",                   //类型，POST或者GET
+          dataType: 'json',              //数据返回类型，可以是xml、json等
+          success: function (data) {      //成功，回调函数
+          	data =data.after_sale;
+            $("#reason").val(data.after_sale_reason);//更改售后原因
+         	$("#reason").attr("disabled",true);//更改售后原因不可编辑
+         	//data.prove_img.preview();
+         	$("#upload").html("");
+       		$("#dealWith").html("<strong><b>处理方式：</b><b>"+data.handle_way+"</b></strong>");//处理方式
+       		$("#afterSaleStatus").html("<strong><b>售后状态：</b><b>"+afterSaleStatusName[data.handle_status]+"</b></strong>");//售后状态
+          },
+          error: function (er) {          //失败，回调函数
+              alert(er);
+          }
+      });
+	}
+	function preview(){//单张图片
+		 var config = {
+		 tip: "请上传格式为png, gif或者jpg的图片",
+		 fileId: "file",
+		 containerId: "container",
+		 	imgStyle: "width:320px;height:auto;border-radius:64%;"
+		 }
+		 var previewer = new ImgPrevirewer(config);
+		 previewer.preview();
+	 }
+	 function uploadImg(){//上传图片
+	 	var reason = $('#reason').val();
+	 	var config = {
+		 tip: "请上传格式为png, gif或者jpg的图片",
+		 fileId: "file",
+		 containerId: "container",
+		 	imgStyle: "width:320px;height:auto;border-radius:64%;"
+		 }
+		 var previewer = new ImgPrevirewer(config);
+		// alert(JSON.stringify(previewer));//图片数据
+		 $.ajax({//添加售后
+	             url: "/fresh/after_sale/addAfter_sale.action",        //后台url
+	             data: {                          //数据
+	                "after_sale": {
+						"id": "",
+						"user_id":0,
+						"order_id": orderId,
+						"after_sale_reason": reason,
+						"handle_status": 1,
+						"handle_way": "",
+						"handle_person": "",
+						"handle_time": "",
+						"prove_img": JSON.stringify(previewer)
+				}
+	             },
+	             type: "POST",                   //类型，POST或者GET
+	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             success: function (data) {      //成功，回调函数
+	             	if(data.result==1){
+	             		alert("添加成功");
+	             	}
+	             },
+	             error: function (er) {          //失败，回调函数
+	                 alert(er);
+	                 //previewer.preview();
+	             }
+	         });	
+		 
+	 }
+	 function findMoreOrderByStatus(){//查看更多
+	 	pages+=1;
+	 	$.ajax({//根据订单id查询订单详情
+             url: "/fresh/order_item/selectAllByOrderId.action",        //后台url
+             data: {                          //数据
+                 id:orderId,   //orderId
+                 currentPage:pages
+             },
+             type: "POST",                   //类型，POST或者GET
+             dataType: 'json',              //数据返回类型，可以是xml、json等
+             success: function (data) {      //成功，回调函数
+                 //alert(data.result);
+                 data = data.list1;
+                 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                        $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_real_price+"</td></tr>");
+                    	totalPrice=data[i].goods_amount*data[i].goods_real_price+totalPrice;
+                    	totalLowPrice=data[i].goods_amount*data[i].goods_low_price+totalLowPrice;
+                    	tatilHighPrice=data[i].goods_amount*data[i].goods_high_price+totalLowPrice;
+                    }
+                    $("#orderStatus").text(orderStatusName[orderStatus]);//更改订单状态
+                    if(orderStatus!=1){
+                    	$("#account").text("￥"+totalPrice+"元");//更改订单金额
+                    }else{
+                    	$("#account").text("￥"+totalLowPrice+"~"+tatilHighPrice+"元");//更改订单金额
+                    }
+                    
+             },
+             error: function (er) {          //失败，回调函数
+                 alert(er);
+             }
+         });
+	 }
+</script>
+</head>
+<body>
+<form method="post" action="" id="listform">
+  <div class="panel admin-panel">
+  	<div class=""><a></a></div>
+    <div class="panel-head"><strong> 订单详情</strong></div>
+    <table class="table table-hover text-center" id="order">
+      <tr>
+        <th>品名</th>
+        <th>单价</th>
+        <th>数量</th>
+        <th>报价</th>
+      </tr>
+      <volist name="list" id="vo">
+    </table>
+  </div>
+  <div class="footer">
+	<a href="javaScript:findMoreOrderByStatus()">查看更多</a>
+</div>
+  <div id="price"> 
+  	<strong>
+  		<b>交易状态：</b>
+  		<b id="orderStatus">待收货</b>
+  		<b>总计：</b>
+  		<b id="account">￥16.30元</b>
+  	</strong>
+  </div>
+ </form>
+ <div id="confirm" style="display:none;">
+ 	<input type="button" value="确认订单" onclick="confirmOrder()"/>
+ 	<input type="button" value="取消订单" onclick="cancelOrder()"/>
+ </div>
+  <div id="afterSales" style="display:none">
+  	<div>
+  		<strong>
+  			<b>申请售后原因：</b>
+  		</strong>
+  			
+  		<input type="textarea" value="" id="reason"></input>
+  	</div>
+  	<div id="dealWith">
+  	</div>
+  	<div id="afterSaleStatus">
+  	</div>
+  	<div id="upload">
+		<input type="file" id="file" multiple onchange="preview()"/>
+		<input type="button" onclick="uploadImg()" value="上传"/>
+		<div id="container"></div>
+	</div>
+  </div>
+</body>
+</html>

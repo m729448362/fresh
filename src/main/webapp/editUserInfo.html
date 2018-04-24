@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="css/pintuer.css">
+<link rel="stylesheet" href="css/admin.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/pintuer.js"></script>
+<script>
+	$(document).ready(function(c) {
+			//初始化方法
+		<!-- 用户对象 -->
+		var user={
+			userName:"Mr wang",
+			userType:1
+		};
+		//获取登录用户信息
+		//var user = JSON.parse(sessionStorage.getItem('user'));
+		//$("#img").html(user.img);	//给用户资料赋值
+		$("#name").val(user.userName);
+		//$("#birthday").html(user.birthdayDate);
+		//$("#userCompany").html(user.userCompany);
+		//$("#userPhone").html(user.userPhone);
+	});
+	function edit(){
+		$.ajax({//修改个人信息接口
+	             url: "/fresh/user/login.action",        //后台url
+	             data: {                          //数据
+	                 name:document.getElementById("userLoginAccount").value,
+	                 pw:document.getElementById("password").value
+	             },
+	             type: "POST",                   //类型，POST或者GET
+	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             success: function (data) {      //成功，回调函数
+	                 alert(data.result);
+	             },
+	             error: function (er) {          //失败，回调函数
+	                 alert(er);
+	             }
+	         });
+	}
+	function returnLastPage(){//返回上一页
+		window.history.go(-1); // 返回上一页  
+	}	
+</script>
+</head>
+<body>
+  <div class="panel admin-panel">
+	  <header class="panel-head" ><strong> 修改个人资料</strong></header> 
+	  	<table>
+	  		<th><td>
+	  			<div class="title">
+			    	<ul>
+				    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:returnLastPage()">返回上一级</a></li>
+			    	</ul>
+			    </div>
+	  		</td></th>
+	  	</table>
+    <div id="editUserInfo">
+	    <table class="table table-hover text-center"  >
+	      <tr>
+	        <th style="text-align:center; padding:0.5em 2em;" ></th>
+	      </tr>
+	      <volist name="list" id="vo">
+	        <tr>
+	          <td>头像:<input type="file" id="img"/></td>
+	        </tr>
+	        <tr>
+	          <td>姓名:<input type="text" id="name" value="张三" /></td>
+	        </tr>
+	        <tr>
+	          <td>出生日期:<input type="date" id="birthday" value="1980-01-01" /></label></td>
+	        </tr>
+	        <tr>
+	          <td>所在单位<input type="text" id="userCompany" value="贵州省贵阳市贵阳一中" /></td>
+	        </tr>
+	        <tr>
+	          <td>联系电话<input type="text" id="userPhone" value="10086" /></td>
+	        </tr>
+	        <tr>
+	          <td><input type="submit" onclick="edit()" value="修改资料"/></td>
+	        </tr>
+	    </table>
+    </div>
+   </div>
+</body>
+</html>
