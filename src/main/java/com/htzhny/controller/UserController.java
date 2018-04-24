@@ -53,7 +53,7 @@ public class UserController {
     			request.getSession().setAttribute("user", user);
     			String result="µÇÂ¼³É¹¦";
     			jsonObject.put("result",result);
-    			
+    			System.out.println("1");
     			String user1=JSON.toJSONString(user);
     			
     			jsonObject.put("user",user1);
