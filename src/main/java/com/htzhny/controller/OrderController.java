@@ -50,7 +50,8 @@ public class OrderController {
     		User user=(User) request.getSession().getAttribute("user");
 			user_id=user.getId();
     	}
-    	Integer status= (Integer)params.get("status");
+    	String str= (String)params.get("status");
+    	Integer status=Integer.parseInt(str);
 		PageBean<Order> pageBean =orderService.selectUserOrderByStatus(currentPage, status,user_id);
 		List<Order> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);
@@ -64,7 +65,9 @@ public class OrderController {
 		JSONObject jsonObject = new JSONObject();
 		
 		Integer currentPage= (Integer)params.get("currentPage");
-		Integer status= (Integer)params.get("status");
+		
+		String str= (String)params.get("status");
+    	Integer status=Integer.parseInt(str);
 		PageBean<OrderQuery> pageBean =orderService.selectAllOrderByStatus(currentPage, status);
 		List<OrderQuery> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);

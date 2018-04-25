@@ -12,7 +12,7 @@
 </script>
 <script src="./js/jquery.min.js"></script>
 <script type="text/javascript" src="js/JquerySession.js"></script>
-<script type="text/javascript" src="js/json.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
 <script>
 	$(document).ready(function(c) {
 			//初始化方法
@@ -20,7 +20,7 @@
 	});
 	function login(){
 		
-		checkMobile();
+		//checkMobile();
 		var user_name=document.getElementById("userLoginAccount").value;
 		var password=document.getElementById("password").value;
 		var user={
@@ -29,7 +29,7 @@
 			}
 		$.ajax({
 	             url: "/fresh/user/login.action",        //后台url
-	             data: JSON.stringfy(user),
+	             data: JSON.stringify(user),
 	             type: "POST",                   //类型，POST或者GET
 	             dataType: 'json',              //数据返回类型，可以是xml、json等
 	             contentType:'application/json;charset=UTF-8',
@@ -38,13 +38,10 @@
 	                 window.location.href="./index.html"; 
 	             },
 	             error: function (er) {          //失败，回调函数
-	                 var data={
-						  "result": "0",
-						  "user_type": 2
-						}//
-	                 sessionStorage.setItem("user",user);
-	                 window.location.href="./index.html"; 
-	                 alert(er);
+	                 alert("用户名或密码错误")
+	                 //sessionStorage.setItem("user",user);
+	                 //window.location.href="./index.html"; 
+	                 //alert(er);
 	             }
 	         });
 	}

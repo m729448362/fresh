@@ -14,21 +14,25 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/JquerySession.js"></script>
 <script type="text/javascript" src="js/include.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
 <script type="text/javascript">
 	<!-- 用户对象 -->
 	//获取登录用户信息
-	var user_type = sessionStorage.getItem('user_type');//
+	var user = sessionStorage.getItem('user');//
+	var user1=JSON.parse(user);
 	//if(user_type==""||user_type==null){
 		//user_type=1;
 	//}
+	var data={"user_name":""
+			};
+	alert(user1);
     $(function(){
        $.ajax({//查询推荐商品
             url: "/fresh/goods/selectRecommendedGoods.action",        //后台url
-            data: {                          //数据
-           	
-            },
+            data: JSON.stringify(data),
             type: "POST",                   //类型，POST或者GET
             dataType: 'json',              //数据返回类型，可以是xml、json等
+            contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数
                 //alert(data.result);
                 //var data={"list1":[{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗莲花白","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"莲花白","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":3},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗芹菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"芹菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":4},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗花菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"花菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":5},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗韭菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"韭菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":6}]}
@@ -50,7 +54,7 @@
               //  }
             }
        });
-        if(user_type==1){
+        if(user1.user_type==1){
     		document.getElementById('user').style.display="block";
     		document.getElementById('userRecommend').style.display="block";
     		

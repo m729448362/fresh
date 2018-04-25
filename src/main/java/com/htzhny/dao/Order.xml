@@ -22,7 +22,7 @@
 		select * from t_order where order_status=#{2} and user_id=#{3} limit #{0},#{1}
 	</select>
 	<select id="selectAllOrderByStatus" resultMap="OrderQuery">
-		select t_order.*,user.user_company from t_order join user on t_order.user_id=user_id where order_status=#{2} limit #{0},#{1}
+		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where order_status=#{2} limit #{0},#{1}
 	</select>
 	<insert id="addOrder" parameterType="com.htzhny.entity.Order" >
 		insert into t_order(id,address,delivery_time,order_low_price,order_high_price,order_real_price,order_status,create_time,user_id,pay_status)

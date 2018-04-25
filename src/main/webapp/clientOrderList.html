@@ -11,6 +11,7 @@
 <script src="js/jquery.js"></script>
 <script src="js/pintuer.js"></script>
 <script src="js/JquerySession.js" type="text/javascript"></script>
+<script type="text/javascript" src="./js/json.js"></script>
 <script>
 var orderStatus=sessionStorage.getItem("orderStatus");
 if(orderStatus==""||orderStatus==null){
@@ -24,9 +25,16 @@ $(document).ready(function(c) {
 			
 });
 function getOrderDetail(orderId){//跳转到订单详情页面  id为订单id
-	 sessionStorage.setItem("orderId",orderId);
+		sessionStorage.setItem("orderId",orderId);
 	 sessionStorage.setItem("orderStatus",orderStatus);
-	 window.location.href="./clientOrderDetail.html"; 
+	 if(orderStatus==5){
+		 window.location.href="./clientAfterSaleDetail.html"; //售后详情页面
+	 }else if(orderStatus==6){
+		 window.location.href="./clientBillDetail.html"; //已完成订单详情页面
+	 }else{
+		 window.location.href="./clientOrderDetail.html"; 
+	 }
+	 
 }
 function returnLastPage(){//返回上一页
 		window.history.go(-1); // 返回上一页  
@@ -38,32 +46,37 @@ function findOrderByStatus(orderStatus){
 }
 function findMoreOrderByStatus(){
 	pages+=1;//查找第几页
+	alert(orderStatus);
+	var data={
+			"status":orderStatus,
+			"user_id":0,
+			"currentPage":pages
+		};
 	$.ajax({//订单状态查找订单
-          url: "/fresh/order/selectUserOrderByStatus.action",        //后台url
-          data: {                          //数据
-	          status:orderStatus,//订单状态
-              user_id:0,
-              currentPage:pages
-          },
+          url: "/fresh/order/selectAllOrderByStatus.action",        //后台url
+          data: JSON.stringify(data),
           type: "POST",                   //类型，POST或者GET
           dataType: 'json',              //数据返回类型，可以是xml、json等
+          contentType:'application/json;charset=UTF-8',
           success: function (data) {      //成功，回调函数
+        	  
           	data = data.list1;
+          	
           	for(var i=0;i<data.length;i++){
-          		$("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].user_id+"</td><td>"+data[i].delivery_time+"</td><td>"+orderStatusName[data[i].order_status]+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">订单详情</a></td></tr>");
+      		    $("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].user_company+"</td><td>"+data[i].delivery_time+"</td><td>"+orderStatusName[data[i].order_status]+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
           	}
           },
           error: function (er) {          //失败，回调函数
               alert(er);
-          //    var data ={"list1":[{"address":"贵阳市贵阳一中","create_time":"2018-6-5","delivery_time":"2018-6-6","id":"1535452","order_high_price":100.5,"order_low_price":88.2,"order_real_price":0,"order_status":1,"pay_status":0,"user_id":2},{"address":"贵阳市贵阳一中","create_time":"4546546","delivery_time":"5744","id":"231242","order_high_price":13,"order_low_price":12,"order_real_price":12.5,"order_status":1,"pay_status":1,"user_id":2}]}
-          //		data = data.list1;
-	      //    	for(var i=0;i<data.length;i++){
-	      //    		if(data[i].order_real_price==0){
-	       //   		    $("#order").append("<tr><td>"+data[i].id+"</td><td>待定</td><td>"+orderStatusName[data[i].order_status]+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
-	      //    		}else{
-	     //     		    $("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_real_price+"</td><td>"+orderStatusName[data[i].order_status]+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
-	     //     		}
-         // 		}
+              //var data ={"list1":[{"address":"贵阳市贵阳一中","create_time":"2018-6-5","delivery_time":"2018-6-6","id":"1535452","order_high_price":100.5,"order_low_price":88.2,"order_real_price":0,"order_status":1,"pay_status":0,"user_id":2},{"address":"贵阳市贵阳一中","create_time":"4546546","delivery_time":"5744","id":"231242","order_high_price":13,"order_low_price":12,"order_real_price":12.5,"order_status":1,"pay_status":1,"user_id":2}]}
+          	//	data = data.list1;
+	       //   	for(var i=0;i<data.length;i++){
+	       //  		if(data[i].order_real_price==0){
+	        // 		    $("#order").append("<tr><td>"+data[i].id+"</td><td>待定</td><td>"+orderStatusName[data[i].order_status]+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
+	       //   		}else{
+	      //    		    $("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_real_price+"</td><td>"+orderStatusName[data[i].order_status]+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
+	      //   		}
+        //		}
           }
       });		
 }
@@ -86,9 +99,10 @@ function findMoreOrderByStatus(){
   	</table>
     	<ul >
     		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('2')">待确认订单</a></li>
+    		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('3')">待发货订单</a></li>
     		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('4')">待收货订单</a></li>
-    		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('5')">已完成订单</a></li>
-    		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('6')">售后处理</a></li>
+    		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('6')">已完成订单</a></li>
+    		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('5')">售后处理</a></li>
     	</ul>
     <table class="table table-hover text-center" id="order">
       <tr>

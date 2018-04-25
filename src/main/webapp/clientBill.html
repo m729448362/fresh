@@ -24,6 +24,7 @@ var user =JSON.parse(obj);//user对象
 		 if($.cookie("mydate")=="history"){//历史账单
 		 	mydate="";
 		 }
+		 
 		 $.ajax({//根据userId查找本月账单
              url: "/fresh/goods/getBill.action",        //后台url
              data: {                          //数据

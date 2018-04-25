@@ -2,7 +2,7 @@ package com.htzhny.entity;
 
 public class Order_itemAndAfter_saleQuery {
 
-	
+	private String goods_name;
 	private Integer goods_amount;//商品数量
 	private double goods_low_price; //最低价
 	private double goods_high_price;//最高价
@@ -16,6 +16,12 @@ public class Order_itemAndAfter_saleQuery {
 	private String prove_img;//证明图片
 	private String delivery_time;
 
+	public String getGoods_name() {
+		return goods_name;
+	}
+	public void setGoods_name(String goods_name) {
+		this.goods_name = goods_name;
+	}
 	public String getDelivery_time() {
 		return delivery_time;
 	}
@@ -92,10 +98,13 @@ public class Order_itemAndAfter_saleQuery {
 	}
 
 
-	public Order_itemAndAfter_saleQuery(Integer goods_amount, double goods_low_price, double goods_high_price,
-			double goods_real_price, String after_sale_reason, int handle_status, String handle_way,
-			String handle_person, String handle_time, String company, String prove_img, String delivery_time) {
+
+	public Order_itemAndAfter_saleQuery(String goods_name, Integer goods_amount, double goods_low_price,
+			double goods_high_price, double goods_real_price, String after_sale_reason, int handle_status,
+			String handle_way, String handle_person, String handle_time, String company, String prove_img,
+			String delivery_time) {
 		super();
+		this.goods_name = goods_name;
 		this.goods_amount = goods_amount;
 		this.goods_low_price = goods_low_price;
 		this.goods_high_price = goods_high_price;
@@ -111,11 +120,12 @@ public class Order_itemAndAfter_saleQuery {
 	}
 	@Override
 	public String toString() {
-		return "Order_itemAndAfter_saleQuery [goods_amount=" + goods_amount + ", goods_low_price=" + goods_low_price
-				+ ", goods_high_price=" + goods_high_price + ", goods_real_price=" + goods_real_price
-				+ ", after_sale_reason=" + after_sale_reason + ", handle_status=" + handle_status + ", handle_way="
-				+ handle_way + ", handle_person=" + handle_person + ", handle_time=" + handle_time + ", company="
-				+ company + ", prove_img=" + prove_img + ", delivery_time=" + delivery_time + "]";
+		return "Order_itemAndAfter_saleQuery [goods_name=" + goods_name + ", goods_amount=" + goods_amount
+				+ ", goods_low_price=" + goods_low_price + ", goods_high_price=" + goods_high_price
+				+ ", goods_real_price=" + goods_real_price + ", after_sale_reason=" + after_sale_reason
+				+ ", handle_status=" + handle_status + ", handle_way=" + handle_way + ", handle_person=" + handle_person
+				+ ", handle_time=" + handle_time + ", company=" + company + ", prove_img=" + prove_img
+				+ ", delivery_time=" + delivery_time + "]";
 	}
 	public Order_itemAndAfter_saleQuery() {
 		super();

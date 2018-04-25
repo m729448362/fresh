@@ -11,14 +11,16 @@
 <script src="js/jquery.js"></script>
 <script src="js/pintuer.js"></script>
 <script src="js/JquerySession.js"></script>
+<script type="text/javascript" src="js/json.js"></script>
 <script>
 	$(document).ready(function(c) {
+		var data ={};
 		$.ajax({//根据用户id查询菜篮中数据
-	            url: "fresh/buyCart/selectBuyCart.action",        //后台url
-	            data: {                          //数据
-	            },
+	            url: "/fresh/buyCart/selectBuyCart.action",        //后台url
+	            data: JSON.stringify(data),
 	            type: "POST",                   //类型，POST或者GET
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
 	                //alert(data.result);
 	                //var data = {"buyCart":{"goodsAmount":6.0,"goodsTotalHighPrice":92.4,"goodsTotalLowPrice":83.0,"items":[{"amount":4,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一棵大白菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":14.5,"goods_name":"白菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":1}},{"amount":2,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一颗大青菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":12.5,"goods_name":"青菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":0,"id":2}}]}}
@@ -43,12 +45,13 @@
 		window.history.go(-1); // 返回上一页  
 	}
 	function createOrder(){//生成订单
+		var data ={};
 		$.ajax({
-	            url: "fresh/buyCart/createOrder.action",        //后台url
-	            data: {                          //数据
-	            },
+	            url: "/fresh/buyCart/createOrder.action",        //后台url
+	            data:JSON.stringify(data),
 	            type: "POST",                   //类型，POST或者GET
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
 	                //alert(data.result);
 	                sessionStorage.setItem("order_id",order_id);
@@ -60,13 +63,13 @@
 	        });
 	}
 	function deleteGoods(goodsId){//删除一个购物项
+		var data ={"goods_id":goodsId};
 		$.ajax({
 	            url: "/fresh/buyCart/deleteItem.action",        //后台url
-	            data: { 
-	            	goods_id:goodsId                         //数据
-	            },
+	            data: JSON.stringify(data),
 	            type: "POST",                   //类型，POST或者GET
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
 	                alert(data.result);
 	                window.location.reload; 
@@ -77,12 +80,13 @@
 	        });
 	}
 	function deleteAllGoods(){//清空购物车
+		var data ={};
 		$.ajax({
-	            url: "/fresh/buyCart/clearGoods.action",        //后台url
-	            data: { 
-	            },
+	            url: "/fresh/buyCart/clearBuyCart.action",        //后台url
+	            data: JSON.stringify(data),
 	            type: "POST",                   //类型，POST或者GET
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
 	                alert(data.result);
 	               // window.location.href="orderSubmit.html"; 
