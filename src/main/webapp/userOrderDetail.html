@@ -14,6 +14,7 @@
 <script src="js/include.js"></script>
 <script src="js/uploadImg.js"></script>
 <script src="js/JquerySession.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
 <script>
 	var orderId = sessionStorage.getItem("orderId");
 	var orderStatusName={"1":"待报价","2":"待确认","3":"待发货","4":"待收货","5":"售后处理中","6":"已完成"};
@@ -24,6 +25,10 @@
      var totalLowPrice=0;//待报价订单，总计最低价
      var tatilHighPrice=0;//待报价订单，总计最高价
 	$(document).ready(function(c) {
+		var data={
+				"id":orderId,   //orderId
+                "currentPage":pages
+		}
 			//初始化方法
 		$.ajax({//根据订单id查询订单详情
              url: "/fresh/order_item/selectAllByOrderId.action",        //后台url
