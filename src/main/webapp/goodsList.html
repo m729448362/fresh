@@ -14,17 +14,23 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/JquerySession.js"></script>
+<script type="text/javascript" src="js/JquerySession.js"></script>
 <script type="text/javascript">
+
 	var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
 	var user =JSON.parse(obj);//user对象 
+	
 	$(document).ready(function(c) {
+     	var data={
+                "goodsType":"",
+               
+    		};
 		$.ajax({//查询商品种类
 	             url: "/fresh/goods_type/showAllType.action",        //后台url
-	             data: {                          //数据
-	                  goodsType:""
-	             },
+				JSON.stringify(data),
 	             type: "POST",                   //类型，POST或者GET
-	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             dataType: 'json',  
+	             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
 	             success: function (data) {      //成功，回调函数    画页面
 	                 	$("#goodsType").remove();//移除
 	                 	$("#title").append("<ul id='goodsType'></ul>");
@@ -40,13 +46,16 @@
 	         });
 	});
 	function getGoods(goodsType){//根据种类查询商品
+     	var data={
+                "goodsType":goodsType,
+               
+    		};
 	   $.ajax({
              url: "/fresh/goods/getGoodsByType.action",        //后台url
-             data: {                          //数据
-                 goodsType:goodsType
-             },
+             JSON.stringify(data),
              type: "POST",                   //类型，POST或者GET
-             dataType: 'json',              //数据返回类型，可以是xml、json等
+             dataType: 'json',   
+             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数    画页面
                  	$("#goods").remove();//移除
                  	$("#goodsType").append("<table class='table table-hover text-center' id='goods'></table>");
