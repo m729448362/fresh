@@ -63,5 +63,16 @@ public class AddressController {
 	
 		return jsonObject;
 		}
+	@RequestMapping(value="findAddressById", method = RequestMethod.POST)
+	//查询一个地址
+	public  @ResponseBody JSONObject findAddressById(@RequestBody Map<String, Object> params,HttpServletRequest request){
+		JSONObject jsonObject = new JSONObject();
+		Integer id=(Integer) params.get("id");
+		Address address=addressService.findAddressById(id);
+		jsonObject.put("address", address);
+		
+		
+		return jsonObject;
+	}
 	
 }

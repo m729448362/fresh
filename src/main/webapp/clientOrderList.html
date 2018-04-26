@@ -53,6 +53,7 @@ function findMoreOrderByStatus(){
 			"currentPage":pages
 		};
 	$.ajax({//订单状态查找订单
+			
           url: "/fresh/order/selectAllOrderByStatus.action",        //后台url
           data: JSON.stringify(data),
           type: "POST",                   //类型，POST或者GET

@@ -52,6 +52,7 @@ public class OrderController {
     	}
     	String str= (String)params.get("status");
     	Integer status=Integer.parseInt(str);
+    	
 		PageBean<Order> pageBean =orderService.selectUserOrderByStatus(currentPage, status,user_id);
 		List<Order> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);

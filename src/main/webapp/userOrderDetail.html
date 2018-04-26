@@ -28,16 +28,14 @@
 		var data={
 				"id":orderId,   //orderId
                 "currentPage":pages
-		}
+		};
 			//初始化方法
 		$.ajax({//根据订单id查询订单详情
              url: "/fresh/order_item/selectAllByOrderId.action",        //后台url
-             data: {                          //数据
-                 id:orderId,   //orderId
-                 currentPage:pages
-             },
+            JSON.stringify(data)
              type: "POST",                   //类型，POST或者GET
              dataType: 'json',              //数据返回类型，可以是xml、json等
+             contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数
                  //alert(data.result);
                  data = data.list1;

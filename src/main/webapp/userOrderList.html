@@ -21,20 +21,28 @@
 	var pages=0;
 	var orderStatusName={"1":"待报价","2":"待确认","3":"待发货","4":"待收货","5":"售后处理中","6":"已完成"};
 $(document).ready(function(c) {
-	if(orderStatus==6){
-		window.location.href="./userBill.html";//跳转到账单页面
-	}else if(orderStatu==5){
-		windwo.location.href="./afterSaleOrderList.html";//跳转到售后订单页面
-	}else {
-		findMoreOrderByStatus();
-	}
-		
+//	if(orderStatus==6){
+//		window.location.href="./userBill.html";//跳转到账单页面
+//	}
+//	else {
+//		findMoreOrderByStatus();
+//	}
+	findMoreOrderByStatus();
 	
 });
 function getOrderDetail(orderId){//跳转到订单详情页面  id为订单id
 	 sessionStorage.setItem("orderId",orderId);
 	 sessionStorage.setItem("orderStatus",orderStatus);
-	 window.location.href="./userOrderDetail.html"; 
+	 if(orderStatus==5){
+		 window.location.href="./userAfterSaleDetail.html"; //售后详情页面
+	 }else if(orderStatus==6){
+		 window.location.href="./userBillDetail.html"; //已完成订单详情页面
+	 }else{
+		 window.location.href="./userOrderDetail.html"; 
+	 }
+//	 sessionStorage.setItem("orderId",orderId);
+//	 sessionStorage.setItem("orderStatus",orderStatus);
+//	 window.location.href="./userOrderDetail.html"; 
 }
 function returnLastPage(){//返回上一页
 	window.history.go(-1); // 返回上一页  
@@ -46,9 +54,11 @@ function findOrderByStatus(orderStatus){
 }
 function findMoreOrderByStatus(){
 	pages+=1;//查找第几页
-	var data =("status":orderStatus,//订单状态
-            "user_id":0,
-            "currentPage":pages);
+	var data={
+			"status":orderStatus,
+			"user_id":0,
+			"currentPage":pages
+		};
 	$.ajax({//订单状态查找订单
           url: "/fresh/order/selectUserOrderByStatus.action",        //后台url
           data: JSON.stringify(data),
@@ -56,10 +66,12 @@ function findMoreOrderByStatus(){
           dataType: 'json',              //数据返回类型，可以是xml、json等
           contentType:'application/json;charset=UTF-8',
           success: function (data) {      //成功，回调函数
+        	
           	data = data.list1;
+          alert(data)
           	for(var i=0;i<data.length;i++){
-         		if(data[i].order_real_price==0){
-          		    $("#order").append("<tr><td>"+data[i].id+"</td><td>待定</td><td>"+orderStatusName[data[i].order_status]+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
+         		if(orderStatus==1){
+          		    $("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_low_price+"~"+data[i].order_high_price+"</td><td>"+orderStatusName[data[i].order_status]+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
           		}else{
           		    $("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_real_price+"</td><td>"+orderStatusName[data[i].order_status]+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
           		}
@@ -67,6 +79,7 @@ function findMoreOrderByStatus(){
           },
           error: function (er) {          //失败，回调函数
               alert(er);
+          }
       });		
 }
 </script>
@@ -91,10 +104,10 @@ function findMoreOrderByStatus(){
     		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('2')">待确认订单</a></li>
     		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('3')">待发货订单</a></li>
     		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('4')">待收货订单</a></li>
-    		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('5')">已完成订单</a></li>
-    		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('6')">售后处理</a></li>
+    		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('5')">售后处理</a></li>
+    		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('6')">已完成订单</a></li>
     	</ul>
-    <table class="table table-hover text-center" id="order" style="display:none">
+    <table class="table table-hover text-center" id="order">
       <tr>
         <th style="text-align:center; padding:0.5em 2em;">订单号</th>
         <th>金额</th>

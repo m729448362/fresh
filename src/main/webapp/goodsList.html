@@ -19,7 +19,7 @@
 	var user =JSON.parse(obj);//user对象 
 	$(document).ready(function(c) {
 		$.ajax({//查询商品种类
-	             url: "/fresh/goods/getGoodsType.action",        //后台url
+	             url: "/fresh/goods_type/showAllType.action",        //后台url
 	             data: {                          //数据
 	                  goodsType:""
 	             },
@@ -61,14 +61,17 @@
          });
 	}
 	function addToMyBasket(goodsId){//加入菜篮 
+	
+     	var data={
+                "goodsId":goodsId,
+                "amount":1
+    		};
 		$.ajax({//
-             url: "/fresh/goods/addToMyBasket.action",        //后台url
-             data: {                          //数据
-                 goodsId:goodsId,
-                 userId:user.id
-             },
+             url: "/fresh/goods/addGoods.action",        //后台url
+            JSON.stringify(data),
              type: "POST",                   //类型，POST或者GET
              dataType: 'json',              //数据返回类型，可以是xml、json等
+             contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数    画页面
                    },
              error: function (er) {          //失败，回调函数

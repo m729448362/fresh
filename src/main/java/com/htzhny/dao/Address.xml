@@ -19,4 +19,7 @@
 	<insert id="addAddress" parameterType="com.htzhny.entity.Address">
 		insert into address(receiver,address_detail,create_time,status,user_id,receiver_phone) values(#{receiver},#{address_detail},#{create_time},#{status},#{user_id},#{receiver_phone})
 	</insert>
+	<select id="findAddressById" parameterType="Integer" resultMap="AddressQuery">
+		select * from address where id=#{id}
+	</select>
 </mapper>
