@@ -17,25 +17,26 @@
 	var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
 	var user =JSON.parse(obj);//user对象 
 	$(document).ready(function(c) {
-		//var addressId=$.cookie('addressId');
-		
+		var message={
+			 "id":user.id//用户id
+		};
 		if(addressId!=null&&addressId!=undefined&&addressId!=""){
 			$.ajax({//根据用户id查询用户收货地址
-	            url: "/fresh/user/getUserAddress.action",        //后台url
-	            data: {                          //数据
-	                userId:user.id,//用户id
-	                addressId:addressId
-	            },
+	            url: "/fresh/address/findAddressById.action",        //后台url
+	            data: JSON.stringify(message),
 	            type: "POST",                   //类型，POST或者GET
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
 	                //alert(data.result);
-	                $('#address').val(data[i].address);
-	                $('#phone').val(data[i].phone);
-	                $('#receiver').val(data[i].receiver);
+	            	var data={"address":{"address_detail":"dsadad","create_time":"sadada","id":1,"receiver":"dsa","receiver_phone":"","status":1,"user_id":2}};
+	            	data = data.address;
+	                $('#address').val(data.address_detail);
+	                $('#phone').val(data.receiver_phone);
+	                $('#receiver').val(data.receiver);
 	            },
 	            error: function (er) {          //失败，回调函数
-	                alert(er);
+	                alert("查询失败");
 	            }
 	        });
 		}
@@ -45,27 +46,68 @@
 		window.history.go(-1); 
 	}
 	function updateAddress(){
-		var address=$('address').val();//地址
-		var phone=$('phone').val();//电话
-		var receiver=$('receiver').val();//收货人
-		$.ajax({//更新用户收货地址
-	            url: "/fresh/user/updateUserAddress.action",        //后台url
-	            data: {                          //数据
-	                userId:user.id,//用户id
-	                addressId:addressId,
-	                address:address,
-	                phone:phone,
-	                receiver:receiver
-	            },
+		var address=$('#address').val();//地址
+		var phone=$('#phone').val();//电话
+		var receiver=$('#receiver').val();//收货人
+		var message;//更新数据
+		if(!addressId){//新增
+			message={
+					"address": {
+						"receiver": receiver,
+						"address_detail": address,
+						"create_time": "2018-3-6",
+						"status": 1,
+						"user_id":user.id,
+						"receiver_phone": phone
+					}
+				};
+			$.ajax({//新增用户收货地址
+	            url: "/fresh/address/addAddress.action",        //后台url
+	            data:JSON.stringify(message),
 	            type: "POST",                   //类型，POST或者GET
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
-	                alert("更新成功");
+	            	if(data.result==1){
+	            		alert("新增成功");
+		                window.history.go(-1);
+	            	}else{
+	            		alert("新增失败");
+	            	}
 	            },
 	            error: function (er) {          //失败，回调函数
 	                alert(er);
 	            }
 	        });
+		}else{
+			message={
+					"address": {
+						"id":addressId,
+						"receiver": receiver,
+						"address_detail": address,
+						"receiver_phone": phone
+					}
+				};
+			$.ajax({//更新用户收货地址
+	            url: "/fresh/address/updateAddressbyId.action",        //后台url
+	            data:JSON.stringify(message),
+	            type: "POST",                   //类型，POST或者GET
+	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            contentType:'application/json;charset=UTF-8',
+	            success: function (data) {      //成功，回调函数
+	            	if(data.result==1){
+	            		alert("更新成功");
+	 	                window.history.go(-1);
+	            	}else{
+	            		alert("更新失败");
+	            	}
+	               
+	            },
+	            error: function (er) {          //失败，回调函数
+	                alert(er);
+	            }
+	        });
+		}
 	}
 	
 </script>

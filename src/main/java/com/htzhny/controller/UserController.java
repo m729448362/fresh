@@ -1,6 +1,9 @@
 package com.htzhny.controller;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,12 +75,20 @@ public class UserController {
     }
     //注册
     @RequestMapping(value="register", method = RequestMethod.POST)
-    public @ResponseBody JSONObject register(@RequestBody Map<String,Object> params){
+    public @ResponseBody JSONObject register(@RequestBody Map<String,Object> params,HttpServletRequest request){
     	JSONObject jsonObject = new JSONObject();
     	Map<String,Object> map=(Map<String, Object>) params.get("user");
     	User user=JSON.parseObject(JSON.toJSONString(map),User.class);
+    	Date dt =new Date(); 
+		String formatDate = "";  
+		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
+	    formatDate = dFormat.format(dt); 
+	    String create_time = DateFormat.getDateInstance().format(dt);  
+	    user.setCreate_time(formatDate);
+	    user.setUser_last_login_time(formatDate);
     	Integer result=userService.addUser(user);
     	if(1==result){
+    		request.getSession().setAttribute("user", user);
     		String user1=JSON.toJSONString(user);
     		jsonObject.put("user", user1);
     		return jsonObject;
@@ -102,11 +113,12 @@ public class UserController {
     	
 	   	JSONObject jsonObject = new JSONObject();
    		Map<String,Object> map=(Map<String, Object>) params.get("user");
-   		User user=JSON.parseObject(JSON.toJSONString(map),User.class);
-   		Integer result=userService.updateMessage(user);
+   		User user1=JSON.parseObject(JSON.toJSONString(map),User.class);
+   		Integer result=userService.updateMessage(user1);
    		if(1==result){
-    		String user1=JSON.toJSONString(user);
-    		jsonObject.put("user", user1);
+   			User user=userService.findUserByUserName(user1.getUser_name());
+    		String user2=JSON.toJSONString(user);
+    		jsonObject.put("user", user2);
     		return jsonObject;
     	}
    		jsonObject.put("result", result);

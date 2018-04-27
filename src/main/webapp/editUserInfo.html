@@ -10,36 +10,52 @@
 <link rel="stylesheet" href="css/admin.css">
 <script src="js/jquery.min.js"></script>
 <script src="js/pintuer.js"></script>
+<script type="text/javascript" src="js/JquerySession.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
+<script type="text/javascript" src="js/JquerySession.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
 <script>
+//获取登录用户信息
+var obj = sessionStorage.getItem("user");
+var user = JSON.parse(obj);
 	$(document).ready(function(c) {
 			//初始化方法
 		<!-- 用户对象 -->
-		var user={
-			userName:"Mr wang",
-			userType:1
-		};
-		//获取登录用户信息
-		//var user = JSON.parse(sessionStorage.getItem('user'));
 		//$("#img").html(user.img);	//给用户资料赋值
-		$("#name").val(user.userName);
-		//$("#birthday").html(user.birthdayDate);
-		//$("#userCompany").html(user.userCompany);
-		//$("#userPhone").html(user.userPhone);
+		$("#name").val(user.user_name);
+		$("#birthday").val(user.user_birthday);
+		$("#userCompany").val(user.user_company);
+		$("#userPhone").val(user.user_phone);
 	});
 	function edit(){
+		var user = {
+				"user": {
+					"user_name": $("#name").val(),
+					"user_phone": $("#userPhone").val(),
+					"user_id_type": 1,
+					"user_id_card": "",
+					"user_birthday": $("#birthday").val(),
+					"user_company": $("#userCompany").val(),
+					"user_img": "www.baidu.com"
+				}
+			};
 		$.ajax({//修改个人信息接口
-	             url: "/fresh/user/login.action",        //后台url
-	             data: {                          //数据
-	                 name:document.getElementById("userLoginAccount").value,
-	                 pw:document.getElementById("password").value
-	             },
+	             url: "/fresh/user/updateMessage.action",        //后台url
+	             data: JSON.stringify(user),
 	             type: "POST",                   //类型，POST或者GET
 	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             contentType:'application/json;charset=UTF-8',
 	             success: function (data) {      //成功，回调函数
-	                 alert(data.result);
+	            	 if(!data.result){
+	            		 alert("修改成功");
+	            		 sessionStorage.setItem("user",JSON.stringify(data.user));
+	            		 //returnLastPage();
+	            	 }else{
+	            		 alert("修改失败");
+	            	 }
 	             },
 	             error: function (er) {          //失败，回调函数
-	                 alert(er);
+	                 alert("修改失败");
 	             }
 	         });
 	}
@@ -68,10 +84,12 @@
 	      </tr>
 	      <volist name="list" id="vo">
 	        <tr>
-	          <td>头像:<input type="file" id="img"/></td>
+	          <td>头像:<input type="file" value="sdgsdg" id="demo_input" /> 
+				</td>
+	          
 	        </tr>
 	        <tr>
-	          <td>姓名:<input type="text" id="name" value="张三" /></td>
+	          <td>姓名:<input type="text" id="name" value="张三" disabled="true"/></td>
 	        </tr>
 	        <tr>
 	          <td>出生日期:<input type="date" id="birthday" value="1980-01-01" /></label></td>

@@ -151,6 +151,18 @@ public class User {
 		this.user_company = user_company;
 		this.user_img = user_img;
 	}
+	
+	public User(String user_name, String password, int user_type, String user_phone, int user_id_type,
+			String user_id_card, int status) {
+		super();
+		this.user_name = user_name;
+		this.password = password;
+		this.user_type = user_type;
+		this.user_phone = user_phone;
+		this.user_id_type = user_id_type;
+		this.user_id_card = user_id_card;
+		this.status = status;
+	}
 	public User() {
 		super();
 	}

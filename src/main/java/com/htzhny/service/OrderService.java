@@ -7,11 +7,16 @@ import com.htzhny.entity.OrderQuery;
 import com.htzhny.entity.PageBean;
 
 public interface OrderService{
-	public PageBean<Order> selectUserOrderByStatus(Integer currentPage,Integer status,Integer user_id);
+	public PageBean<OrderQuery> selectUserOrderByStatus(Integer currentPage,Integer status,Integer user_id);
 	public Integer selectCountByStatus(Integer status);
+	public Integer selectCountByUserByStatus(Integer order_status,Integer user_id);
 	public PageBean<OrderQuery> selectAllOrderByStatus( Integer currentPage,Integer status);
 	public Integer addOrder(Order order);
 	public Integer updateStatus(Integer status,String id);
 	public Integer updateRealPrice(double price,String id);
 	public Integer updatePayStatus(Integer pay_status,String id);
+	public PageBean<OrderQuery> selectUserOrderByPayStatus(Integer currentPage,Integer pay_status,Integer user_id);
+	public PageBean<OrderQuery> selectAllOrderByPayStatus(Integer currentPage,Integer pay_status);
+	public Integer selectCountByUserByPayStatus(Integer pay_status,	Integer user_id);
+	public Integer selectCountByPayStatus(Integer pay_status);
 }

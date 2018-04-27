@@ -49,7 +49,8 @@ public class BuyCartController {
 	public @ResponseBody JSONObject addGoods(@RequestBody Map<String, Object> params,HttpServletRequest request){
 		JSONObject jsonObject = new JSONObject();
 		
-		Integer goods_id= (Integer)params.get("goods_id");
+		String str= (String)params.get("goods_id");
+		Integer goods_id=Integer.parseInt(str);
 		Integer amount= (Integer)params.get("amount");
 		BuyCart buyCart=null;
 		

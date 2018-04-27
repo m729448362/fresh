@@ -18,6 +18,9 @@
 	<select id="selectCountByStatus" parameterType="java.lang.Integer" resultType="java.lang.Integer">
 		select count(1) from t_order where order_status=#{status}
 	</select>
+	<select id="selectCountByUserByStatus" resultType="java.lang.Integer">
+		select count(1) from t_order where order_status=#{0} and user_id=#{1}
+	</select>
 	<select id="selectUserOrderByStatus" resultMap="OrderQuery">
 		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where order_status=#{2} and user_id=#{3} limit #{0},#{1}
 	</select>
@@ -37,4 +40,16 @@
 		<update id="updatePayStatus">
 		update t_order set pay_status=#{0} where id=#{1}
 	</update>
+	<select id="selectCountByUserByPayStatus" resultType="java.lang.Integer">
+		select count(1) from t_order where pay_status=#{0} and user_id=#{1}
+	</select>
+	<select id="selectCountByPayStatus" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(1) from t_order where pay_status=#{pay_status}
+	</select>
+	<select id="selectUserOrderByPayStatus" resultMap="OrderQuery">
+	select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where pay_status=#{2} and user_id=#{3} limit #{0},#{1}
+	</select>
+	<select id="selectAllOrderByPayStatus" resultMap="OrderQuery">
+		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where pay_status=#{2} limit #{0},#{1}
+	</select>
 </mapper>

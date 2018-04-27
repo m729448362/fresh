@@ -78,8 +78,8 @@ public class GoodsController {
 		JSONObject jsonObject = new JSONObject();
     	
     	Integer currentPage= (Integer)params.get("currentPage");
-    	Integer typeId= (Integer)params.get("goods_type");
-    	
+    	String str= (String)params.get("goods_type");
+    	Integer typeId=Integer.parseInt(str);
     	PageBean<Goods> pageBean=goodsService.selectGoodsByType(currentPage, typeId);
     	List<Goods> list=pageBean.getLists();
     	String list1=JSON.toJSONString(list);

@@ -53,8 +53,8 @@ public class OrderController {
     	String str= (String)params.get("status");
     	Integer status=Integer.parseInt(str);
     	
-		PageBean<Order> pageBean =orderService.selectUserOrderByStatus(currentPage, status,user_id);
-		List<Order> list=pageBean.getLists();
+		PageBean<OrderQuery> pageBean =orderService.selectUserOrderByStatus(currentPage, status,user_id);
+		List<OrderQuery> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);
     	jsonObject.put("list1",list1);
 		return jsonObject;
@@ -75,6 +75,36 @@ public class OrderController {
     	jsonObject.put("list1",list1);
 		return jsonObject;
 	}
+	@RequestMapping(value="selectUserOrderByPayStatus", method = RequestMethod.POST)
+	//通过支付状态状态查询某个用户的所有账单
+	public @ResponseBody JSONObject selectUserOrderByPayStatus(@RequestBody Map<String, Object> params){
+		JSONObject jsonObject = new JSONObject();
+		
+		Integer currentPage= (Integer)params.get("currentPage");
+		Integer user_id=(Integer) params.get("user_id");
+		Integer pay_status= (Integer)params.get("pay_status");
+    	
+		PageBean<OrderQuery> pageBean =orderService.selectUserOrderByPayStatus(currentPage, pay_status, user_id);
+		List<OrderQuery> list=pageBean.getLists();
+		String list1=JSON.toJSONString(list);
+    	jsonObject.put("list1",list1);
+		return jsonObject;
+	}
+	@RequestMapping(value="selectAllOrderByPayStatus", method = RequestMethod.POST)
+	//通过支付状态状态查询所有用户的所有账单
+		public @ResponseBody JSONObject selectAllOrderByPayStatus(@RequestBody Map<String, Object> params){
+			JSONObject jsonObject = new JSONObject();
+			
+			Integer currentPage= (Integer)params.get("currentPage");
+			
+			Integer pay_status= (Integer)params.get("pay_status");
+	    	
+			PageBean<OrderQuery> pageBean =orderService.selectAllOrderByPayStatus(currentPage, pay_status);
+			List<OrderQuery> list=pageBean.getLists();
+			String list1=JSON.toJSONString(list);
+	    	jsonObject.put("list1",list1);
+			return jsonObject;
+		}
 	@RequestMapping(value="addOrder", method = RequestMethod.POST)
 	//生成订单(购物车结算)
 	public @ResponseBody JSONObject addOrder(@RequestBody Map<String, Object> params){
