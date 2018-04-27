@@ -18,5 +18,6 @@ public interface OrderDao {
 	public List<OrderQuery> selectAllOrderByPayStatus(Integer start,Integer size,Integer pay_status);
 	public Integer selectCountByUserByPayStatus(Integer pay_status,	Integer user_id);
 	public Integer selectCountByPayStatus(Integer pay_status);
+	public Order selectOneOrderById(String id);
 	
 }

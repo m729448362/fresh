@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import com.alibaba.fastjson.JSON;
+import com.htzhny.entity.Bill;
 import com.htzhny.entity.Goods;
 import com.htzhny.entity.Order;
 import com.htzhny.entity.OrderQuery;
 import com.htzhny.entity.PageBean;
 import com.htzhny.entity.User;
+import com.htzhny.service.BillService;
 import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
 
@@ -32,6 +34,8 @@ public class OrderController {
 	private OrderService orderService;
 	@Autowired
 	private Order_itemService order_itemService;
+	@Autowired
+	private BillService billService;
 	@RequestMapping(value="selectCountByStatus", method = RequestMethod.POST)
 	//查询某个订单状态的总数
 	public  @ResponseBody JSONObject selectCountByStatus(@RequestBody Map<String, Object> params){
@@ -88,6 +92,9 @@ public class OrderController {
 		List<OrderQuery> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);
     	jsonObject.put("list1",list1);
+    	Bill bill=billService.selectBillByUserId(user_id);
+    	double month_pay_money=bill.getMonth_pay_money();
+    	jsonObject.put("month_pay_money",month_pay_money);
 		return jsonObject;
 	}
 	@RequestMapping(value="selectAllOrderByPayStatus", method = RequestMethod.POST)
@@ -103,7 +110,15 @@ public class OrderController {
 			List<OrderQuery> list=pageBean.getLists();
 			String list1=JSON.toJSONString(list);
 	    	jsonObject.put("list1",list1);
-			return jsonObject;
+	    	List<Bill> billList=billService.selectAllBill();
+	    	double seller_month_total_money=0.00;
+	    	for(Bill bill:billList){
+	    		seller_month_total_money =+ bill.getMonth_pay_money();
+	    		
+	    		
+	    	}
+	    	jsonObject.put("mseller_month_total_money",seller_month_total_money);
+	    	return jsonObject;
 		}
 	@RequestMapping(value="addOrder", method = RequestMethod.POST)
 	//生成订单(购物车结算)
@@ -127,6 +142,14 @@ public class OrderController {
 		String id= (String)params.get("id");
 		Integer result=orderService.updateStatus(status, id);
 		jsonObject.put("result", result);
+		if(status==6){
+			Order order=orderService.selectOneOrderById(id);
+			double real_price=order.getOrder_real_price();
+			
+			Bill bill=billService.selectBillByUserId(order.getUser_id());
+			double month_pay_money=bill.getMonth_pay_money()+real_price;
+			billService.updateMonthPayMoney(month_pay_money);
+		}
 		return jsonObject;
 	}
 	@RequestMapping(value="updateRealPrice", method = RequestMethod.POST)

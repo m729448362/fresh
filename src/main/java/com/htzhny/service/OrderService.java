@@ -19,4 +19,5 @@ public interface OrderService{
 	public PageBean<OrderQuery> selectAllOrderByPayStatus(Integer currentPage,Integer pay_status);
 	public Integer selectCountByUserByPayStatus(Integer pay_status,	Integer user_id);
 	public Integer selectCountByPayStatus(Integer pay_status);
+	public Order selectOneOrderById(String id);
 }

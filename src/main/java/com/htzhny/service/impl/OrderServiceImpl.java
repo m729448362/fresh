@@ -162,6 +162,11 @@ public class OrderServiceImpl implements OrderService{
 		return orderDao.selectCountByUserByStatus(order_status, user_id);
 	}
 
+	@Override
+	public Order selectOneOrderById(String id) {
+		return orderDao.selectOneOrderById(id);
+	}
+
 
 
 

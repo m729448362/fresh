@@ -3,8 +3,10 @@ package com.htzhny.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,8 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import com.alibaba.fastjson.JSON;
-
+import com.htzhny.entity.Bill;
 import com.htzhny.entity.User;
+import com.htzhny.service.BillService;
 import com.htzhny.service.UserService;
 
 import net.sf.json.JSONObject;
@@ -35,6 +38,8 @@ public class UserController {
 	@Autowired(required=true)
     private UserService userService;
 	
+	@Autowired(required=true)
+    private BillService billService;
     @RequestMapping("/view")
     public String view() {
         return "main/login";
@@ -58,8 +63,45 @@ public class UserController {
     			jsonObject.put("result",result);
     			User user2=(User) request.getSession().getAttribute("user");
     			String user1=JSON.toJSONString(user);
-    			
     			jsonObject.put("user",user1);
+    			Integer user_id=user.getId();
+    			Bill bill=billService.selectBillByUserId(user_id);
+    			Calendar cal=Calendar.getInstance();
+    			Date dt =new Date(); 
+    			cal.setTime(dt);
+    			int month=cal.get(Calendar.MONTH);
+    			int year=cal.get(Calendar.YEAR);
+    			if(bill!=null){
+    				String a=bill.getOnemonth(); //得到账单的年月
+    				Integer oldYear=Integer.parseInt(a.substring(0, 4));
+    			
+    				Integer oldMonth=Integer.parseInt(a.substring(5));
+    			
+    			
+
+    				if(oldYear==year){//年份是否相等
+    					if(oldMonth<month){ //新的月份如果大于数据库中存储的月份，为改用户新增一个月份的账单。
+    						String id =UUID.randomUUID().toString();
+    						String year_month=year+"-"+month;
+    						Bill newBill=new Bill(id,user_id,year_month,0.00,1,"");
+    						billService.addBill(newBill);
+    						bill.setFlag(0);
+    					}
+    				}else if(oldYear<year){
+    					String id =UUID.randomUUID().toString();
+    					String year_month=year+"-"+month;
+    					Bill newBill=new Bill(id,user_id,year_month,0.00,1,"");
+    					billService.addBill(newBill);
+    					bill.setFlag(0);
+    			}
+    			}else {
+    				String id =UUID.randomUUID().toString();
+					String year_month=year+"-"+month;
+					Bill newBill=new Bill(id,user_id,year_month,0.00,1,"");
+					billService.addBill(newBill);
+    			}
+    			
+    		    
     			return jsonObject;
     
     			

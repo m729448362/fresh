@@ -52,4 +52,7 @@
 	<select id="selectAllOrderByPayStatus" resultMap="OrderQuery">
 		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where pay_status=#{2} limit #{0},#{1}
 	</select>
+	<select id="selectOneOrderById" parameterType="java.lang.String" resultType="com.htzhny.entity.Order">
+		select * from t_order where id=#{id}
+	</select>
 </mapper>
