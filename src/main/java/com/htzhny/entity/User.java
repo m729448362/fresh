@@ -166,6 +166,12 @@ public class User {
 	public User() {
 		super();
 	}
+	public User(int id, String user_name, String user_company) {
+		super();
+		this.id = id;
+		this.user_name = user_name;
+		this.user_company = user_company;
+	}
 	
 	
 	

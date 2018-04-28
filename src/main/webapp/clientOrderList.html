@@ -14,8 +14,8 @@
 <script type="text/javascript" src="./js/json.js"></script>
 <script>
 var orderStatus=sessionStorage.getItem("orderStatus");
-if(orderStatus==""||orderStatus==null){
-	orderStatus=1;
+if(!orderStatus){
+	orderStatus=2;
 }
 var pages=0;
 var orderStatusName={"1":"待报价","2":"待确认","3":"待发货","4":"待收货","5":"售后处理中","6":"已完成"};
@@ -24,13 +24,14 @@ $(document).ready(function(c) {
 	findMoreOrderByStatus();	
 			
 });
-function getOrderDetail(orderId){//跳转到订单详情页面  id为订单id
-		sessionStorage.setItem("orderId",orderId);
+function getOrderDetail(orderId,orderPrice,lowPrice,highPrice){//跳转到订单详情页面  id为订单id
+	 sessionStorage.setItem("orderId",orderId);
 	 sessionStorage.setItem("orderStatus",orderStatus);
+	 sessionStorage.setItem("orderPrice",orderPrice);
+	 sessionStorage.setItem("lowPrice",lowPrice);
+	 sessionStorage.setItem("highPrice",highPrice);
 	 if(orderStatus==5){
 		 window.location.href="./clientAfterSaleDetail.html"; //售后详情页面
-	 }else if(orderStatus==6){
-		 window.location.href="./clientBillDetail.html"; //已完成订单详情页面
 	 }else{
 		 window.location.href="./clientOrderDetail.html"; 
 	 }
@@ -64,7 +65,7 @@ function findMoreOrderByStatus(){
           	data = data.list1;
           	
           	for(var i=0;i<data.length;i++){
-      		    $("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].user_company+"</td><td>"+data[i].delivery_time+"</td><td>"+orderStatusName[data[i].order_status]+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
+      		    $("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].user_company+"</td><td>"+data[i].delivery_time+"</td><td>"+orderStatusName[data[i].order_status]+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"','"+data[i].order_real_price+"','"+data[i].order_low_price+"','"+data[i].order_high_price+"')\">查看</a></td></tr>");
           	}
           },
           error: function (er) {          //失败，回调函数

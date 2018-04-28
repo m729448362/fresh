@@ -49,9 +49,10 @@ public class BuyCartController {
 	public @ResponseBody JSONObject addGoods(@RequestBody Map<String, Object> params,HttpServletRequest request){
 		JSONObject jsonObject = new JSONObject();
 		
-		String str= (String)params.get("goods_id");
+		String str= (String)params.get("goodsId");
 		Integer goods_id=Integer.parseInt(str);
 		Integer amount= (Integer)params.get("amount");
+		
 		BuyCart buyCart=null;
 		
 		if(null!=request.getSession().getAttribute("buyCart")){
@@ -65,6 +66,7 @@ public class BuyCartController {
 		Goods goods=goodsService.selectGoodsById(goods_id);
 		buyItem.setGoods(goods);
 		buyCart.addItem(buyItem);
+		System.out.println(buyCart.getItems().size());
 		
 		request.getSession().setAttribute("buyCart", buyCart);
 		jsonObject.put("buyCart",buyCart);

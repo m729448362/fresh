@@ -14,6 +14,7 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/JquerySession.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
 <script type="text/javascript">
 
 	var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
@@ -110,7 +111,7 @@
 		}
 	}
 	function addToMyBasket(goodsId){//加入菜篮 
-	
+		alert(goodsId);
      	var data={
                 "goodsId":goodsId,
                 "amount":1
@@ -129,8 +130,8 @@
          });
 	}
 	function openPage(obj){//订单详情
-		window.sessionStorage.setItem('goodsId', obj);
-	    window.location.href="./goodsDetail.html"; 
+		sessionStorage.setItem('goodsId', obj);
+	    location.href="./goodsDetail.html"; 
 	}
 	
 </script>

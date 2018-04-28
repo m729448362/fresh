@@ -15,4 +15,7 @@
 	update user set user_phone=#{user_phone},user_id_type=#{user_id_type},user_id_card=#{user_id_card},
 	user_birthday=#{user_birthday},user_company=#{user_company},user_img=#{user_img} where user_name=#{user_name}
 </update>
+<select id="selectAllUser" resultType="com.htzhny.entity.User">
+	select user.id,user.user_name,user.user_company from user;
+</select>
 </mapper>

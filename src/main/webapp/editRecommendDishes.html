@@ -11,19 +11,20 @@
 <script src="js/jquery.js"></script>
 <script src="js/pintuer.js"></script>
 <script>
+var message;//请求参数
 	$(document).ready(function(c) {
-		
+		message={};
 		$.ajax({//查询推荐菜品
 	            url: "/fresh/goods/selectRecommendedGoods.action",        //后台url
-	            data: {                          //数据
-	            },
+	            data: JSON.stringify(message),
 	            type: "POST",                   //类型，POST或者GET
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
 	                //alert(data.result);
 	                data=data.list1;
 	                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-		                	$("#recommendGoods").append("<tr><td>"+data[i].id+"</td><td>"+data[i].goods_name+"</td><td><input type='button' value='删除' onclick='deleteDishes("+data[i].id+")'></input></td></tr>");
+		                	$("#recommendGoods").append("<tr><td>"+data[i].id+"</td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_create_time+"</td><td><input type='button' value='删除' onclick='deleteDishes("+data[i].id+")'></input></td></tr>");
 	                }
 	                getUnRecommendGoods();
 	            },
@@ -35,12 +36,13 @@
 	       });
 	});
 	function getUnRecommendGoods(){//查询所有产品  画下拉框
+		message={};
 		$.ajax({//查询所有产品
 		            url: "/fresh/goods/selectAll.action",        //后台url
-		            data: {                          //数据
-		            },
+		            data: JSON.stringify(message),
 		            type: "POST",                   //类型，POST或者GET
 		            dataType: 'json',              //数据返回类型，可以是xml、json等
+		            contentType:'application/json;charset=UTF-8',
 		            success: function (data) {      //成功，回调函数
 		                //alert(data.res1ult);
 		                data=data.list1;
@@ -60,17 +62,22 @@
 		       });
 	}
 	function deleteDishes(goodsId){
+		message={
+				"goods_id":""+goodsId,  //菜品编号
+                "goods_Recommended":0
+		};
 		$.ajax({//删除推荐菜品
-            url: "fresh/goods/updateGoodsRecommendedstatus.action",        //后台url
-            data: {                          //数据
-                goods_id:goodsId,  //菜品编号
-                goods_Recommended:0
-            },
+            url: "/fresh/goods/updateGoodsRecommendedstatus.action",        //后台url
+            data: JSON.stringify(message),
             type: "POST",                   //类型，POST或者GET
             dataType: 'json',              //数据返回类型，可以是xml、json等
+            contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数
-                //alert(data.result);
-                window.location.reload();
+                if(data.result==1){
+                	alert("删除成功");
+                	window.location.reload();
+                }
+                
             },
             error: function (er) {          //失败，回调函数
                 alert(er);
@@ -79,17 +86,22 @@
 	}
 	function addRecommendGoods(){
 		var goodsId = $('#goods').val();
+		message={
+				"goods_id":goodsId,  //菜品编号
+                "goods_Recommended":1
+		};
 		$.ajax({//增加推荐商品
-            url: "fresh/goods/updateGoodsRecommendedstatus.action",        //后台url
-            data: {                          //数据
-                goods_id:goodsId,  //菜品编号
-                goods_Recommended:1
-            },
+            url: "/fresh/goods/updateGoodsRecommendedstatus.action",        //后台url
+            data: JSON.stringify(message),
             type: "POST",                   //类型，POST或者GET
             dataType: 'json',              //数据返回类型，可以是xml、json等
+            contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数
                 //alert(data.result);
-                window.location.reload();
+            	if(data.result==1){
+                	alert("新增成功");
+                	window.location.reload();
+                }
             },
             error: function (er) {          //失败，回调函数
                 alert(er);
@@ -116,6 +128,7 @@
       <tr>
         <th style="text-align:center; padding:20px;">菜品编号</th>
         <th>菜名</th>
+        <th>推荐日期</th>
         <th>操作</th>
       </tr>
     </table>

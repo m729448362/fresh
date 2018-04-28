@@ -54,8 +54,8 @@ public class Order_itemServiceImpl implements Order_itemService{
 		return order_itemDao.selectCount(id);
 	}
 	@Override
-	public List<Double> selectAllItemRealPrice(String id) {
-		return order_itemDao.selectAllItemRealPrice(id);
+	public List<Order_item> selectAllItem(String id) {
+		return order_itemDao.selectAllItem(id);
 	}
 
 

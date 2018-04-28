@@ -10,31 +10,52 @@
 <link rel="stylesheet" href="css/admin.css">
 <script src="js/jquery.js"></script>
 <script src="js/pintuer.js"></script>
-<script src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/JquerySession.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
 <script>
 	var goodsId = sessionStorage.getItem('goodsId');
+	var message;//请求参数
+	var goods;//产品信息
 	$(document).ready(function(c) {
+		message =  {                          //数据
+                "id":goodsId
+        };
 		if(goodsId!='undefind'&&goodsId!=''&&goodsId!=null){
 			$.ajax({//查询商品详情
-	             url: "/fresh/goods/getGoodsById.action",        //后台url
-	             data: {                          //数据
-	                 goodsId:goodsId
-	             },
+	             url: "/fresh/goods/selectGoodsById.action",        //后台url
+	             data: JSON.stringify(message),
 	             type: "POST",                   //类型，POST或者GET
 	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             contentType:'application/json;charset=UTF-8',
 	             success: function (data) {      //成功，回调函数    画页面
-                 	alert(data.result);
-                 	$('#goodsName').val(data.goodsName);//品名
-					$('#lowPrice').val(data.lowPrice);//单价低价
-					$('#highPrice').val(data.highPrice);//单价高价
+	            	data = {"goods" : {"goods_name":"大白菜","goods_low_price":12.6,"goods_high_price":15.8,"goods_type":1,"goods_detai":"一颗大白菜","goods_status":1,"goods_Recommended":0,
+	            		"goods_create_time":"2018-6-6","goods_img":"www.baidu.com"}};
+                 	data = data.goods;
+                 	$('#img').val(data.goods_img);//图片
+                 	$('#goodsName').val(data.goods_name);//品名
+					$('#lowPrice').val(data.goods_low_price);//单价低价
+					$('#highPrice').val(data.goods_high_price);//单价高价
 					$('#base').val(data.base);//基地id
-					$('#goodsDetailText').val(data.goodsDetailText);//产品详情
+					$('#goodsDetailText').val(data.goods_detai);//产品详情
 					$('#inspectionReportText').val(data.inspectionReportText);//质检详情
 					$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
 					$('#baseDetailText').val(data.baseDetailText);//基地详情
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);
+	                var data = {"goods" : {"goods_name":"大白菜","goods_low_price":12.6,"goods_high_price":15.8,"goods_type":1,"goods_detai":"一颗大白菜","goods_status":1,"goods_Recommended":0,
+		            		"goods_create_time":"2018-6-6","goods_img":"www.baidu.com"}};
+	                 	data = data.goods;
+	                 	$('#img').val(data.goods_img);//图片
+	                 	$('#goodsName').val(data.goods_name);//品名
+	                 	$('#introduce').val(data.goods_name);//产品介绍
+						$('#lowPrice').val(data.goods_low_price);//单价低价
+						$('#highPrice').val(data.goods_high_price);//单价高价
+						$('#base').val(data.base);//基地id
+						$('#goodsDetailText').val(data.goods_detai);//产品详情
+						$('#inspectionReportText').val(data.inspectionReportText);//质检详情
+						$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
+						$('#baseDetailText').val(data.baseDetailText);//基地详情
 	             }
 	         });
 		}
@@ -65,6 +86,7 @@
 	}
 	function updateGoods(){
 		var goodsName=$('#goodsName').val();//品名
+		var introduce = $("#introduce").val();//介绍
 		var lowPrice=$('#lowPrice').val();//单价低价
 		var highPrice=$('#highPrice').val();//单价高价
 		var base=$('#base').val();//基地id
@@ -72,21 +94,30 @@
 		var inspectionReportText=$('#inspectionReportText').val();//质检详情
 		var goodsSourceText=$('#goodsSourceText').val();//产品溯源
 		var baseDetailText=$('#baseDetailText').val();//基地详情
+		message={
+			"goods": {
+				"base_id": 0,
+				"goods_Recommended": 0,
+				"goods_create_time": "2018-6-6",
+				"goods_detail": goodsDetailText,
+				"goods_high_price": lowPrice,
+				"goods_img": "www.baidu.com",
+				"goods_introduce": introduce,
+				"goods_low_price": highPrice,
+				"goods_name": goodsName,
+				"goods_quality_report_id": 0,
+				"goods_resource_id": 0,
+				"goods_status": 1,
+				"goods_type": 0,
+				"id": goodsId
+			}
+		};
 		$.ajax({//更新商品信息
              url: "/fresh/goods/updateGoods.action",        //后台url
-             data: {                          //数据
-                 goodsName:goodsName,
-                 lowPrice:lowPrice,
-                 highPrice:highPrice,
-                 base:base,
-                 goodsDetailText:goodsDetailText,
-                 inspectionReportText:inspectionReportText,
-                 goodsSourceText:goodsSourceText,
-                 baseDetailText:baseDetailText,
-                 goodsId:goodsId
-             },
+             data: JSON.stringify(message),
              type: "POST",                   //类型，POST或者GET
              dataType: 'json',              //数据返回类型，可以是xml、json等
+             contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数    画页面
                  	alert(data.result);
              },
@@ -115,9 +146,13 @@
  	</table>
    <table class="table table-hover text-center">
      <tr>
-       <td rowspan="5"><img src="./images/vegetable3.jpg"/></td>
+       <td rowspan="5"><img id="img" src="./images/vegetable3.jpg"/></td>
        <td>品名：</td>
        <td><input type="text" id="goodsName"/></td>
+     </tr>
+     <tr>
+       <td>介绍：</td>
+       <td><input type="text" id="introduce"/></td>
      </tr>
      <tr>
        <td>单价：</td>

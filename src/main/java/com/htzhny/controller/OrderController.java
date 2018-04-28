@@ -20,11 +20,13 @@ import com.htzhny.entity.Bill;
 import com.htzhny.entity.Goods;
 import com.htzhny.entity.Order;
 import com.htzhny.entity.OrderQuery;
+import com.htzhny.entity.Order_item;
 import com.htzhny.entity.PageBean;
 import com.htzhny.entity.User;
 import com.htzhny.service.BillService;
 import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
+import com.htzhny.service.UserService;
 
 import net.sf.json.JSONObject;
 @Controller
@@ -36,6 +38,8 @@ public class OrderController {
 	private Order_itemService order_itemService;
 	@Autowired
 	private BillService billService;
+	@Autowired
+	private UserService userService;
 	@RequestMapping(value="selectCountByStatus", method = RequestMethod.POST)
 	//查询某个订单状态的总数
 	public  @ResponseBody JSONObject selectCountByStatus(@RequestBody Map<String, Object> params){
@@ -70,7 +74,8 @@ public class OrderController {
 		JSONObject jsonObject = new JSONObject();
 		
 		Integer currentPage= (Integer)params.get("currentPage");
-		
+		List<User> userList =userService.selectAllUser();
+		jsonObject.put("userList",userList);
 		String str= (String)params.get("status");
     	Integer status=Integer.parseInt(str);
 		PageBean<OrderQuery> pageBean =orderService.selectAllOrderByStatus(currentPage, status);
@@ -84,9 +89,12 @@ public class OrderController {
 	public @ResponseBody JSONObject selectUserOrderByPayStatus(@RequestBody Map<String, Object> params){
 		JSONObject jsonObject = new JSONObject();
 		
-		Integer currentPage= (Integer)params.get("currentPage");
-		Integer user_id=(Integer) params.get("user_id");
-		Integer pay_status= (Integer)params.get("pay_status");
+		String str1= (String)params.get("currentPage");
+		Integer currentPage=Integer.parseInt(str1);
+		String str=(String) params.get("user_id");
+		Integer user_id=Integer.parseInt(str);
+		String str2= (String)params.get("pay_status");
+		Integer pay_status=Integer.parseInt(str2);
     	
 		PageBean<OrderQuery> pageBean =orderService.selectUserOrderByPayStatus(currentPage, pay_status, user_id);
 		List<OrderQuery> list=pageBean.getLists();
@@ -101,11 +109,13 @@ public class OrderController {
 	//通过支付状态状态查询所有用户的所有账单
 		public @ResponseBody JSONObject selectAllOrderByPayStatus(@RequestBody Map<String, Object> params){
 			JSONObject jsonObject = new JSONObject();
+			String str1= (String)params.get("currentPage");
+			Integer currentPage=Integer.parseInt(str1);
+			String str= (String)params.get("pay_status");
+			Integer pay_status=Integer.parseInt(str);
 			
-			Integer currentPage= (Integer)params.get("currentPage");
-			
-			Integer pay_status= (Integer)params.get("pay_status");
-	    	
+			List<User> userList =userService.selectAllUser();
+			jsonObject.put("userList",userList);
 			PageBean<OrderQuery> pageBean =orderService.selectAllOrderByPayStatus(currentPage, pay_status);
 			List<OrderQuery> list=pageBean.getLists();
 			String list1=JSON.toJSONString(list);
@@ -160,10 +170,10 @@ public class OrderController {
 		JSONObject jsonObject = new JSONObject();
 
 		String order_id= (String)params.get("order_id");
-		List<Double> list=order_itemService.selectAllItemRealPrice( order_id);
-		Double orderRealPrice=0.00;
-		for(Double realPrice:list){
-			orderRealPrice+=realPrice;
+		List<Order_item> list=order_itemService.selectAllItem(order_id);
+		double orderRealPrice=0.00;
+		for(Order_item order_item:list){
+			orderRealPrice=+order_item.getGoods_real_price()*order_item.getGoods_amount();
 		}
 		BigDecimal bg=new BigDecimal(orderRealPrice);
 		double  orderRealPriceFormat= bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();

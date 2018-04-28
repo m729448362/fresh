@@ -11,76 +11,55 @@
 <script src="js/jquery.js"></script>
 <script src="js/pintuer.js"></script>
 <script src="js/JquerySession.js" type="text/javascript"></script>
-
+<script type="text/javascript" src="./js/json.js"></script>
 <script>
-var pages=0;
-var orderStatus=6；
+var pages=0;//当前页码
+var message;//后台参数
+var payStatus=sessionStorage.getItem("payStatus");//支付状态
+var obj = sessionStorage.getItem('user');//
+var user=JSON.parse(obj);
+if(!payStatus){
+	payStatus=0;//未支付
+}
 	$(document).ready(function(c) {
 			//初始化方法
-		 var date=new Date;
-		 var year=date.getFullYear(); 
-		 var month=date.getMonth()+1;
-		 month =(month<10 ? "0"+month:month); 
-		 var mydate = (year.toString()+"-"+month.toString());//当前年月
-		 $.ajax({//根据userId查找本月账单
-             url: "/fresh/order/selectUserOrderByStatus.action",        //后台url
-             data: {                          //数据
-                 userId:0,//userId //用户id
-                 currentPage:pages,
-                 status:orderStatus//已完成订单
-                 
-             },
-             type: "POST",                   //类型，POST或者GET
-             dataType: 'json',              //数据返回类型，可以是xml、json等
-             success: function (data) {      //成功，回调函数    画页面
-                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                  		if(data[i].payStatus== undefined||data[i].payStatus== null||data[i].payStatus== ""){//未支付
-                  			$("#myBillList").append("<tr><td>data[i].orderId</td><td>data[i].totalPrice</td><td>data[i].address</td><td>data[i].deliveryDate</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
-                  		}else{
-                  			$("#myBillList").append("<tr style='color: #9b9292;'><td color='#FFFFFF'>data[i].orderId</td><td>data[i].totalPrice</td><td>data[i].address</td><td>data[i].deliveryDate</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
-                  		}
-                    }
-             },
-             error: function (er) {          //失败，回调函数
-                 alert(er);
-             }
-         });	
+		findMoreOrder();
 	});
-	function getThisMonthBill(){//获取本月账单
+	function getOrder(payStatus){//获取本月账单
+		pages=0;
+		sessionStorage.setItem("payStatus",payStatus);
 		window.location.reload();
 	}
-	function getHistoryBill(){
-		$.ajax({//根据userId查找历史账单
-             url: "/fresh/goods/getHistoryBill.action",        //后台url
-             data: {                          //数据
-                 userId:user.id,//userId //用户id
-                 month:""   //
-             },
-             type: "POST",                   //类型，POST或者GET
-             dataType: 'json',              //数据返回类型，可以是xml、json等
-             success: function (data) {      //成功，回调函数    画页面
-             	  $("#myBillList").remove();//移除
-             	  $("#billTitle").append("<table class='table table-hover text-center' id='myBillList'></table>");
-             	  $("#myBillList").append("<tr><th style='text-align:center; padding:0.5em 2em;'>订单号</th><th>金额(元)</th><th>收货地址</th><th>时间</th><th>操作</th></tr>");
-                  var totalPrice=0.0;
-                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                  		if(data[i].payStatus== undefined||data[i].payStatus== null||data[i].payStatus== ""){//未支付
-                  			$("#myBillList").append("<tr><td>data[i].orderId</td><td>data[i].totalPrice</td><td>data[i].address</td><td>data[i].deliveryDate</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
-                  			totalPrice +=data[i].totalPrice;
-                  		}else{
-                  			$("#myBillList").append("<tr style='color: #9b9292;'><td color='#FFFFFF'>data[i].orderId</td><td>data[i].totalPrice</td><td>data[i].address</td><td>data[i].deliveryDate</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
-                  		}
-                    }
-                    $("#account").val(totalPrice+"元");//应付金额
-             },
-             error: function (er) {          //失败，回调函数
-                 alert(er);
-             }
-         });
+	function findMoreOrder(){
+		alert(payStatus);
+		pages+=1;
+		message={                          //数据
+                "user_id":""+user.id,//用户id
+                "currentPage":""+pages,
+                "pay_status":""+payStatus
+            };
+		$.ajax({//根据userId查找本月账单
+            url: "/fresh/order/selectUserOrderByPayStatus.action",        //后台url
+            data: JSON.stringify(message),
+            type: "POST",                   //类型，POST或者GET
+            dataType: 'json',              //数据返回类型，可以是xml、json等
+            contentType:'application/json;charset=UTF-8',
+            success: function (data) {      //成功，回调函数    画页面
+            	 $("#account").text(data.month_pay_money+"元");//应付金额
+           	     data=data.list1;
+                 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                 	$("#myBillList").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_high_price+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
+                 }
+            },
+            error: function (er) {          //失败，回调函数
+                alert(er);
+               // var data={"list1":[{"address":"贵阳市贵阳一中","create_time":"2018-6-5","delivery_time":"2018-6-6","id":"1535452","order_high_price":100.5,"order_low_price":88.2,"order_real_price":0,"order_status":1,"pay_status":0,"user_company":"贵阳一中123","user_id":2},{"address":"贵州省贵阳一中","create_time":"2018-4-22","delivery_time":"2018-4-7","id":"268d5b7cd-6f24-4a73-bfc7-89774ef57c75","order_high_price":61.6,"order_low_price":54,"order_real_price":0,"order_status":6,"pay_status":0,"user_company":"贵阳一中123","user_id":2}],"month_pay_money":81.0};
+            }
+        });	
 	}
 	function getOrderDetail(orderId){//进入订单详情
-		sesstionStorage.setItem("orderId",orderId);
-		sessionStorage.setItem("orderStatus",6);//已完成订单状态
+		sessionStorage.setItem("orderId",orderId);
+		//sessionStorage.setItem("orderStatus",6);//已完成订单状态
 	 	window.location.href="./userOrderDetail.html"; 
 	}
 </script>
@@ -88,7 +67,7 @@ var orderStatus=6；
 <body>
 <form method="post" action="" id="listform">
   <div class="panel admin-panel">
-  	<header class="panel-head" ><strong class="icon-reorder">本月账单</strong></header> 
+  	<header class="panel-head" ><strong>账单</strong></header> 
   	<table>
   		<th><td>
   			<div class="title">
@@ -100,8 +79,8 @@ var orderStatus=6；
   		</td></th>
   	</table>
     	<ul id="billTitle">
-    		<li style="float:left;padding:0.2em;"><a href="javascript:getThisMonthBill()">本月账单</a></li>
-    		<li style="float:left;padding:0.2em;"><a href="javascript:getHistoryBill()">历史账单</a></li>
+    		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(0)">本月账单</a></li>
+    		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(1)">历史账单</a></li>
     	</ul>
     <table class="table table-hover text-center" id="myBillList">
       <tr>
@@ -119,9 +98,10 @@ var orderStatus=6；
   	</strong>
   </div>
 </form>
+<div class="footer">
+	<a href="javaScript:findMoreOrder()">查看更多</a>
+</div>
 <script type="text/javascript">
-
-
 </script>
 </body>
 </html>

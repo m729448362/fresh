@@ -67,7 +67,8 @@ public class GoodsController {
 	//根据id查询商品
 	public @ResponseBody JSONObject selectGoodsById(@RequestBody Map<String, Object> params){
 		JSONObject jsonObject = new JSONObject();
-    	Integer goods_id= (Integer) params.get("id");
+    	String str= (String) params.get("goodsId");
+    	Integer goods_id=Integer.parseInt(str);
     	Goods goods=goodsService.selectGoodsById(goods_id);
     	jsonObject.put("goods", goods);
     	return jsonObject;

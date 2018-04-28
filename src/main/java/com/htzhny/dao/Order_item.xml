@@ -23,7 +23,7 @@
 	<select id="selectAllByOrderId" resultMap="Order_itemQuery">
 		select a.id,b.goods_name,a.order_id,a.goods_amount,b.goods_low_price,b.goods_high_price,a.goods_real_price from order_item a inner join goods b on a.goods_id=b.id where order_id=#{2} limit #{0},#{1}
 	</select>
-	<select id="selectAllItemRealPrice" parameterType="java.lang.String" resultType="java.lang.Double">
-		select goods_real_price from order_item where order_id=#{order_id}
+	<select id="selectAllItem" parameterType="java.lang.String" resultType="com.htzhny.entity.Order_item">
+		select * from order_item where order_id=#{order_id}
 	</select>
 </mapper>

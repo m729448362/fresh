@@ -1,6 +1,7 @@
 package com.htzhny.entity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -13,7 +14,7 @@ public class Order {
 	private String delivery_time;//送货时间
 	private double order_low_price;//订单所有商品总共的最低价
 	private double order_high_price;//订单所有商品总共的最高价
-	private double order_real_price;//供货商给出的实际报价
+	private double order_real_price;//供货商给出的实际价交钱
 	private int order_status;//0:失效 （取消订单）1:待报价 2：待确认 3：待发货 4：待收货 5：售后处理中 6：已完成 
 	private String create_time;//创建时间
 	private int user_id;//订单所属用户id

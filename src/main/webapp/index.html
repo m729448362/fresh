@@ -67,12 +67,13 @@
     function joinMyBasket(obj){//加入菜篮   取消本地cookie存储
     	var td = obj.parentNode;//父节点
     	var goodsId=td.firstChild.value;
+    	var message = {
+    			"goodsId":goodsId,
+                "amount":1
+    	};
     	$.ajax({//
              url: "/fresh/buyCart/addGoods.action",        //后台url
-             data: {                          //数据
-                 goodsId:goodsId,
-                 amount:1
-             },
+             data: JSON.stringify(message),
              type: "POST",                   //类型，POST或者GET
              dataType: 'json',              //数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数    画页面

@@ -11,31 +11,36 @@
 <script src="js/jquery.js"></script>
 <script src="js/pintuer.js"></script>
 <script type="text/javascript" src="js/JquerySession.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
 <script>
 	var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
 	var user =JSON.parse(obj);//user对象 
 	var goodsId = sessionStorage.getItem("goodsId");
 	var userId = user.id;
 	$(document).ready(function(c) {
-		if(goodsId!='undefind'&&goodsId!=''&&goodsId!=null){
+		var data={
+				"goodsId":goodsId
+		};
+		if(goodsId){
 			$.ajax({//查询商品详情
-	             url: "/fresh/goods/getGoodsById.action",        //后台url
-	             data: {                          //数据
-	                 goodsId:goodsId
-	             },
-	             type: "POST",                   //类型，POST或者GET
-	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             url: "/fresh/goods/selectGoodsById.action",        //后台url
+	             data:JSON.stringify(data),
+	             type: "POST",                //类型，POST或者GET
+	             dataType: 'json',     
+	             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
 	             success: function (data) {      //成功，回调函数    画页面
-                 	alert(data.result);
-                 	$('#goodsName').val(data.goodsName);//品名
-					$('#lowPrice').val(data.lowPrice);//单价低价
-					$('#highPrice').val(data.highPrice);//单价高价
-					$('#base').val(data.base);//基地id
+	                data=data.goods;
+                 	$('#goodsName').val(data.goods_name);//品名
+                 	$('#introduce').val(data.goods_introduce);//产品介绍
+					$('#lowPrice').val(data.goods_low_price);//单价低价
+					$('#highPrice').val(data.goods_high_price);//单价高价
+					$('#base').val(data.base_id);//基地id
 					$('#goodsDetailText').val(data.goodsDetailText);//产品详情
 					$('#inspectionReportText').val(data.inspectionReportText);//质检详情
 					$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
 					$('#baseDetailText').val(data.baseDetailText);//基地详情
-					$('#totalPrice').val(data.totalPrice);//合计金额
+					//$('#totalPrice').val(data.totalPrice+"元");//合计金额
+					changeTotalPrice();
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);
@@ -78,15 +83,19 @@
 		var totalHighPrice =highPrice*amount;
 		$('#totalPrice').html(''+totalLowerPrice+'~'+totalHighPrice+'元');
 	}
-	function addToMyBasket(goodsId){//加入菜篮
+	function addToMyBasket(){//加入菜篮
+		var amount=$('#amount').val()
+		var data={
+                "goodsId":goodsId,
+                "amount":parseInt(amount) //数量
+    		};
 		//alert(goodsId);
 		$.ajax({//
-             url: "/fresh/goods/addToMyBasket.action",        //后台url
-             data: {                          //数据
-                 goodsId:goodsId
-             },
-             type: "POST",                   //类型，POST或者GET
-             dataType: 'json',              //数据返回类型，可以是xml、json等
+             url: "/fresh/buyCart/addGoods.action",        //后台url
+             data:JSON.stringify(data),
+             type: "POST",           //类型，POST或者GET
+             dataType: 'json',   
+             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数    画页面
                  	alert(data.result);
                    },
@@ -95,21 +104,20 @@
              }
          });
 	}
-	function createOrder(goodsId){
+	function createOrder(){
+		var data={                          //数据
+            };
 		//alert(goodsId);
-		var amount = $('#amount').val()
+		var amount = $('#amount').val();
 		$.ajax({
-	            url: "/fresh/order/createOrder.action",        //后台url
-	            data: {                          //数据
-	                goodsId:goodsId,
-	                amount:amount,
-	                userId:userId
-	            },
-	            type: "POST",                   //类型，POST或者GET
-	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            url: "/fresh/buyCart/createOrder.action",        //后台url
+	            data:JSON.stringify(data),
+	            type: "POST",               //类型，POST或者GET
+	            dataType: 'json',
+	            contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
 	            success: function (data) {      //成功，回调函数
 	                alert(data.result);
-	                window.location.href="orderSubmit.html"; 
+	                window.location.href="myBasket.html"; 
 	            },
 	            error: function (er) {          //失败，回调函数
 	                alert(er);
@@ -136,11 +144,15 @@
      <tr>
        <td rowspan="5"><img src="./images/vegetable3.jpg"/></td>
        <td>品名：</td>
-       <td><input type="text" id="goodsName"/></td>
+       <td><input type="text" id="goodsName" disabled="true"/></td>
+     </tr>
+     <tr>
+       <td>介绍：</td>
+       <td><input type="text" id="introduce" disabled="true"/></td>
      </tr>
      <tr>
        <td>单价：</td>
-       <td><input type="text" id="lowPrice"/>---<input type="text" id="highPrice"/>元/kg</td>
+       <td><input type="text" id="lowPrice" disabled="true"/>---<input type="text" id="highPrice" disabled="true"/>元/kg</td>
      </tr>
      <tr>
        <td>数量：</td>
@@ -163,8 +175,8 @@
      </tr>
    </table>
    <div>
-   		<input type="button" value="加入菜篮" onclick="addToMyBasket('+goodsId+')"/>
-   		<input type="button" value="立即购买" onclick="createOrder('+goodsId+')"/>
+   		<input type="button" value="加入菜篮" onclick="addToMyBasket()"/>
+   		<input type="button" value="立即购买" onclick="createOrder()"/>
    </div>
    
  </div>
@@ -179,7 +191,7 @@
  <div id="goodsDetail" style="display:block;">
  	<table class="table table-hover text-left">
  		<tr>
- 			<td><textarea id="goodsDetailText">
+ 			<td><textarea id="goodsDetailText" disabled="true">
  			</textarea></td>
  		</tr>
  	</table>
@@ -187,7 +199,7 @@
  <div id="inspectionReport" style="display:none;">
  	<table class="table table-hover text-left">
  		<tr>
- 			<td><textarea id="inspectionReportText" >
+ 			<td><textarea id="inspectionReportText" disabled="true" >
  			</textarea></td>
  		</tr>
  	</table>
@@ -195,7 +207,7 @@
  <div id="goodsSource" style="display:none;">
  	<table class="table table-hover text-left">
  		<tr>
- 			<td><textarea id="goodsSourceText" >
+ 			<td><textarea id="goodsSourceText"  disabled="true">
  			</textarea></td>
  		</tr>
  	</table>
@@ -203,7 +215,7 @@
  <div id="baseDetail" style="display:none;">
  	<table class="table table-hover text-left">
  		<tr>
- 			<td><textarea id="baseDetailText">
+ 			<td><textarea id="baseDetailText" disabled="true">
  			</textarea></td>
  		</tr>
  	</table>

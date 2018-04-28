@@ -18,7 +18,7 @@
 			update goods_type set status=#{status} where id=#{id}
 		</update>
 		<select id="showAllType" resultMap="goods_typeQuery">
-			select * from goods_type
+			select * from goods_type where status=1
 		</select>
 
 </mapper> 
