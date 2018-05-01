@@ -15,7 +15,7 @@
 		values(#{id},#{goods_id},#{order_id},#{goods_amount})
 	</insert>
 	<update id="updateRealPrice">
-		update order_item set goods_real_price=#{0} where id=#{1}
+		update order_item set goods_real_price=#{goods_real_price} where id=#{id}
 	</update>
 	<select id="selectCount" parameterType="java.lang.String" resultType="java.lang.Integer">
 		select count(1) from order_item where order_id=#{order_id}

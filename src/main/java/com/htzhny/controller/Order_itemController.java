@@ -1,5 +1,6 @@
 package com.htzhny.controller;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,10 +49,16 @@ public class Order_itemController {
 		
 		JSONObject jsonObject = new JSONObject();
 
-		double price= (double) params.get("price");
-		String id= (String)params.get("id");
-		Integer result=order_itemService.updateRealPrice(price, id);
-		jsonObject.put("result", result);
+		Map<String, Object> map= (Map<String, Object>) params.get("itemList");
+		
+   		List<Order_item> itemList=JSON.parseObject(JSON.toJSONString(map),List.class);
+		
+		for(Order_item item :itemList){
+			Order_item order_item=JSON.parseObject(JSON.toJSONString(item),Order_item.class);
+			Integer result =order_itemService.updateRealPrice(order_item);
+			jsonObject.put("result", result);
+			return jsonObject;
+		}
 		return jsonObject;
 	}
 	@RequestMapping(value="selectCount")

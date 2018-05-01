@@ -1,7 +1,7 @@
 package com.htzhny.entity;
 
 public class Order_itemAndAfter_saleQuery {
-
+	private String after_sale_id;
 	private String goods_name;
 	private Integer goods_amount;//商品数量
 	private double goods_low_price; //最低价
@@ -15,7 +15,13 @@ public class Order_itemAndAfter_saleQuery {
 	private String company;
 	private String prove_img;//证明图片
 	private String delivery_time;
-
+	
+	public String getAfter_sale_id() {
+		return after_sale_id;
+	}
+	public void setAfter_sale_id(String after_sale_id) {
+		this.after_sale_id = after_sale_id;
+	}
 	public String getGoods_name() {
 		return goods_name;
 	}
@@ -99,11 +105,13 @@ public class Order_itemAndAfter_saleQuery {
 
 
 
-	public Order_itemAndAfter_saleQuery(String goods_name, Integer goods_amount, double goods_low_price,
-			double goods_high_price, double goods_real_price, String after_sale_reason, int handle_status,
-			String handle_way, String handle_person, String handle_time, String company, String prove_img,
-			String delivery_time) {
+
+	public Order_itemAndAfter_saleQuery(String after_sale_id, String goods_name, Integer goods_amount,
+			double goods_low_price, double goods_high_price, double goods_real_price, String after_sale_reason,
+			int handle_status, String handle_way, String handle_person, String handle_time, String company,
+			String prove_img, String delivery_time) {
 		super();
+		this.after_sale_id = after_sale_id;
 		this.goods_name = goods_name;
 		this.goods_amount = goods_amount;
 		this.goods_low_price = goods_low_price;

@@ -22,8 +22,8 @@ public class Order_itemServiceImpl implements Order_itemService{
 		return order_itemDao.addOrder_item(item);
 	}
 	@Override
-	public Integer updateRealPrice(double price,String id) {
-		return order_itemDao.updateRealPrice(price, id);
+	public Integer updateRealPrice(Order_item item) {
+		return order_itemDao.updateRealPrice(item);
 	}
 	  @Override
 	
