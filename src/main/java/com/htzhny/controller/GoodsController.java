@@ -129,4 +129,14 @@ public class GoodsController {
     	jsonObject.put("list1",list1);
 		return jsonObject;
 	}
+	@RequestMapping(value="selectGoodsStatus")
+	//查询所有商品（不分页）
+	public @ResponseBody JSONObject selectGoodsStatus(@RequestBody Map<String, Object> params){
+		JSONObject jsonObject = new JSONObject();
+		Integer goods_status=(Integer) params.get("goods_status");
+		List<Goods> list=goodsService.selectGoodsStatus(goods_status);
+		String list1=JSON.toJSONString(list);
+    	jsonObject.put("list1",list1);
+		return jsonObject;
+	}
 }

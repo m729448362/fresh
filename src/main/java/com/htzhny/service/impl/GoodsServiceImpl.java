@@ -110,4 +110,9 @@ public class GoodsServiceImpl implements GoodsService{
 	public List<Goods> selectAll() {
 		return goodsDao.selectAll();
 	}
+
+	@Override
+	public List<Goods> selectGoodsStatus(Integer good_status) {
+		return goodsDao.selectGoodsStatus(good_status);
+	}
 }
