@@ -134,7 +134,7 @@ public class BuyCartController {
 			
 			return jsonObject;
 		}
-		//提交订单
+		//提交订单、、、、、、、、
 		@RequestMapping(value="submitOrder")
 		public @ResponseBody JSONObject submitOrder(@RequestBody Map<String, Object> params,HttpServletRequest request ){
 			JSONObject jsonObject = new JSONObject();
