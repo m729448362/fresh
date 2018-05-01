@@ -14,7 +14,7 @@
 		insert into order_item(id,goods_id,order_id,goods_amount) 
 		values(#{id},#{goods_id},#{order_id},#{goods_amount})
 	</insert>
-	<update id="updateRealPrice">
+	<update id="updateRealPrice" parameterType="com.htzhny.entity.Order_item">
 		update order_item set goods_real_price=#{goods_real_price} where id=#{id}
 	</update>
 	<select id="selectCount" parameterType="java.lang.String" resultType="java.lang.Integer">

@@ -49,16 +49,23 @@ public class Order_itemController {
 		
 		JSONObject jsonObject = new JSONObject();
 
-		Map<String, Object> map= (Map<String, Object>) params.get("itemList");
+		ArrayList<Order_item> list= (ArrayList<Order_item>) params.get("itemList");
 		
-   		List<Order_item> itemList=JSON.parseObject(JSON.toJSONString(map),List.class);
+		 
+		for(int i = 0 ; i < list.size() ; i++) {
+			 
+				Order_item order_item=JSON.parseObject(JSON.toJSONString(list.get(i)),Order_item.class);
+				Integer result =order_itemService.updateRealPrice(order_item);
+				jsonObject.put("result", result);
+				
+			 
+			}
 		
-		for(Order_item item :itemList){
-			Order_item order_item=JSON.parseObject(JSON.toJSONString(item),Order_item.class);
-			Integer result =order_itemService.updateRealPrice(order_item);
-			jsonObject.put("result", result);
-			return jsonObject;
-		}
+	
+		
+
+		
+	
 		return jsonObject;
 	}
 	@RequestMapping(value="selectCount")
