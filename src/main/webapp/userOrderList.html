@@ -65,7 +65,7 @@ function findMoreOrderByStatus(){
           success: function (data) {      //成功，回调函数
         	
           	data = data.list1;
-          alert(data)
+          
           	for(var i=0;i<data.length;i++){
          		if(orderStatus==1){
           		    $("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_low_price+"~"+data[i].order_high_price+"</td><td>"+orderStatusName[data[i].order_status]+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"','"+data[i].order_real_price+"','"+data[i].order_low_price+"','"+data[i].order_high_price+"')\">查看</a></td></tr>");

@@ -32,7 +32,7 @@ if(!payStatus){
 		window.location.reload();
 	}
 	function findMoreAllOrder(){//查询所有用户
-		alert(payStatus);
+		
 		pages+=1;
 		message={                          //数据
                 "currentPage":""+pages,
@@ -65,7 +65,7 @@ if(!payStatus){
         });	
 	}
 	function findMoreOrderByUserId(userId){//根据用户查找
-		alert(payStatus);
+		
 		pages+=1;
 		message={                          //数据
                 "user_id":""+userId,//userId //用户id
@@ -98,6 +98,10 @@ if(!payStatus){
 	}
 	function getOrderByUserId(obj){
 		pages=0;
+		
+		if(payStatus==0){
+			$('#updatePayStatus').append('<input type="button" value="已支付" onclick="updatePayStatus()">');
+		}
 		$("#myBillList  tr:not(:first)").empty("");  
 		sessionStorage.setItem("findUserId",obj.value);
 		findMoreOrderByUserId(obj.value);
@@ -109,6 +113,30 @@ if(!payStatus){
 		}else{//所有用户查看更多
 			findMoreAllOrder();
 		}
+	}
+	function updatePayStatus(){//根据用户id更新支付状态
+		var userId = sessionStorage.getItem("findUserId");
+		message={                          //数据
+                "user_id":parseInt(userId)//userId //用户id
+            };
+		$.ajax({//根据用户id更新支付状态
+            url: "/fresh/order/updatePayStatusByUser.action",        //后台url
+            data: JSON.stringify(message),
+            type: "POST",                   //类型，POST或者GET
+            dataType: 'json',              //数据返回类型，可以是xml、json等
+            contentType:'application/json;charset=UTF-8',
+            success: function (data) {      //成功，回调函数    画页面
+				if(data){
+					alert("修改成功");
+					window.location.reload();
+				}else{
+					alert("修改失败");
+				}
+            },
+            error: function (er) {          //失败，回调函数
+            	alert("修改失败");
+            }
+        });	
 	}
 </script>
 </head>
@@ -166,8 +194,11 @@ if(!payStatus){
   	</strong>
   </div>
 </form>
+
 <div class="footer">
 	<a href="javaScript:findMoreOrder()">查看更多</a>
+</div>
+<div id="updatePayStatus">
 </div>
 <script type="text/javascript">
 </script>

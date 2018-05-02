@@ -78,6 +78,7 @@ public class OrderController {
 		jsonObject.put("userList",userList);
 		String str= (String)params.get("status");
     	Integer status=Integer.parseInt(str);
+    	
 		PageBean<OrderQuery> pageBean =orderService.selectAllOrderByStatus(currentPage, status);
 		List<OrderQuery> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);
@@ -152,18 +153,12 @@ public class OrderController {
 		String id= (String)params.get("id");
 		Integer result=orderService.updateStatus(status, id);
 		jsonObject.put("result", result);
-		if(status==6){
-			Order order=orderService.selectOneOrderById(id);
-			double real_price=order.getOrder_real_price();
-			
-			Bill bill=billService.selectBillByUserId(order.getUser_id());
-			double month_pay_money=bill.getMonth_pay_money()+real_price;
-			billService.updateMonthPayMoney(month_pay_money);
-		}
+		
+		
 		return jsonObject;
 	}
-	@RequestMapping(value="updateRealPrice", method = RequestMethod.POST)
-	//报价
+	/**		@RequestMapping(value="updateRealPrice", method = RequestMethod.POST)
+//报价
 	public @ResponseBody JSONObject updateRealPrice(@RequestBody Map<String, Object> params){
 		
 		
@@ -181,7 +176,7 @@ public class OrderController {
 		jsonObject.put("orderRealPriceFormat", orderRealPriceFormat);
 		return jsonObject;
 		
-	}
+	}*/
 	@RequestMapping(value="updatePayStatus", method = RequestMethod.POST)
 	//修改订单支付状态
 	public @ResponseBody JSONObject updatePayStatus(@RequestBody Map<String, Object> params){
@@ -191,6 +186,28 @@ public class OrderController {
 		Integer pay_status= (Integer)params.get("pay_status");
 		Integer result=orderService.updatePayStatus(pay_status, order_id);
 		jsonObject.put("result", result);
+		return jsonObject;
+	}
+	@RequestMapping(value="updatePayStatusByUser", method = RequestMethod.POST)
+	//修改某个用户所有已完成订单支付状态
+	public @ResponseBody JSONObject updatePayStatusByUser(@RequestBody Map<String, Object> params){
+		
+		JSONObject jsonObject = new JSONObject();
+		Integer user_id= (Integer)params.get("user_id");
+		List<OrderQuery> orderList=orderService.selectUserOrderByStatusNoPage(6, user_id);
+		for(OrderQuery order:orderList){
+			double real_price=order.getOrder_real_price();
+			
+			Bill bill=billService.selectBillByUserId(order.getUser_id());
+			double month_pay_money=bill.getMonth_pay_money()+real_price;
+			billService.updateMonthPayMoney(month_pay_money);
+		Integer result=orderService.updatePayStatusByUser(user_id);
+		
+		jsonObject.put("result", result);
+			
+		}
+		
+		
 		return jsonObject;
 	}
 }

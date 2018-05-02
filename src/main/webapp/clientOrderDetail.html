@@ -50,6 +50,10 @@
                     	document.getElementById("afterSales").style.display ="block";
                     	findAfterSaleInfo(data.id);//售后信息查询
                     }
+                    if(orderStatus==3){
+                    	
+            			$('#updateOrderStatus').append('<input type="button" value="已发货" onclick="updateOrderStatus()">');
+            		}
                     
              },
              error: function (er) {          //失败，回调函数
@@ -111,7 +115,7 @@
 	}
 	 function updateOrderStatus(){//更新订单状态
 		 message={
-					"status":5,//订单状态  待收货
+					"status":4,//订单状态  待收货
 		            "id":orderId
 			};
 			$.ajax({//订单状态查找订单
@@ -121,11 +125,12 @@
 		          dataType: 'json',              //数据返回类型，可以是xml、json等
 		          contentType:'application/json;charset=UTF-8',
 		          success: function (data) {      //成功，回调函数
-		          	if(data.result==1){
-		          		alert("修改成功");
-		          		sessionStorage.setItem("orderStatus",5);
-		          		window.location.href="./userOrderList.html";
-		           	}
+		        	  if(data){
+							alert("修改成功");
+							window.history.go(-1);
+						}else{
+							alert("修改失败");
+						}
 		          },
 		          error: function (er) {          //失败，回调函数
 		              alert(er);
@@ -183,5 +188,7 @@
   	<div id="afterSaleStatus">
   	</div>
   </div>
+  <div id="updateOrderStatus">
+</div>
 </body>
 </html>

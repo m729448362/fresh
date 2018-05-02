@@ -1,6 +1,7 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
+<!DOCTYPE HTML>
+<html>
 <head>
+<title></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -8,66 +9,110 @@
 <title></title>
 <link rel="stylesheet" href="css/pintuer.css">
 <link rel="stylesheet" href="css/admin.css">
-<script src="js/jquery.js"></script>
-<script src="js/pintuer.js"></script>
-<script src="js/JquerySession.js"></script>
-<script>
-var pages=0;
-var goodsType;
+<!-- -->
+<script src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/JquerySession.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
+<script type="text/javascript">
+
+	var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
+	var user =JSON.parse(obj);//user对象 
+	var pages=0;//当前页数
+	var goodsType=sessionStorage.getItem("goodsType");
+	if(!goodsType){
+		goodsType=100;
+	}
 	$(document).ready(function(c) {
-	
-		$.ajax({//查询所有商品种类
+     	var data={
+                "goodsType":""
+    		};
+		$.ajax({//查询商品种类
 	             url: "/fresh/goods_type/showAllType.action",        //后台url
-	             data: {                          //数据
-	             },
+				 data:JSON.stringify(data),
 	             type: "POST",                   //类型，POST或者GET
-	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             dataType: 'json',  
+	             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
 	             success: function (data) {      //成功，回调函数    画页面
-	                 	alert(data.result);
-	                 	data=data.list;
-	                 	$("#goodsType").remove();//移除
-	                 	$("#title").append("<ul id='goodsType'></ul>");
+	            	 data=data.list;
+                 	// $("#goodsType").remove();//移除
+                 //	 $("#title").append("<ul id='goodsType'></ul>");
 	                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                         $("#goodsType").append("<li style='float:left;padding:0.2em;'><a href='javascript:void(0)' onclick='javascript:getGoods("+data[i].id+")'>"+data[i].goods_type_name+"</a></li>");
-                         //如果添加class或者id内容要加单引号例如：$("#first").append("<li class='a'>"+data[i].name+"</li>");
+                          $("#goodsType").append("<li style='float:left;padding:0.2em;'><a href='javascript:void(0)' onclick=\"getGoodsByType('"+data[i].id+"')\">"+data[i].goods_type_name+"</a></li>");
                      }
-	                // $("#goodsType").append("<li style='float:left;padding:0.2em;'><a onclick='javascript:getGoods(other)'>其他</a></li>");
-	                 getGoods("1");//查询所有种类商品
+	                
+	                 findMoreGoods();//查询所有种类商品
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);
 	             }
 	         });
 	});
-	function getGoods(obj){
-		page=0;
-		goodsType=obj;
-		getGoodsByType(goodsType);
+	function getGoodsByType(goodsType){
+		pages=0;//重置当前页面
+		sessionStorage.setItem("goodsType",goodsType);
+		window.location.reload();
 	}
-	function getGoodsByType(goodsType){//根据种类查询商品
+	function findMoreGoods(){//根据种类查询商品
+		var data;//请求参数
 		pages+=1;
-	   $.ajax({
-             url: "/fresh/goods/getGoodsByType.action",        //后台url
-             data: {                          //数据
-                 goods_type:goodsType,
-                 currentPage:pages
-             },
-             type: "POST",                   //类型，POST或者GET
-             dataType: 'json',              //数据返回类型，可以是xml、json等
-             success: function (data) {      //成功，回调函数    画页面
-                 	//alert(data.result);
-                 	data=data.list1;
-                 	$("#goods").remove();//移除
-                 	$("#goodsType").append("<table class='table table-hover text-center' id='goods'></table>");
-                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                        $("#goods").append("<tr><td rowspan='2'><img src="+data[i].goods_img+"></td><td colspan='2'>"+data[i].nagoods_nameme+"</td><td><input type='button' value='下架菜品' onclick='deleteGoods("+data[i].id+")'/></td></tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='编辑菜品'+onclick='editGoods("+data[i].goodsId+")'></input></td></tr>");
-                    	$("#findMore").html("<a href=\"javaScript:findMoreGoods()\">查看更多</a>");
-                    }
-             },
-             error: function (er) {          //失败，回调函数
-                 alert(er);
-             }
-         });
+		
+		if(goodsType==100){
+			data={
+	     			"currentPage":pages
+	    		};
+			$.ajax({
+	             url: "/fresh/goods/selectAllGoods.action",        //后台url
+	             data:JSON.stringify(data),
+	             type: "POST",                   //类型，POST或者GET
+	             dataType: 'json',   
+	             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
+	             success: function (data) {      //成功，回调函数    画页面
+	            	data = data.list1;
+		            	 //$("#goods").remove();//移除
+		                 //$("#goodsType").append("<table class='table table-hover text-center' id='goods'></table>");
+           		  	for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                       $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='2'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td><td><input type='button' value='下架菜品' onclick=\"deleteGoods("+data[i].id+")\"/></td> </tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='编辑菜品' onclick=\"editGoods('"+data[i].id+"')\"></input></td></tr>");
+                       //如果添加class或者id内容要加单引号例如：$("#first").append("<li class='a'>"+data[i].name+"</li>");
+                   }
+	             },
+	             error: function (er) {          //失败，回调函数
+	                 alert(er);
+	             }
+	         });
+		}else{
+			data={
+	     			"currentPage":pages,
+	                "goods_type":goodsType
+	    		};
+			$.ajax({
+	             url: "/fresh/goods/selectGoodsByType.action",        //后台url
+	             data:JSON.stringify(data),
+	             type: "POST",                   //类型，POST或者GET
+	             dataType: 'json',   
+	             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
+	             success: function (data) {      //成功，回调函数    画页面
+	            	 data=data.list1;
+	             
+	             	//	$("#goods").remove();//移除
+		             //   $("#goodsType").append("<table class='table table-hover text-center' id='goods'></table>");
+            		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                        $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='2'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td><td><input type='button' value='下架菜品' onclick=\"deleteGoods("+data[i].id+")\"/></td> </tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='编辑菜品' onclick=\"editGoods('"+data[i].id+"')\"></input></td></tr>");
+                       //如果添加class或者id内容要加单引号例如：$("#first").append("<li class='a'>"+data[i].name+"</li>");
+           			}
+            		
+	             },
+	             
+	             error: function (er) {          //失败，回调函数
+	                 alert(er);
+	             }
+	         });
+		}
+	}
+	function openPage(obj){//订单详情
+		sessionStorage.setItem('goodsId', obj);
+	    location.href="./goodsDetail.html"; 
 	}
 	function editGoodsType(){//编辑菜品种类
 		window.location.href="./editGoodsType.html"; 	
@@ -80,65 +125,71 @@ var goodsType;
 		window.location.href="./editGoods.html";
 	}
 	function deleteGoods(goodsId){//下架菜品
-		$.ajax({//删除商品种类
-	             url: "/fresh/goods/delGoods.action",        //后台url
-	             data: {                          //数据
-	                 goodsId:goodsId
-	             },
+		message={
+				"goods": {
+					"base_id": 0,
+					"goods_Recommended": 0,
+					"goods_create_time": "2018-6-6",
+					"goods_detail": "goodsDetailText",
+					"goods_high_price": 14,
+					"goods_img": "www.baidu.com",
+					"goods_introduce": "introduce",
+					"goods_low_price": 18,
+					"goods_name": "goodsName",
+					"goods_quality_report_id": 0,
+					"goods_resource_id": 0,
+					"goods_status": 0,
+					"goods_type": 0,
+					"id": goodsId
+				}
+			};
+			$.ajax({//更新商品信息
+	             url: "/fresh/goods/updateGoods.action",        //后台url
+	             data: JSON.stringify(message),
 	             type: "POST",                   //类型，POST或者GET
 	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             contentType:'application/json;charset=UTF-8',
 	             success: function (data) {      //成功，回调函数    画页面
-	                 	window.location.reload();
+	                 	if(data.result==1){
+	                 		alert("下架成功");
+	                 		widow.location.reload();
+	                 	}else{
+	                 		alert("下架失败");
+	                 	}
 	             },
 	             error: function (er) {          //失败，回调函数
-	                 alert(er);
+	            	 alert("下架失败");
 	             }
 	         });
 	}
 </script>
 </head>
 <body>
-<form method="post" action="" id="listform">
-  <div class="panel admin-panel">
-  	<header class="panel-head" ><strong> 菜品中心</strong></header> 
-  	<table id="title">
-  		<tr><td>
-  			<div class="title">
-		    	<ul >
-			    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
-		    	</ul>
-		    </div>
-  		</td></th>
-  	</table>
-  	<div style="float:right;" ><input type="button" onclick="editGoodsType()" value="编辑菜品种类"/></div>
-	<div>
+<div>
+	<form method="post" id="listform">
+	  <div class="panel admin-panel">
+	  	<header class="panel-head" ><strong> 菜品中心</strong></header> 
+	  	<table id="title">
+	  		<tr><td>
+	  			<div class="title">
+			    	<ul >
+				    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
+			    	</ul>
+			    </div>
+	  		</td>
+	  	</table>
+	  	<div style="float:right;" ><input type="button" onclick="editGoodsType()" value="编辑菜品种类"/></div>
 	   	<ul id="goodsType">
-	   		<li style="float:left;padding:0.2em;"><a onclick="javascript:getGoods()">全部</a></li>
-	   		<li style="float:left;padding:0.2em;"><a>叶菜类</a></li>
-	   		<li style="float:left;padding:0.2em;"><a>根茎类</a></li>
-	   		<li style="float:left;padding:0.2em;"><a>瓜果类</a></li>
-	   		<li style="float:left;padding:0.2em;"><a>豆类</a></li>
-	   		<li style="float:left;padding:0.2em;"><a>其他</a></li>
+	   		<li style="float:left;padding:0.2em;"><a onclick="javascript:getGoodsByType('100')">全部</a></li>
 	   	</ul>
-	</div>   
-	<div style="float:right;"><input type="button" onclick="addGoods()" value="添加菜品"/></div>
-    <table class="table table-hover text-center" id="goods">
-      <tr>
-        <td rowspan="2"><img src="./images/vegetable1.jpg"></td>
-        <td colspan="2"><a href="javascript:openPage()">蔬菜名称</a></td>
-        <td><input type="button" value="下架菜品" onclick="deleteGoods('goodsId')"/> </td>
-      </tr>
-     <!--  <volist name="list" id="vo"> -->
-        <tr>
-          <td rolspan="2"><input type="button" value="基地严选"/></td>
-          <td rolspan="2">蔬菜价格</td>
-          <td><input type="button" value="编辑菜品" onclick="editGoods(’goodsId‘)"/></td>
-        </tr>
-        
-    </table>
-  </div>
-</form>
-<div class="footer" id="findMore">
+	   	<div style="float:right;"><input type="button" onclick="addGoods()" value="添加菜品"/></div>
+	    <table class="table table-hover text-center" id="goods">
+	    </table>
+	  </div>
+	</form>
+</div>
+<div class="footer" style="poestion:relative">
+	<a href="javaScript:findMoreGoods()">查看更多</a>
 </div>
 <script type="text/javascript">
 

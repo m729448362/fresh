@@ -1,8 +1,12 @@
 package com.htzhny.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -36,6 +40,8 @@ public class After_saleController {
 	private After_saleService after_saleService;
 	@Autowired
 	private Order_itemService order_itemService;
+	@Autowired
+	private OrderService orderService;
 	
 	//增加售后记录
     @RequestMapping(value="addAfter_sale", method = RequestMethod.POST)
@@ -44,7 +50,15 @@ public class After_saleController {
     	JSONObject jsonObject = new JSONObject();
    		Map<String,Object> map=(Map<String, Object>)params.get("after_sale");
    		After_sale after_sale=JSON.parseObject(JSON.toJSONString(map),After_sale.class);
+   		String uuid=UUID.randomUUID().toString();
+   		Integer user_id=after_sale.getUser_id();
+   		String after_sale_id=user_id+uuid;
+   		after_sale.setAfter_sale_id(after_sale_id);
    		Integer result=after_saleService.addAfter_sale(after_sale);
+   		if(result!=0){
+   			String order_id=after_sale.getA_order_id();
+   			orderService.updateStatus(5,order_id );
+   		}
    		jsonObject.put("result", result);
 	return jsonObject;
     }
@@ -55,7 +69,16 @@ public class After_saleController {
     	JSONObject jsonObject = new JSONObject();
    		Map<String,Object> map=(Map<String, Object>)params.get("after_sale");
    		After_sale after_sale=JSON.parseObject(JSON.toJSONString(map),After_sale.class);
+   		Date dt =new Date(); 
+		String formatDate = "";  
+		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
+	    formatDate = dFormat.format(dt);
+	    after_sale.setHandle_time(formatDate);
+	    String order_id=after_sale.getA_order_id();
    		Integer result=after_saleService.updateAfter_sale(after_sale);
+   		if(result==1){
+   			orderService.updateStatus(6, order_id);
+   		}
    		jsonObject.put("result", result);
 	return jsonObject;
     }

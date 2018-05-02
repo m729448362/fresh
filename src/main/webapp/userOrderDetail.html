@@ -250,6 +250,61 @@
 		          }
 		      });
 	 }
+	 function confirmReceive(){//确认收货，更改订单状态为已完成
+		 message={
+					"status":6,//订单状态  已完成
+		            "id":orderId
+			};
+			$.ajax({//订单状态查找订单
+		          url: "/fresh/order/updateStatus.action",        //后台url
+		          data:JSON.stringify(message),
+		          type: "POST",                   //类型，POST或者GET
+		          dataType: 'json',              //数据返回类型，可以是xml、json等
+		          contentType:'application/json;charset=UTF-8',
+		          success: function (data) {      //成功，回调函数
+		          	if(data.result==1){
+		          		alert("修改成功");
+		          		window.location.href="./userOrderList.html";
+		           	}
+		          },
+		          error: function (er) {          //失败，回调函数
+		              alert(er);
+		          }
+		      });
+	 }
+	 function updateAftersale(){//提交售后信息
+		 var reason = $('#reason').val();
+		 message={                          //数据
+	                "after_sale": {
+						"after_sale_id": "",
+						"user_id":user.id,
+						"a_order_id": orderId,
+						"after_sale_reason": reason,
+						"handle_status": 1,
+						"handle_way": "",
+						"handle_person": "",
+						"handle_time": "",
+						"prove_img": ""
+					}
+	             },
+			 $.ajax({//添加售后
+		             url: "/fresh/after_sale/addAfter_sale.action",        //后台url
+		             data:JSON.stringify(message),
+		             type: "POST",                   //类型，POST或者GET
+		             dataType: 'json',              //数据返回类型，可以是xml、json等
+		             contentType:'application/json;charset=UTF-8',
+		             success: function (data) {      //成功，回调函数
+		             	if(data.result==1){
+		             		alert("添加成功");
+		             		window.location.href="./userOrderList.html";
+		             	}
+		             },
+		             error: function (er) {          //失败，回调函数
+		                 alert(er);
+		                 //previewer.preview();
+		             }
+		         });
+	 }
 </script>
 </head>
 <body>
@@ -301,6 +356,8 @@
   		</strong>
   			
   		<input type="textarea" value="" id="reason"></input>
+  		<input type="button" onclick="updateAftersale()" value="提交"/>
+  		<input type="button" onclick="confirmReceive()" value="确认收货"/>
   	</div>
   	<div id="dealWith">
   	</div>

@@ -30,8 +30,8 @@
 		,a.handle_person,a.handle_time,a.prove_img,a.after_sale_reason,a.handle_status,b.user_company,f.delivery_time from after_sale a join user b on a.user_id=b.id join order_item c on a.a_order_id=c.order_id join goods d on c.goods_id=d.id join t_order f on c.order_id=f.id where order_id=#{2} limit #{0},#{1}
 	</select>
 	<insert id="addAfter_sale" parameterType="com.htzhny.entity.After_sale">
-		insert into after_sale(after_sale_id,user_id,order_id,after_sale_reason,handle_status,handle_way,handle_person,handle_time,prove_img) 
-		values(#{after_sale_id},#{user_id},#{order_id},#{after_sale_reason},#{handle_status},#{handle_way},#{handle_person},#{handle_time},#{prove_img})
+		insert into after_sale(after_sale_id,user_id,a_order_id,after_sale_reason,handle_status,handle_way,handle_person,handle_time,prove_img) 
+		values(#{after_sale_id},#{user_id},#{a_order_id},#{after_sale_reason},#{handle_status},#{handle_way},#{handle_person},#{handle_time},#{prove_img})
 	</insert>
 	<update id="updateAfter_sale" parameterType="com.htzhny.entity.After_sale">
 		update after_sale set handle_status=#{handle_status},handle_way=#{handle_way},handle_person=#{handle_person} where after_sale_id=#{after_sale_id}

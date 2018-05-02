@@ -12,36 +12,10 @@
 <script src="js/pintuer.js"></script>
 <script src="js/JquerySession.js" type="text/javascript"></script>
 <script>
-var pages=1
+var pages=0;
+var message;
 $(document).ready(function(c) {
-		//$("#order").append("<tr><td>1</td><td>待定</td><td>待报价</td><td>贵阳市XXX</td><td>2018-3-5</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+1+"')\">去报价</a></td></tr>");
-		//$("#order").append("<tr><td>2</td><td>待定</td><td>待报价</td><td>贵阳市XXX</td><td>2018-3-2</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+2+"')\">去报价</a></td></tr>");
-
-			//初始化方法
-	$.ajax({//根据订单状态查找订单
-	             url: "/fresh/order/selectUserOrderByStatus.action",        //后台url
-	             data: {                          //数据
-	                  status:1,//订单状态 待报价
-		              user_id:0,
-		              currentPage:pages
-	             },
-	             type: "POST",                   //类型，POST或者GET
-	             dataType: 'json',              //数据返回类型，可以是xml、json等
-	             success: function (data) {      //成功，回调函数
-	             	data = data.list1;
-	             	for(var i=0;i<data.length;i++){
-	                	$("#order").append("<tr><td>data[i].orderId</td><td>data[i].address</td><td>data[i].deliveryDate</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">去报价</a></td></tr>");
-	             	}
-	             },
-	             error: function (er) {          //失败，回调函数
-	                 alert(er);
-	            //     var data ={"list1":[{"address":"贵阳市贵阳一中","create_time":"2018-6-5","delivery_time":"2018-6-6","id":"1535452","order_high_price":100.5,"order_low_price":88.2,"order_real_price":0,"order_status":1,"pay_status":0,"user_id":2},{"address":"贵阳市贵阳一中","create_time":"4546546","delivery_time":"5744","id":"231242","order_high_price":13,"order_low_price":12,"order_real_price":12.5,"order_status":1,"pay_status":1,"user_id":2}]};
-	            // 	data = data.list1;
-	            // 	for(var i=0;i<data.length;i++){
-	            //    	$("#order").append("<tr><td>"+data[i].id+"+</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">去报价</a></td></tr>");
-	            // 	}
-	             }
-	         });		
+	findMoreOrderByStatus();
 });
 function getOrderDetail(orderId){//跳转到订单详情页面  id为订单id
 	 sessionStorage.setItem("orderId",orderId);
@@ -49,25 +23,27 @@ function getOrderDetail(orderId){//跳转到订单详情页面  id为订单id
 }
 function findMoreOrderByStatus(){
 	pages+=1;//查找第几页
-	$.ajax({//订单状态查找订单
-          url: "/fresh/order/selectUserOrderByStatus.action",        //后台url
-          data: {                          //数据
-	          status:1,//订单状态 待报价
-              user_id:0,
-              currentPage:pages
-          },
-          type: "POST",                   //类型，POST或者GET
-          dataType: 'json',              //数据返回类型，可以是xml、json等
-          success: function (data) {      //成功，回调函数
-          	data = data.list1;
-           	for(var i=0;i<data.length;i++){
-              	$("#order").append("<tr><td>"+data[i].id+"+</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">去报价</a></td></tr>");
-           	}
-          },
-          error: function (er) {          //失败，回调函数
-              alert(er);
-          }
-      });
+	message={
+			status:""+1,//订单状态 待报价
+            currentPage:pages
+		};
+			//初始化方法
+	$.ajax({//根据订单状态查找订单
+	             url: "/fresh/order/selectAllOrderByStatus.action",        //后台url
+	             data: JSON.stringify(message),
+	             type: "POST",                   //类型，POST或者GET
+	             dataType: 'json',              //数据返回类型，可以是xml、json等
+	             contentType:'application/json;charset=UTF-8',
+	             success: function (data) {      //成功，回调函数
+	             	data = data.list1;
+	             	for(var i=0;i<data.length;i++){
+	                	$("#order").append("<tr><td>"+data[i].id+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">去报价</a></td></tr>");
+	             	}
+	             },
+	             error: function (er) {          //失败，回调函数
+	                 alert(er);
+	             }
+	       });
    }
 </script>
 </head>

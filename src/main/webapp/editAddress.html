@@ -29,7 +29,7 @@
 	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
 	                //alert(data.result);
-	            	var data={"address":{"address_detail":"dsadad","create_time":"sadada","id":1,"receiver":"dsa","receiver_phone":"","status":1,"user_id":2}};
+	            	//var data={"address":{"address_detail":"dsadad","create_time":"sadada","id":1,"receiver":"dsa","receiver_phone":"","status":1,"user_id":2}};
 	            	data = data.address;
 	                $('#address').val(data.address_detail);
 	                $('#phone').val(data.receiver_phone);

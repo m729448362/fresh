@@ -12,58 +12,50 @@
 <script src="js/jquery.js"></script>
 <script src="js/pintuer.js"></script>
 <script src="js/JquerySession.js"></script>
+<script type="text/javascript" src="./js/json.js"></script>
 <script>
-	var orderId = sessionStorage.getItem("order_id");
+	
+	var data = sessionStorage.getItem("data");//请求数据
+	data=JSON.parse(data);
+	var orderId = data.order_id;
 	$(document).ready(function(c) {
-		$.ajax({//根据用户id查询用户收货地址
-	            url: "/fresh/address/findAddressByUserId.action",        //后台url
-	            data: {                          //数据
-	              //  userId:user.id
-	            },
-	            type: "POST",                   //类型，POST或者GET
-	            dataType: 'json',              //数据返回类型，可以是xml、json等
-	            success: function (data) {      //成功，回调函数
-	                alert(data.result);
-	                data = data.addressList;
-	                var obj = document.getElementById('address');
-	                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-						obj.options.add(new Option(data[i].address_detail,data[i].id));
-	                }
-	            },
-	            error: function (er) {          //失败，回调函数
-	                alert(er);
-	          //    var data =  {"addressList":[{"address_detail":"dsadad","create_time":"sadada","id":1,"receiver":"dsa","status":1,"user_id":2},{"address_detail":"贵阳市贵阳二中","create_time":"2018-3-6","id":2,"receiver":"李四","status":0,"user_id":2}]}
-	          //  	var obj = document.getElementById('address');
-	          //  	data = data.addressList;
-	           //     for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-				//		obj.options.add(new Option(data[i].address_detail,data[i].id));
-	            //    }
-	            }
-	        });
+		   var addressList = data.Address;
+           var obj = document.getElementById('address');
+           for(var i=0;i<addressList.length;i++){//data.length是获取data的长度。for循环
+			obj.options.add(new Option(addressList[i].address_detail,addressList[i].id));
+           }
+           $('#orderId').html(orderId);
+	           
 	});
 	function returnLastPage(){//返回上一页
 		window.history.go(-1); 
 	}
 	function addOrderAddress(){
 			//判断用户是否登录
-		$.ajax({//保存订单收货地址
-            url: "/fresh/buyCart/submitOrder.action",        //后台url
-            data: {                          //数据
-            	order_id:order_id,//订单id
-                addressId:document.getElementById("address").value,
-                deliveryDate:document.getElementById("deliveryDate").value
-            },
-            type: "POST",                   //类型，POST或者GET
-            dataType: 'json',              //数据返回类型，可以是xml、json等
-            success: function (data) {      //成功，回调函数
-                alert(data.result);
-                sessionStorage.setItem("orderStatus",1);//订单状态为待报价
-                window.location.href="./userOrderList.html";
-            },
-            error: function (er) {          //失败，回调函数
-                alert(er);
-            }
-        });
+			
+		var address = $('#address').find("option:selected").text();
+		var deliveryDate = $('#deliveryDate').val();
+		var message={
+				"order_id":orderId,//订单id
+                "address":address,
+                "delivery_time":deliveryDate
+		};
+		//alert(goodsId);
+		$.ajax({//
+             url: "/fresh/buyCart/submitOrder.action",        //后台url
+             data:JSON.stringify(message),
+             type: "POST",           //类型，POST或者GET
+             dataType: 'json',   
+             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
+             success: function (data) {      //成功，回调函数    画页面
+            	 
+                 sessionStorage.setItem("orderStatus",1);//订单状态为待报价
+                 window.location.href="./userOrderList.html";
+                   },
+             error: function (er) {          //失败，回调函数
+                 alert(er);
+             }
+         });
 	}
 	
 </script>
@@ -96,7 +88,7 @@
         </tr>
         <tr>
           <td><label>菜单订单号:</label></td>
-          <td><label>user2018111</label></td>
+          <td><label id="orderId">user2018111</label></td>
         </tr>
         <tr>
           <td><label>请选择收货地址：</label></td>
@@ -112,7 +104,7 @@
         </tr>
         <tr>
           <td></td>
-          <td><input type="submit" value="提交订单" onclick="addOrderAddress()"></input></td>
+          <td><input type="button" value="提交订单" onclick="addOrderAddress()"></input></td>
         </tr>
     </table>
   </div>

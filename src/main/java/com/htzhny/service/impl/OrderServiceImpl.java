@@ -167,6 +167,16 @@ public class OrderServiceImpl implements OrderService{
 		return orderDao.selectOneOrderById(id);
 	}
 
+	@Override
+	public Integer updatePayStatusByUser(Integer user_id) {
+		return orderDao.updatePayStatusByUser(user_id);
+	}
+
+	@Override
+	public List<OrderQuery> selectUserOrderByStatusNoPage(Integer status, Integer user_id) {
+		return orderDao.selectUserOrderByStatusNoPage(status, user_id);
+	}
+
 
 
 

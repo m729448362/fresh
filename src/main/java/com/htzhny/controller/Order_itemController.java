@@ -1,5 +1,6 @@
 package com.htzhny.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,8 @@ import net.sf.json.JSONObject;
 public class Order_itemController {
 	@Autowired
 	private Order_itemService order_itemService;
+	@Autowired
+	private OrderService orderService;
 	@RequestMapping(value="addOrder_item")
 	//生成订单项
 	public @ResponseBody JSONObject addOrder_item(@RequestBody Map<String, Object> params){
@@ -49,20 +52,33 @@ public class Order_itemController {
 		
 		JSONObject jsonObject = new JSONObject();
 
-		ArrayList<Order_item> list= (ArrayList<Order_item>) params.get("itemList");
-		
-		 
+ 		ArrayList<Order_item> list= (ArrayList<Order_item>) params.get("itemList");
+		String order_id1="";
+ 		double orderRealPrice=0.00;
 		for(int i = 0 ; i < list.size() ; i++) {
-			 
+			 	
 				Order_item order_item=JSON.parseObject(JSON.toJSONString(list.get(i)),Order_item.class);
+				String order_id=order_item.getOrder_id();
+				order_id1=order_id;
 				Integer result =order_itemService.updateRealPrice(order_item);
-				jsonObject.put("result", result);
+				
+				double itemPrice=order_item.getGoods_real_price()*order_item.getGoods_amount();
+				orderRealPrice=itemPrice+orderRealPrice;
+				
+				
+				if(result!=0 && i==0){
+				Integer status=2;
+				orderService.updateStatus(2, order_id);}
+				
+					
 				
 			 
 			}
+		Integer result=orderService.updateRealPrice(orderRealPrice, order_id1);
 		
+		
+		jsonObject.put("result", result);
 	
-		
 
 		
 	

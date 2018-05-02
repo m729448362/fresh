@@ -20,6 +20,8 @@ var orderStatus = sessionStorage.getItem('orderStatus');
 var orderId = sessionStorage.getItem("orderId");
 var pages=0;
 var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成"};
+var obj = sessionStorage.getItem('user');//
+var user=JSON.parse(obj);
 
 var totalPrice=0//总计金额
 	$(document).ready(function(c) {
@@ -39,9 +41,8 @@ var totalPrice=0//总计金额
              dataType: 'json',     
              contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数
-            	
                  data = data.list;
-             	if(data){
+             	if(data.length>0){
              		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
                         $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_real_price+"</td></tr>");
                     	totalPrice=data[i].goods_amount*data[i].goods_real_price+totalPrice;
@@ -51,8 +52,11 @@ var totalPrice=0//总计金额
                    	$("#reason").val(data[0].after_sale_reason);//更改售后原因
                    	$("#reason").attr("disabled",true);//更改售后原因不可编辑
                    	$("#img").html("");
-                   	$("#dealWith").html("<strong><b>处理方式：</b><b>"+data[0].handle_way+"</b></strong>");//处理方式
                    	$("#afterSaleStatus").html("<strong><b>售后状态：</b><b>"+afterSaleStatusName[data[0].handle_status]+"</b></strong>");//售后状态	
+                   	if(data[0].handle_status==1){//未处理
+                   		$("#dealWith").html("<strong><b>处理方式：</b><input type='text' id='handWay'/></strong>");//处理方式
+                   		$("#dealWith").append("<input type='button' onclick=\"updateAfterSale('"+data[0].after_sale_id+"')\" value='提交'/>");//处理方式
+                   	}
              	}
                  
              },
@@ -63,6 +67,41 @@ var totalPrice=0//总计金额
 	}
 	function returnLastPage(){//返回上一页
 		window.history.go(-1); // 返回上一页  
+	}
+	function updateAfterSale(id){//更新售后信息
+		var handle_way=$('#handWay').val();
+		var data= {                          //数据
+				"after_sale": {
+					"after_sale_id": id,
+					"user_id": user.id,
+					//"order_id": orderId,
+					"a_order_id": orderId,
+					"after_sale_reason":$("#reason").val(),
+					"handle_status": 3,
+					"handle_way": handle_way,
+					"handle_person": user.id,
+					"handle_time": "",
+					"prove_img": "www.baidu.com"
+				}
+	        };
+		$.ajax({//更新售后详情
+             url: "/fresh/after_sale/updateAfter_sale.action",        //后台url
+             data: JSON.stringify(data),
+             type: "POST",                   //类型，POST或者GET
+             dataType: 'json',     
+             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
+             success: function (data) {      //成功，回调函数
+                 if(data.result==1){
+                	 alert("提交成功");
+                	 window.location.reload();
+                 }else{
+                	 alert("提交失败");
+                 }
+             },
+             error: function (er) {          //失败，回调函数
+            	 alert("提交失败");
+             }
+         });
 	}
 </script>
 </head>
@@ -77,7 +116,7 @@ var totalPrice=0//总计金额
 		    	<ul>
 			    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
 			    	<li style="float:left;padding:0.2em;"><a href="javascript:returnLastPage()">返回上一级</a></li>
-			    	<li style="float:left;padding:0.2em;"><a href="./myBasket.html">我的菜篮</a></li>
+			    	<!-- <li style="float:left;padding:0.2em;"><a href="./myBasket.html">我的菜篮</a></li> -->
 		    	</ul>
 		    </div>
   		</td></th>
@@ -105,9 +144,9 @@ var totalPrice=0//总计金额
   		</strong>
   		<input type="textarea" value="售后原因" id="reason"></input>
   	</div>
-  	<div id="dealWith">
-  	</div>
   	<div id="afterSaleStatus">
+  	</div>
+  	 <div id="dealWith">
   	</div>
   	<div id="img">
 		

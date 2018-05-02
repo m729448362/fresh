@@ -18,9 +18,9 @@
 	var goods;//产品信息
 	$(document).ready(function(c) {
 		message =  {                          //数据
-                "id":goodsId
+                "goodsId":goodsId
         };
-		if(goodsId!='undefind'&&goodsId!=''&&goodsId!=null){
+		if(goodsId){
 			$.ajax({//查询商品详情
 	             url: "/fresh/goods/selectGoodsById.action",        //后台url
 	             data: JSON.stringify(message),
@@ -43,7 +43,7 @@
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);
-	                var data = {"goods" : {"goods_name":"大白菜","goods_low_price":12.6,"goods_high_price":15.8,"goods_type":1,"goods_detai":"一颗大白菜","goods_status":1,"goods_Recommended":0,
+	               /*  var data = {"goods" : {"goods_name":"大白菜","goods_low_price":12.6,"goods_high_price":15.8,"goods_type":1,"goods_detai":"一颗大白菜","goods_status":1,"goods_Recommended":0,
 		            		"goods_create_time":"2018-6-6","goods_img":"www.baidu.com"}};
 	                 	data = data.goods;
 	                 	$('#img').val(data.goods_img);//图片
@@ -55,7 +55,7 @@
 						$('#goodsDetailText').val(data.goods_detai);//产品详情
 						$('#inspectionReportText').val(data.inspectionReportText);//质检详情
 						$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
-						$('#baseDetailText').val(data.baseDetailText);//基地详情
+						$('#baseDetailText').val(data.baseDetailText);//基地详情 */
 	             }
 	         });
 		}
@@ -94,38 +94,84 @@
 		var inspectionReportText=$('#inspectionReportText').val();//质检详情
 		var goodsSourceText=$('#goodsSourceText').val();//产品溯源
 		var baseDetailText=$('#baseDetailText').val();//基地详情
-		message={
-			"goods": {
-				"base_id": 0,
-				"goods_Recommended": 0,
-				"goods_create_time": "2018-6-6",
-				"goods_detail": goodsDetailText,
-				"goods_high_price": lowPrice,
-				"goods_img": "www.baidu.com",
-				"goods_introduce": introduce,
-				"goods_low_price": highPrice,
-				"goods_name": goodsName,
-				"goods_quality_report_id": 0,
-				"goods_resource_id": 0,
-				"goods_status": 1,
-				"goods_type": 0,
-				"id": goodsId
-			}
-		};
-		$.ajax({//更新商品信息
-             url: "/fresh/goods/updateGoods.action",        //后台url
-             data: JSON.stringify(message),
-             type: "POST",                   //类型，POST或者GET
-             dataType: 'json',              //数据返回类型，可以是xml、json等
-             contentType:'application/json;charset=UTF-8',
-             success: function (data) {      //成功，回调函数    画页面
-                 	alert(data.result);
-             },
-             error: function (er) {          //失败，回调函数
-                 alert(er);
-             }
-         });
+		if(goodsId){
+			message={
+					"goods": {
+						"base_id": 0,
+						"goods_Recommended": 0,
+						"goods_create_time": "2018-6-6",
+						"goods_detail": goodsDetailText,
+						"goods_high_price": lowPrice,
+						"goods_img": "www.baidu.com",
+						"goods_introduce": introduce,
+						"goods_low_price": highPrice,
+						"goods_name": goodsName,
+						"goods_quality_report_id": 0,
+						"goods_resource_id": 0,
+						"goods_status": 1,
+						"goods_type": 0,
+						"id": goodsId
+					}
+				};
+				$.ajax({//更新商品信息
+		             url: "/fresh/goods/updateGoods.action",        //后台url
+		             data: JSON.stringify(message),
+		             type: "POST",                   //类型，POST或者GET
+		             dataType: 'json',              //数据返回类型，可以是xml、json等
+		             contentType:'application/json;charset=UTF-8',
+		             success: function (data) {      //成功，回调函数    画页面
+		            	 if(data.result==1){
+		                 		alert("更新成功");
+		                 		window.history.go(-1); // 返回上一页  
+		                 	}else{
+		                 		alert("更新失败");
+		                 	}
+		             },
+		             error: function (er) {          //失败，回调函数
+		            	 alert("更新失败");
+		             }
+		         });
+		}else{//新增商品
+			message={
+					"goods": {
+						"base_id": 0,
+						"goods_Recommended": 0,
+						"goods_create_time": "2018-6-6",
+						"goods_detail": goodsDetailText,
+						"goods_high_price": lowPrice,
+						"goods_img": "www.baidu.com",
+						"goods_introduce": introduce,
+						"goods_low_price": highPrice,
+						"goods_name": goodsName,
+						"goods_quality_report_id": 0,
+						"goods_resource_id": 0,
+						"goods_status": 1,
+						"goods_type": 0,
+						"id": goodsId
+					}
+				};
+				$.ajax({//新增商品信息
+		             url: "/fresh/goods/addGoods.action",        //后台url
+		             data: JSON.stringify(message),
+		             type: "POST",                   //类型，POST或者GET
+		             dataType: 'json',              //数据返回类型，可以是xml、json等
+		             contentType:'application/json;charset=UTF-8',
+		             success: function (data) {      //成功，回调函数    画页面
+		            	 if(data.result==1){
+		                 		alert("新增成功");
+		                 		window.history.go(-1); // 返回上一页  
+		                 	}else{
+		                 		alert("新增失败");
+		                 	}
+		             },
+		             error: function (er) {          //失败，回调函数
+		            	 alert("新增失败");
+		             }
+		         });
+		}
+		
 	}
+	
 	function returnLastPage(){//返回上一页
 		window.history.go(-1); // 返回上一页  
 	}

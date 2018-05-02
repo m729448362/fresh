@@ -25,7 +25,6 @@
 	//}
 	var data={"user_name":""
 			};
-	alert(user1);
     $(function(){
        $.ajax({//查询推荐商品
             url: "/fresh/goods/selectRecommendedGoods.action",        //后台url
@@ -34,24 +33,14 @@
             dataType: 'json',              //数据返回类型，可以是xml、json等
             contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数
-                //alert(data.result);
-                //var data={"list1":[{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗莲花白","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"莲花白","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":3},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗芹菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"芹菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":4},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗花菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"花菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":5},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗韭菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"韭菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":6}]}
-                //alert(data.list1);
                 data=data.list1;
                 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                	$("#recommendDishes1").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
                 	$("#recommendDishes2").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
+                	$("#recommendDishes1").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='openPage(this)' value='查看'/></td></tr>");
                 }
             },
             error: function (er) {          //失败，回调函数
                 alert(er);
-                //var data={"list1":[{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗莲花白","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"莲花白","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":3},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗芹菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"芹菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":4},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗花菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"花菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":5},{"base_id":0,"goods_Recommended":1,"goods_create_time":"2018-6-7","goods_detail":"一颗韭菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_low_price":12.5,"goods_name":"韭菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":6}]}
-                //alert(data.list1);
-                //data=data.list1;
-                //for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                //	$("#recommendDishes1").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
-              //  	$("#recommendDishes2").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
-              //  }
             }
        });
         if(user1.user_type==1){
@@ -76,6 +65,7 @@
              data: JSON.stringify(message),
              type: "POST",                   //类型，POST或者GET
              dataType: 'json',              //数据返回类型，可以是xml、json等
+             contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数    画页面
                  	//alert(data.result);
                    },
@@ -84,6 +74,12 @@
              }
          });
     }
+    function openPage(obj){//蔬菜详情
+    	var td = obj.parentNode;//父节点
+    	var goodsId=td.firstChild.value;
+		sessionStorage.setItem('goodsId', goodsId);
+	    location.href="./goodsDetail.html"; 
+	}
 </script>
 </head>
 <body>

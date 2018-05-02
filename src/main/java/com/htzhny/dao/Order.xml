@@ -24,6 +24,9 @@
 	<select id="selectUserOrderByStatus" resultMap="OrderQuery">
 		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where order_status=#{2} and user_id=#{3} limit #{0},#{1}
 	</select>
+	<select id="selectUserOrderByStatusNoPage" resultMap="OrderQuery">
+		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where order_status=#{0} and user_id=#{1} and pay_status=0
+	</select>
 	<select id="selectAllOrderByStatus" resultMap="OrderQuery">
 		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where order_status=#{2} limit #{0},#{1}
 	</select>
@@ -39,6 +42,9 @@
 	</update>
 		<update id="updatePayStatus">
 		update t_order set pay_status=#{0} where id=#{1}
+	</update>
+			<update id="updatePayStatusByUser" parameterType="java.lang.Integer">
+		update t_order set pay_status=1 where user_id=#{0} and order_status=6 and pay_status=0
 	</update>
 	<select id="selectCountByUserByPayStatus" resultType="java.lang.Integer">
 		select count(1) from t_order where pay_status=#{0} and user_id=#{1}

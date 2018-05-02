@@ -21,7 +21,7 @@
 	var user =JSON.parse(obj);//user对象 
 	var pages=0;//当前页数
 	var goodsType=sessionStorage.getItem("goodsType");
-	if(goodsType==""||goodsType==null){
+	if(!goodsType){
 		goodsType=100;
 	}
 	$(document).ready(function(c) {
@@ -57,7 +57,7 @@
 	function findMoreGoods(){//根据种类查询商品
 		var data;//请求参数
 		pages+=1;
-		alert(goodsType);
+		
 		if(goodsType==100){
 			data={
 	     			"currentPage":pages
@@ -111,7 +111,7 @@
 		}
 	}
 	function addToMyBasket(goodsId){//加入菜篮 
-		alert(goodsId);
+	
      	var data={
                 "goodsId":goodsId,
                 "amount":1
@@ -146,7 +146,7 @@
 	  			<div class="title">
 			    	<ul >
 				    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
-				    	<li style="float:left;padding:0.2em;"><a href="./register.html">我的菜篮</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="./myBasket.html">我的菜篮</a></li>
 			    	</ul>
 			    </div>
 	  		</td>

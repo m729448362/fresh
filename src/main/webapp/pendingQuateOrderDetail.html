@@ -14,36 +14,11 @@
 <script src="js/JquerySession.js" type="text/javascript"></script>
 <script>
 var orderId =sessionStorage.getItem("orderId");
-var pages = 1;
+var pages = 0;
 $(document).ready(function(c) {
-		//$("#order").append("<tr><td>胡萝卜1</td><td>2</td><td>贵阳市XXX</td><td>￥:<input type='text' id='hu1'/></td></tr>");
-		//$("#order").append("<tr><td>胡萝卜2</td><td>2</td><td>贵阳市XXX</td><td>￥:<input type='text' id='hu2'/></td></tr>");
-		//$("#order").append("<tr><td>胡萝卜3</td><td>2</td><td>贵阳市XXX</td><td>￥:<input type='text' id='hu3'/></td></tr>");
-		//$("#order").append("<tr><td>胡萝卜4</td><td>2</td><td>贵阳市XXX</td><td>￥:<input type='text' id='hu4'/></td></tr>");
 
 			//初始化方法
-		$.ajax({//根据订单id查找订单详情
-             url: "/fresh/order_item/selectAllByOrderId.action",        //后台url
-             data: {                          //数据
-                 id:orderId, //orderId 从cookie中获取
-                 currentPage:pages
-             },
-             type: "POST",                   //类型，POST或者GET
-             dataType: 'json',              //数据返回类型，可以是xml、json等
-             success: function (data) {      //成功，回调函数
-             	for(var i=0;i<data.length;i++){
-                	$("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>data[i].address</td><td>￥:<input type='text' id='"+data[i].id+"'/></td></tr>");
-             	}
-             },
-             error: function (er) {          //失败，回调函数
-                 alert(er);
-                 var data ={"list1":[{"goods_amount":2,"goods_high_price":15.4,"goods_low_price":14.5,"goods_name":"白菜","goods_real_price":3.5,"id":"12344","order_id":"045465"},{"goods_amount":2,"goods_high_price":15.4,"goods_low_price":14.5,"goods_name":"白菜","goods_real_price":4,"id":"23424","order_id":"045465"}]};
-             	data = data.list1;
-             	for(var i=0;i<data.length;i++){
-                	$("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].address+"</td><td>￥:<input type='text' id='"+data[i].id+"'/></td></tr>");
-             	}
-             }
-         });		
+	findMoreOrderByStatus();	
 			
 });
 function returnLastPage(){
@@ -51,42 +26,59 @@ function returnLastPage(){
 }
 function updateOrder(){//更新报价
 	var param = {};
-	$('table input').each( function(){
-		//param[this.id]=this.value;
-		//alert(this.id);
-		//alert(this.value);
+	var list =new Array();
+	$('#order tr').not(':eq(0)').each(function(i){  
+		var id = $(this).children('td').eq(4).text();
+	      var amount = $(this).children('td').eq(1).text();
+	      var price = $(this).children('td').eq(2).text(); 
+	      var real_price = $(this).children('td').eq(3).find('input').val();  
+     	  var goodsId= $(this).children('td').eq(3).find('input').attr('id');  
+     	  param={
+				"id": id,
+				"goods_id": goodsId,
+				"order_id": orderId,
+				"goods_amount": amount,
+				"goods_real_price": parseFloat(real_price)
+		  };
+     	 list.push(param);
+	    })  
+		message={
+			"itemList":list
+		};
 		$.ajax({//更新订单报价
-	             url: "/fresh/order_item/updateRealPrice.action",        //后台url
-	             data: {                          //数据
-	                 id:this.id,//
-	                 price:this.value 
-	             },
-	             type: "POST",                   //类型，POST或者GET
-	             dataType: 'json',              //数据返回类型，可以是xml、json等
-	             success: function (data) {      //成功，回调函数
-	             	if(data.result==1){
-	             		alert("更新成功");
-	             	}
-	             },
-	             error: function (er) {          //失败，回调函数
-	                 alert(er);
-	             }
-	         });
-     });		
+             url: "/fresh/order_item/updateRealPrice.action",        //后台url
+             data: JSON.stringify(message),
+             type: "POST",                   //类型，POST或者GET
+             dataType: 'json',              //数据返回类型，可以是xml、json等
+             contentType:'application/json;charset=UTF-8',
+             success: function (data) {      //成功，回调函数
+            	 if(data.result==1){
+            		 alert("修改成功");
+ 	                window.location.href="clientOrderList.html"; 
+            	 }
+             },
+             error: function (er) {          //失败，回调函数
+                 alert(er);
+             }
+         });
+    		
 }
 function findMoreOrderByStatus(){//查看更多
 	pages+=1;//查找第几页
+	message={
+			id:orderId, //orderId 
+            currentPage:pages
+		};
 	$.ajax({//根据订单id查找订单详情
              url: "/fresh/order_item/selectAllByOrderId.action",        //后台url
-             data: {                          //数据
-                 id:orderId, //orderId 
-                 currentPage:pages
-             },
+             data: JSON.stringify(message),
              type: "POST",                   //类型，POST或者GET
              dataType: 'json',              //数据返回类型，可以是xml、json等
+             contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数
+            	data=data.list1;
              	for(var i=0;i<data.length;i++){
-                	$("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].address+"</td><td>￥:<input type='text' id='"+data[i].id+"'/></td></tr>");
+                	$("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>￥:<input type='text' id='"+data[i].goods_id+"'/></td><td style='display:none;'>"+data[i].id+"</td></tr>");
              	}
              },
              error: function (er) {          //失败，回调函数
@@ -111,13 +103,14 @@ function findMoreOrderByStatus(){//查看更多
 		    </div>
   		</td></th>
   	</table>
-    <div><strong>待报价的订单如下：</strong></div>
+    <div><strong>待报价的订单详情如下：</strong></div>
     <table class="table table-hover text-center" id="order">
       <tr>
         <th>菜名</th>
         <th>数量</th>
-        <th>基地</th>
+        <th>价格</th>
         <th>报价</th>
+        <th style="display:none;">id</th>
       </tr>
         
     </table>

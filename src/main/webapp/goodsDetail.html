@@ -97,7 +97,7 @@
              dataType: 'json',   
              contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数    画页面
-                 	alert(data.result);
+                 	
                    },
              error: function (er) {          //失败，回调函数
                  alert(er);
@@ -105,24 +105,26 @@
          });
 	}
 	function createOrder(){
-		var data={                          //数据
-            };
+		var amount=$('#amount').val()
+		var data={
+                "goodsId":goodsId,
+                "amount":parseInt(amount) //数量
+    		};
 		//alert(goodsId);
-		var amount = $('#amount').val();
-		$.ajax({
-	            url: "/fresh/buyCart/createOrder.action",        //后台url
-	            data:JSON.stringify(data),
-	            type: "POST",               //类型，POST或者GET
-	            dataType: 'json',
-	            contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
-	            success: function (data) {      //成功，回调函数
-	                alert(data.result);
-	                window.location.href="myBasket.html"; 
-	            },
-	            error: function (er) {          //失败，回调函数
-	                alert(er);
-	            }
-	        });
+		$.ajax({//
+             url: "/fresh/buyCart/addGoods.action",        //后台url
+             data:JSON.stringify(data),
+             type: "POST",           //类型，POST或者GET
+             dataType: 'json',   
+             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
+             success: function (data) {      //成功，回调函数    画页面
+                 	//alert(1);
+             		window.location.href="myBasket.html";
+                   },
+             error: function (er) {          //失败，回调函数
+                 alert(er);
+             }
+         });
 	}
 </script>
 </head>

@@ -28,7 +28,7 @@
 	                data = data.buyCart.items;
 	                
 	                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-						$("#myBasket").append("<tr><td style='display:none;'>"+data[i].goods.id+"</td><td>"+data[i].goods.goods_name+"</td><td>"+data[i].goods.goods_low_price+"~"+data[i].goods.goods_high_price+"</td><td><input id='amount' type='number' min='0' value='"+data[i].amount+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods("+data[i].goods.id+")\"/></td></tr>");
+						$("#myBasket").append("<tr><td style='display:none;'>"+data[i].goods.id+"</td><td>"+data[i].goods.goods_name+"</td><td>"+data[i].goods.goods_low_price+"~"+data[i].goods.goods_high_price+"</td><td><input id='amount' type='number' min='1' value='"+data[i].amount+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods("+data[i].goods.id+")\"/></td></tr>");
 	                }
 	            },
 	            error: function (er) {          //失败，回调函数
@@ -55,8 +55,8 @@
 	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
 	                //alert(data.result);
-	                sessionStorage.setItem("order_id",order_id);
-	                window.location.href="orderSubmit.html"; 
+	                sessionStorage.setItem("data",JSON.stringify(data));
+	                window.location.href="./orderSubmit.html";
 	            },
 	            error: function (er) {          //失败，回调函数
 	                alert(er);
@@ -72,8 +72,8 @@
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
 	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
-	                alert(data.result);
-	                window.location.reload; 
+	                //alert(data.result);
+	                window.location.reload(); 
 	            },
 	            error: function (er) {          //失败，回调函数
 	                alert(er);
@@ -89,7 +89,8 @@
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
 	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
-	                alert(data.result);
+	                
+	                window.location.reload(); 
 	               // window.location.href="orderSubmit.html"; 
 	            },
 	            error: function (er) {          //失败，回调函数
