@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.htzhny.dao.BillDao;
 import com.htzhny.dao.OrderDao;
+import com.htzhny.entity.Bill;
 import com.htzhny.entity.Goods;
 import com.htzhny.entity.Order;
 import com.htzhny.entity.OrderQuery;
@@ -20,8 +22,9 @@ import com.htzhny.service.OrderService;
 @Transactional
 public class OrderServiceImpl implements OrderService{
 	@Autowired
-	OrderDao orderDao;
-
+	private OrderDao orderDao;
+	@Autowired
+	private BillDao billDao;
 	@Override
 	@Transactional(readOnly=true)
 	public PageBean<OrderQuery> selectUserOrderByStatus(Integer currentPage, Integer status,Integer user_id) {
@@ -138,7 +141,14 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public Integer updateStatus(Integer status,String id) {
-		
+		if(status==6){
+			Order order=orderDao.selectOneOrderById(id);
+			double real_price=order.getOrder_real_price();
+			Integer user_id=order.getUser_id();
+			Bill bill=billDao.selectBillByUserId(user_id);
+			double month_pay_money=bill.getMonth_pay_money()+real_price;
+			billDao.updateMonthPayMoney(month_pay_money,user_id);
+		}
 		return orderDao.updateStatus(status,id);
 	}
 

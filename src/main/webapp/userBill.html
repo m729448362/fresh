@@ -47,9 +47,11 @@ if(!payStatus){
             success: function (data) {      //成功，回调函数    画页面
             	 $("#account").text(data.month_pay_money+"元");//应付金额
            	     data=data.list1;
-                 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                 	$("#myBillList").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_high_price+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
+           	  if(data){
+           		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                 	$("#myBillList").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_real_price+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"','"+data[i].order_real_price+"')\">查看</a></td></tr>");
                  }
+           	  }
             },
             error: function (er) {          //失败，回调函数
                 alert(er);
@@ -57,9 +59,10 @@ if(!payStatus){
             }
         });	
 	}
-	function getOrderDetail(orderId){//进入订单详情
+	function getOrderDetail(orderId,orderPrice){//进入订单详情
 		sessionStorage.setItem("orderId",orderId);
-		//sessionStorage.setItem("orderStatus",6);//已完成订单状态
+		sessionStorage.setItem("orderPrice",orderPrice);//订单价格
+		sessionStorage.setItem("orderStatus",6);//已完成订单状态
 	 	window.location.href="./userOrderDetail.html"; 
 	}
 </script>

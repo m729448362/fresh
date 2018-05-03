@@ -38,11 +38,13 @@
 	            	 data=data.list;
                  	// $("#goodsType").remove();//移除
                  //	 $("#title").append("<ul id='goodsType'></ul>");
-	                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                          $("#goodsType").append("<li style='float:left;padding:0.2em;'><a href='javascript:void(0)' onclick=\"getGoodsByType('"+data[i].id+"')\">"+data[i].goods_type_name+"</a></li>");
-                     }
-	                
-	                 findMoreGoods();//查询所有种类商品
+                 	 if(data){
+                 		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                            $("#goodsType").append("<li style='float:left;padding:0.2em;'><a href='javascript:void(0)' onclick=\"getGoodsByType('"+data[i].id+"')\">"+data[i].goods_type_name+"</a></li>");
+                        }
+  	                	findMoreGoods();//查询所有种类商品
+                 	 }
+	                  
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);
@@ -72,10 +74,12 @@
 	            	data = data.list1;
 		            	 //$("#goods").remove();//移除
 		                 //$("#goodsType").append("<table class='table table-hover text-center' id='goods'></table>");
-           		  	for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                       $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='3'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td></tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='加入菜篮' onclick=\"addToMyBasket('"+data[i].id+"')\"></input></td></tr>");
-                       //如果添加class或者id内容要加单引号例如：$("#first").append("<li class='a'>"+data[i].name+"</li>");
-                   }
+		           	if(data){
+		           		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+		                       $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='3'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td></tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='加入菜篮' onclick=\"addToMyBasket('"+data[i].id+"')\"></input></td></tr>");
+		                       //如果添加class或者id内容要加单引号例如：$("#first").append("<li class='a'>"+data[i].name+"</li>");
+		                }
+		           	}
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);
@@ -97,10 +101,13 @@
 	             
 	             	//	$("#goods").remove();//移除
 		             //   $("#goodsType").append("<table class='table table-hover text-center' id='goods'></table>");
-            		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                       $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='3'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td></tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='加入菜篮' onclick=\"addToMyBasket('"+data[i].id+"')\"></input></td></tr>");
-                       //如果添加class或者id内容要加单引号例如：$("#first").append("<li class='a'>"+data[i].name+"</li>");
-           			}
+	             	if(data){
+	             		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+	                        $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='3'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td></tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='加入菜篮' onclick=\"addToMyBasket('"+data[i].id+"')\"></input></td></tr>");
+	                        //如果添加class或者id内容要加单引号例如：$("#first").append("<li class='a'>"+data[i].name+"</li>");
+	            			}	
+	             	}
+            		
             		
 	             },
 	             
@@ -123,6 +130,9 @@
              dataType: 'json',              //数据返回类型，可以是xml、json等
              contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数    画页面
+            	 if(data){
+            		 alert("添加成功");
+            	 }
                    },
              error: function (er) {          //失败，回调函数
                  alert(er);

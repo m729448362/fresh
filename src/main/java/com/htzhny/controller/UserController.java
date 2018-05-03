@@ -58,17 +58,18 @@ public class UserController {
     	if(null!=user){
     		if(password.equals(user.getPassword())){
     			request.getSession().setAttribute("user", user);
-    			String result="登录成功";
+    			String result="1";
     			jsonObject.put("result",result);
     			User user2=(User) request.getSession().getAttribute("user");
     			String user1=JSON.toJSONString(user);
     			jsonObject.put("user",user1);
+    			if(user.getUser_type()==1){
     			Integer user_id=user.getId();
     			Bill bill=billService.selectBillByUserId(user_id);
     			Calendar cal=Calendar.getInstance();
     			Date dt =new Date(); 
     			cal.setTime(dt);
-    			int month=cal.get(Calendar.MONTH);
+    			int month=cal.get(Calendar.MONTH)+1;
     			int year=cal.get(Calendar.YEAR);
     			if(bill!=null){
     				String a=bill.getOnemonth(); //得到账单的年月
@@ -99,18 +100,18 @@ public class UserController {
 					Bill newBill=new Bill(id,user_id,year_month,0.00,1,"");
 					billService.addBill(newBill);
     			}
-    			
+    			}
     		    
     			return jsonObject;
     
     			
     			
     		}
-    		String result="密码错误";
+    		String result="0";
     		jsonObject.put("result", result);
     		return jsonObject;
     	}
-    	String result="该用户名不存在";
+    	String result="0";
 		jsonObject.put("result", result);
 		return jsonObject;
     }

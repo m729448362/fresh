@@ -51,10 +51,10 @@ if(!payStatus){
             	 userList = data.userList;
            	     data=data.list1;
                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                  	$("#myBillList").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_high_price+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
+                  	$("#myBillList").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_real_price+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"','"+data[i].order_real_price+"')\">查看</a></td></tr>");
                  }
                  $("#user option:not(:first)").remove();
-                 for(var i=0;i<data.length;i++){//
+                 for(var i=0;i<userList.length;i++){//
                    	$("#user").append("<option value='"+userList[i].id+"'>"+userList[i].user_company+" </option>");
                   }
                  
@@ -83,7 +83,7 @@ if(!payStatus){
             	 $("#account").text(data.month_pay_money+"元");//应付金额
            	     data=data.list1;
                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                  	$("#myBillList").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_high_price+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"')\">查看</a></td></tr>");
+                  	$("#myBillList").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_real_price+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"','"+data[i].order_real_price+"')\">查看</a></td></tr>");
                  }
             },
             error: function (er) {          //失败，回调函数
@@ -91,20 +91,27 @@ if(!payStatus){
             }
         });	
 	}
-	function getOrderDetail(orderId){//进入订单详情
+	function getOrderDetail(orderId,orderPrice){//进入订单详情
 		sessionStorage.setItem("orderId",orderId);
-		//sessionStorage.setItem("orderStatus",6);//已完成订单状态
+		sessionStorage.setItem("orderPrice",orderPrice);//订单价格
+		sessionStorage.setItem("orderStatus",6);//已完成订单状态
 	 	window.location.href="./clientOrderDetail.html"; 
 	}
 	function getOrderByUserId(obj){
 		pages=0;
-		
-		if(payStatus==0){
-			$('#updatePayStatus').append('<input type="button" value="已支付" onclick="updatePayStatus()">');
-		}
 		$("#myBillList  tr:not(:first)").empty("");  
-		sessionStorage.setItem("findUserId",obj.value);
-		findMoreOrderByUserId(obj.value);
+		if(obj.value=='all'){
+			sessionStorage.removeItem("findUserId");
+			$('#updatePayStatus').html('');
+			findMoreAllOrder();
+		}else{
+			sessionStorage.setItem("findUserId",obj.value);
+			findMoreOrderByUserId(obj.value);
+			if(payStatus==0){
+				$('#updatePayStatus').html('<input type="button" value="已支付" onclick="updatePayStatus()">');
+			}
+		}
+		
 	}
 	function findMoreOrder(){
 		var userId = sessionStorage.getItem("findUserId");
@@ -171,7 +178,7 @@ if(!payStatus){
    			</th>
 	   		<th>
 	   			<select id="user" onchange="getOrderByUserId(this)">
-		   			<option value=" "> </option>
+		   			<option value="all">全部</option>
 		   			<!-- <option value="user_name1">贵阳市贵阳一中</option>
 		   			<option value="user_name2">贵阳市贵阳二中</option> -->
 		   		</select>

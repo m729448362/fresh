@@ -79,6 +79,7 @@ public class OrderController {
 		String str= (String)params.get("status");
     	Integer status=Integer.parseInt(str);
     	
+    	
 		PageBean<OrderQuery> pageBean =orderService.selectAllOrderByStatus(currentPage, status);
 		List<OrderQuery> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);
@@ -102,8 +103,12 @@ public class OrderController {
 		String list1=JSON.toJSONString(list);
     	jsonObject.put("list1",list1);
     	Bill bill=billService.selectBillByUserId(user_id);
-    	double month_pay_money=bill.getMonth_pay_money();
-    	jsonObject.put("month_pay_money",month_pay_money);
+    	if(bill!=null){
+    		double month_pay_money=bill.getMonth_pay_money();
+    		jsonObject.put("month_pay_money",month_pay_money);
+    	}
+    	
+    	
 		return jsonObject;
 	}
 	@RequestMapping(value="selectAllOrderByPayStatus", method = RequestMethod.POST)
@@ -154,7 +159,6 @@ public class OrderController {
 		Integer result=orderService.updateStatus(status, id);
 		jsonObject.put("result", result);
 		
-		
 		return jsonObject;
 	}
 	/**		@RequestMapping(value="updateRealPrice", method = RequestMethod.POST)
@@ -194,18 +198,13 @@ public class OrderController {
 		
 		JSONObject jsonObject = new JSONObject();
 		Integer user_id= (Integer)params.get("user_id");
-		List<OrderQuery> orderList=orderService.selectUserOrderByStatusNoPage(6, user_id);
-		for(OrderQuery order:orderList){
-			double real_price=order.getOrder_real_price();
-			
-			Bill bill=billService.selectBillByUserId(order.getUser_id());
-			double month_pay_money=bill.getMonth_pay_money()+real_price;
-			billService.updateMonthPayMoney(month_pay_money);
+		
+		
 		Integer result=orderService.updatePayStatusByUser(user_id);
 		
 		jsonObject.put("result", result);
 			
-		}
+		
 		
 		
 		return jsonObject;

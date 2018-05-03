@@ -18,10 +18,10 @@
 	var user =JSON.parse(obj);//user对象 
 	$(document).ready(function(c) {
 		var message={
-			 "id":user.id//用户id
+			 "id":parseInt(addressId)//地址
 		};
 		if(addressId!=null&&addressId!=undefined&&addressId!=""){
-			$.ajax({//根据用户id查询用户收货地址
+			$.ajax({//根据地址id查询收货地址详情
 	            url: "/fresh/address/findAddressById.action",        //后台url
 	            data: JSON.stringify(message),
 	            type: "POST",                   //类型，POST或者GET
@@ -31,9 +31,11 @@
 	                //alert(data.result);
 	            	//var data={"address":{"address_detail":"dsadad","create_time":"sadada","id":1,"receiver":"dsa","receiver_phone":"","status":1,"user_id":2}};
 	            	data = data.address;
-	                $('#address').val(data.address_detail);
-	                $('#phone').val(data.receiver_phone);
-	                $('#receiver').val(data.receiver);
+	            	if(data){
+	            		$('#address').val(data.address_detail);
+		                $('#phone').val(data.receiver_phone);
+		                $('#receiver').val(data.receiver);
+	            	}
 	            },
 	            error: function (er) {          //失败，回调函数
 	                alert("查询失败");

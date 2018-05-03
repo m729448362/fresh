@@ -75,8 +75,9 @@ public class After_saleController {
 	    formatDate = dFormat.format(dt);
 	    after_sale.setHandle_time(formatDate);
 	    String order_id=after_sale.getA_order_id();
+	   
    		Integer result=after_saleService.updateAfter_sale(after_sale);
-   		if(result==1){
+   		if(result!=0){
    			orderService.updateStatus(6, order_id);
    		}
    		jsonObject.put("result", result);

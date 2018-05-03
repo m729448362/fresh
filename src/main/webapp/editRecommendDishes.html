@@ -23,10 +23,12 @@ var message;//请求参数
 	            success: function (data) {      //成功，回调函数
 	                //alert(data.result);
 	                data=data.list1;
-	                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+	                if(data){
+	                	for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
 		                	$("#recommendGoods").append("<tr><td>"+data[i].id+"</td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_create_time+"</td><td><input type='button' value='删除' onclick='deleteDishes("+data[i].id+")'></input></td></tr>");
+		                }
+		                getUnRecommendGoods();
 	                }
-	                getUnRecommendGoods();
 	            },
 	            error: function (er) {          //失败，回调函数
                 	alert(er);
@@ -46,10 +48,12 @@ var message;//请求参数
 		            success: function (data) {      //成功，回调函数
 		                //alert(data.res1ult);
 		                data=data.list1;
-	                	for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-		                	if(data[i].goods_Recommended==0){//非推荐产品
-		                		$("#goods").append("<option value='"+data[i].id+"'>"+data[i].goods_name+"</option>");
-		                	}
+		                if(data){
+		                	for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+			                	if(data[i].goods_Recommended==0){//非推荐产品
+			                		$("#goods").append("<option value='"+data[i].id+"'>"+data[i].goods_name+"</option>");
+			                	}
+			                }
 		                }
 		            },
 		            error: function (er) {          //失败，回调函数

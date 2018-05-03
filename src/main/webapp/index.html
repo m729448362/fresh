@@ -34,10 +34,12 @@
             contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数
                 data=data.list1;
-                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                	$("#recommendDishes2").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
-                	$("#recommendDishes1").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='openPage(this)' value='查看'/></td></tr>");
-                }
+            	if(data){
+            		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                    	$("#recommendDishes2").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='joinMyBasket(this)' value='加入菜篮'/></td></tr>");
+                    	$("#recommendDishes1").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"元</td><td><textarea style='display:none;'>"+data[i].id+"</textarea><input type='button' onclick='openPage(this)' value='查看'/></td></tr>");
+                    }
+            	}
             },
             error: function (er) {          //失败，回调函数
                 alert(er);

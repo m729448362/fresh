@@ -29,14 +29,16 @@
 	             success: function (data) {      //成功，回调函数    画页面
 	                 	//alert(data.result);
 	                 	data=data.addressList;
-	                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-	                  	if(data[i].isDefault==1){
-	                  	   $("#addressList").append("<tr><td rowspan='3'>默认收货地址：</td><td>地址：</td><td>"+data[i].address_detail+"</td></tr><tr><td>电话：</td><td>"+data[i].receiver_phone+"</td></tr><tr><td>收货人：</td><td>"+data[i].receiver+"</td></tr>");
-	                  	}else{
-	                  	   $("#addressList").append("<tr><td rowspan='3'></td><td>地址：</td><td>"+data[i].address_detail+"</td></tr><tr><td>电话：</td><td>"+data[i].receiver_phone+"</td></tr><tr><td>收货人：</td><td>"+data[i].receiver+"</td></tr>");
-	                  	}
-	                  	$('#addressSelect').append("<option  value='"+data[i].id+"'>"+data[i].address_detail+"</option>");
-                     }
+	                 	if(data){
+	                 		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+	    	                  	if(data[i].isDefault==1){
+	    	                  	   $("#addressList").append("<tr><td rowspan='3'>默认收货地址：</td><td>地址：</td><td>"+data[i].address_detail+"</td></tr><tr><td>电话：</td><td>"+data[i].receiver_phone+"</td></tr><tr><td>收货人：</td><td>"+data[i].receiver+"</td></tr>");
+	    	                  	}else{
+	    	                  	   $("#addressList").append("<tr><td rowspan='3'></td><td>地址：</td><td>"+data[i].address_detail+"</td></tr><tr><td>电话：</td><td>"+data[i].receiver_phone+"</td></tr><tr><td>收货人：</td><td>"+data[i].receiver+"</td></tr>");
+	    	                  	}
+	    	                  	$('#addressSelect').append("<option  value='"+data[i].id+"'>"+data[i].address_detail+"</option>");
+	                         }
+	                 	}
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);
@@ -58,7 +60,9 @@
 	             type: "POST",                   //类型，POST或者GET
 	             dataType: 'json',              //数据返回类型，可以是xml、json等
 	             success: function (data) {      //成功，回调函数    画页面
-	                 	alert("设置成功");
+	            	 	if(data){
+	            	 		alert("设置成功");
+	            	 	}
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);

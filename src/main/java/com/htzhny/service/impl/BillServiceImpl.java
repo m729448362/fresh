@@ -27,9 +27,9 @@ public class BillServiceImpl implements BillService{
 	}
 
 	@Override
-	public Integer updateMonthPayMoney(double month_pay_money) {
+	public Integer updateMonthPayMoney(double month_pay_money,Integer user_id) {
 		
-		return billDao.updateMonthPayMoney(month_pay_money);
+		return billDao.updateMonthPayMoney(month_pay_money, user_id);
 	}
 
 	@Override

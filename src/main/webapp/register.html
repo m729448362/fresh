@@ -44,8 +44,11 @@
 	             contentType:'application/json;charset=UTF-8',
 	             success: function (data) {      //成功，回调函数
 	                 //alert(data.result);
-	                 sessionStorage.setItem("user_type","1");
-	                 window.location.href="index.html"; 
+	             	if(data.result==1){
+	             		alert("注册成功");
+	             		sessionStorage.setItem("user_type","1");
+		                window.location.href="index.html"; 
+	             	}
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);

@@ -77,8 +77,10 @@ function findMoreOrderByStatus(){//查看更多
              contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数
             	data=data.list1;
-             	for(var i=0;i<data.length;i++){
-                	$("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>￥:<input type='text' id='"+data[i].goods_id+"'/></td><td style='display:none;'>"+data[i].id+"</td></tr>");
+             	if(data){
+             		for(var i=0;i<data.length;i++){
+                    	$("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>￥:<input type='text' id='"+data[i].goods_id+"'/></td><td style='display:none;'>"+data[i].id+"</td></tr>");
+                 	}
              	}
              },
              error: function (er) {          //失败，回调函数

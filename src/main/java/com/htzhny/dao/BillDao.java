@@ -8,6 +8,6 @@ public interface BillDao {
 	
 	public Integer addBill(Bill bill);
 	public Bill selectBillByUserId(Integer user_id);
-	public Integer updateMonthPayMoney(double month_pay_money);
+	public Integer updateMonthPayMoney(double month_pay_money,Integer user_id);
 	public List<Bill> selectAllBill();
 }

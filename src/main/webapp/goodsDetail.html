@@ -30,17 +30,19 @@
 	             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
 	             success: function (data) {      //成功，回调函数    画页面
 	                data=data.goods;
-                 	$('#goodsName').val(data.goods_name);//品名
-                 	$('#introduce').val(data.goods_introduce);//产品介绍
-					$('#lowPrice').val(data.goods_low_price);//单价低价
-					$('#highPrice').val(data.goods_high_price);//单价高价
-					$('#base').val(data.base_id);//基地id
-					$('#goodsDetailText').val(data.goodsDetailText);//产品详情
-					$('#inspectionReportText').val(data.inspectionReportText);//质检详情
-					$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
-					$('#baseDetailText').val(data.baseDetailText);//基地详情
-					//$('#totalPrice').val(data.totalPrice+"元");//合计金额
-					changeTotalPrice();
+	             	if(data){
+	             		$('#goodsName').val(data.goods_name);//品名
+	                 	$('#introduce').val(data.goods_introduce);//产品介绍
+						$('#lowPrice').val(data.goods_low_price);//单价低价
+						$('#highPrice').val(data.goods_high_price);//单价高价
+						$('#base').val(data.base_id);//基地id
+						$('#goodsDetailText').val(data.goodsDetailText);//产品详情
+						$('#inspectionReportText').val(data.inspectionReportText);//质检详情
+						$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
+						$('#baseDetailText').val(data.baseDetailText);//基地详情
+						//$('#totalPrice').val(data.totalPrice+"元");//合计金额
+						changeTotalPrice();
+	             	}
 	             },
 	             error: function (er) {          //失败，回调函数
 	                 alert(er);
@@ -97,7 +99,9 @@
              dataType: 'json',   
              contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数    画页面
-                 	
+                 		if(data){
+                 			alert("添加成功");
+                 		}
                    },
              error: function (er) {          //失败，回调函数
                  alert(er);
@@ -119,7 +123,9 @@
              contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数    画页面
                  	//alert(1);
-             		window.location.href="myBasket.html";
+             		if(data){
+             			window.location.href="myBasket.html";
+             		}
                    },
              error: function (er) {          //失败，回调函数
                  alert(er);

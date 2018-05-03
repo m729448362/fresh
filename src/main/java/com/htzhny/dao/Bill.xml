@@ -15,8 +15,8 @@
 	<select id="selectBillByUserId" parameterType="java.lang.Integer" resultMap="BillQuery">
 		select * from bill where user_id=#{use_id} and flag=1;
 	</select>
-	<update id="updateMonthPayMoney" parameterType="double">
-		update bill set month_pay_money=#{month_pay_money}
+	<update id="updateMonthPayMoney" >
+		update bill set month_pay_money=#{0} where user_id=#{1}
 	</update>
 	<select id="selectAllBill" resultMap="BillQuery">
 		select * from bill where flag=1;
