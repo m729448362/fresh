@@ -46,7 +46,24 @@
 		window.history.go(-1); // 返回上一页  
 	}
 	function createOrder(){//生成订单
-		var data ={};
+		var param = {};
+		var list =new Array();
+		$('#myBasket tr').not(':eq(0)').each(function(i){  
+			 var id = $(this).children('td').eq(0).text();
+		     // var amount = $(this).children('td').eq(1).val();
+		     // var price = $(this).children('td').eq(2).text(); 
+		     var amount = $(this).children('td').eq(3).find('input').val();  
+	     	 // var goodsId= $(this).children('td').eq(3).find('input').attr('id');  
+	     	  param={				//list格式
+					"goods_id": parseInt(id),
+					"amount": parseInt(amount)
+			  };
+	     	
+	     	 list.push(param);
+		    }) 
+		var data ={
+				"list":list
+		};
 		$.ajax({
 	            url: "/fresh/buyCart/createOrder.action",        //后台url
 	            data:JSON.stringify(data),

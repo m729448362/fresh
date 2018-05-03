@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.htzhny.entity.Address;
 import com.htzhny.entity.BuyCart;
 import com.htzhny.entity.BuyItem;
@@ -27,6 +30,7 @@ import com.htzhny.service.GoodsService;
 import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
 import com.htzhny.service.UserService;
+import com.htzhny.util.CartItemUtil;
 
 import net.sf.json.JSONObject;
 
@@ -66,7 +70,7 @@ public class BuyCartController {
 		Goods goods=goodsService.selectGoodsById(goods_id);
 		buyItem.setGoods(goods);
 		buyCart.addItem(buyItem);
-		System.out.println(buyCart.getItems().size());
+		
 		
 		request.getSession().setAttribute("buyCart", buyCart);
 		jsonObject.put("buyCart",buyCart);
@@ -120,7 +124,7 @@ public class BuyCartController {
 	}
 	//结算（生成订单）
 		@RequestMapping(value="createOrder")
-		public @ResponseBody JSONObject createOrder(HttpServletRequest request ){
+		public @ResponseBody JSONObject createOrder(@RequestBody Map<String, Object> params,HttpServletRequest request ){
 			JSONObject jsonObject = new JSONObject();
 			String uuid=UUID.randomUUID().toString();
 			User user=(User) request.getSession().getAttribute("user");
@@ -131,7 +135,20 @@ public class BuyCartController {
 			jsonObject.put("order_id",order_id);
 			List<Address> list=addressService.findAddressByUserId(user_id);
 			jsonObject.put("Address",list);
+			List<CartItemUtil> list1=(List<CartItemUtil>)params.get("list");
+			BuyCart buyCart=(BuyCart) request.getSession().getAttribute("buyCart");
+			List<BuyItem> items=buyCart.getItems();
+			for(int i=0;i<list1.size();i++){
+				CartItemUtil cartItem=JSON.parseObject(JSON.toJSONString(list1.get(i)),CartItemUtil.class);
+				for(BuyItem item:items){
+					if(item.getGoods().getId()==cartItem.getGoods_id()){
+						item.setAmount(cartItem.getAmount());
+					}
+				}
+			}
+				
 			
+			request.getSession().setAttribute("buyCart", buyCart);
 			return jsonObject;
 		}
 		//提交订单、、、、、、、、
@@ -168,7 +185,9 @@ public class BuyCartController {
 			
 			Order_item order_item=new Order_item(id,goods_id,order_id,goods_amount,0.00);
 			order_itemService.addOrder_item(order_item);
+			
 			}
+			buyCart.clearCart();
 			jsonObject.put("result","提交订单成功");
 			return jsonObject;
 				}
