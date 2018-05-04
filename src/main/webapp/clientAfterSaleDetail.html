@@ -84,6 +84,9 @@ var totalPrice=0//总计金额
 					"prove_img": "www.baidu.com"
 				}
 	        };
+		if(!confirm("确认提交？")){
+			return;
+		}
 		$.ajax({//更新售后详情
              url: "/fresh/after_sale/updateAfter_sale.action",        //后台url
              data: JSON.stringify(data),

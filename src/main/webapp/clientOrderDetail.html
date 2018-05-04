@@ -122,24 +122,28 @@
 					"status":4,//订单状态  待收货
 		            "id":orderId
 			};
-			$.ajax({//订单状态查找订单
-		          url: "/fresh/order/updateStatus.action",        //后台url
-		          data:JSON.stringify(message),
-		          type: "POST",                   //类型，POST或者GET
-		          dataType: 'json',              //数据返回类型，可以是xml、json等
-		          contentType:'application/json;charset=UTF-8',
-		          success: function (data) {      //成功，回调函数
-		        	  if(data){
-							alert("修改成功");
-							window.history.go(-1);
-						}else{
-							alert("修改失败");
-						}
-		          },
-		          error: function (er) {          //失败，回调函数
-		              alert(er);
-		          }
-		      });
+		 if(!confirm("确认发货？")){
+			 return;
+		 }
+		 $.ajax({//订单状态查找订单
+	          url: "/fresh/order/updateStatus.action",        //后台url
+	          data:JSON.stringify(message),
+	          type: "POST",                   //类型，POST或者GET
+	          dataType: 'json',              //数据返回类型，可以是xml、json等
+	          contentType:'application/json;charset=UTF-8',
+	          success: function (data) {      //成功，回调函数
+	        	  if(data){
+						alert("修改成功");
+						window.history.go(-1);
+					}else{
+						alert("修改失败");
+					}
+	          },
+	          error: function (er) {          //失败，回调函数
+	              alert(er);
+	          }
+	      });
+		 
 	 }
 </script>
 </head>

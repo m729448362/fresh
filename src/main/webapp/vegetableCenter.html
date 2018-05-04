@@ -126,6 +126,9 @@
 		window.location.href="./editGoods.html";
 	}
 	function deleteGoods(goodsId){//下架菜品
+		if(!confirm("确认下架菜品？")){
+			return;
+		}
 		message={
 				"goods": {
 					"base_id": 0,

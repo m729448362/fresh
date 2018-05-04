@@ -25,6 +25,9 @@ function returnLastPage(){
 	window.history.go(-1);
 }
 function updateOrder(){//更新报价
+	if(!confirm("确认提交？")){
+		return;
+	}
 	var param = {};
 	var list =new Array();
 	$('#order tr').not(':eq(0)').each(function(i){  

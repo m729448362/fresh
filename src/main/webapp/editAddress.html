@@ -20,7 +20,7 @@
 		var message={
 			 "id":parseInt(addressId)//地址
 		};
-		if(addressId!=null&&addressId!=undefined&&addressId!=""){
+		if(addressId){
 			$.ajax({//根据地址id查询收货地址详情
 	            url: "/fresh/address/findAddressById.action",        //后台url
 	            data: JSON.stringify(message),
@@ -48,6 +48,9 @@
 		window.history.go(-1); 
 	}
 	function updateAddress(){
+		if(!confirm("确认提交？")){
+			return;
+		}
 		var address=$('#address').val();//地址
 		var phone=$('#phone').val();//电话
 		var receiver=$('#receiver').val();//收货人

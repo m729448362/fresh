@@ -122,6 +122,9 @@ if(!payStatus){
 		}
 	}
 	function updatePayStatus(){//根据用户id更新支付状态
+		if(!confirm("确认支付?")){
+			return;
+		}
 		var userId = sessionStorage.getItem("findUserId");
 		message={                          //数据
                 "user_id":parseInt(userId)//userId //用户id
@@ -144,6 +147,7 @@ if(!payStatus){
             	alert("修改失败");
             }
         });	
+		
 	}
 </script>
 </head>

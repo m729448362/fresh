@@ -109,6 +109,9 @@
          });
 	}
 	function createOrder(){
+		if(!confirm("确认购买？")){
+			return;
+		}
 		var amount=$('#amount').val()
 		var data={
                 "goodsId":goodsId,

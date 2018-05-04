@@ -32,7 +32,9 @@
 	}
 	function addOrderAddress(){
 			//判断用户是否登录
-			
+		if(!confirm("确认提交？")){
+			return;
+		}
 		var address = $('#address').find("option:selected").text();
 		var deliveryDate = $('#deliveryDate').val();
 		var message={

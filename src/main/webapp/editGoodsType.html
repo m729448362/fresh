@@ -45,6 +45,9 @@ var message;//请求参数
 		var str=prompt("请输入种类名称","");
 	    if(str)
 	    {
+	    	if(!confirm("确认添加？")){
+				return;
+			}
 	    	message={
 	    			"goods_type":{  "goods_type_name":str,
                 	"id":goodsTypeId}
@@ -70,6 +73,9 @@ var message;//请求参数
 	    }
 	}
 	function deleteGoodsType(goodsTypeId){
+		if(!confirm("确认删除？")){
+			return;
+		}
 		message={ "goods_type":{                         //数据
                 "id":goodsTypeId,
                 "status":0}
@@ -93,6 +99,9 @@ var message;//请求参数
 	         });
 	}
 	function addGoodsType(){
+		if(!confirm("确认添加？")){
+			return;
+		}
 		var goodsTypeName = $('#goodsTypeName').val();
 		message={  "goods_type" :{                     //数据
                 "goods_type_name":goodsTypeName,

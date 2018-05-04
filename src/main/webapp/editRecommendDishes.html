@@ -66,6 +66,9 @@ var message;//请求参数
 		       });
 	}
 	function deleteDishes(goodsId){
+		if(!confirm("确认删除？")){
+			return;
+		}
 		message={
 				"goods_id":""+goodsId,  //菜品编号
                 "goods_Recommended":0
@@ -89,6 +92,9 @@ var message;//请求参数
        });
 	}
 	function addRecommendGoods(){
+		if(!confirm("确认添加？")){
+			return;
+		}
 		var goodsId = $('#goods').val();
 		message={
 				"goods_id":goodsId,  //菜品编号

@@ -41,6 +41,9 @@ var user = JSON.parse(obj);
 					"user_img": "www.baidu.com"
 				}
 			};
+		if(!confirm("确认修改？")){
+			return;
+		}
 		$.ajax({//修改个人信息接口
 	             url: "/fresh/user/updateMessage.action",        //后台url
 	             data: JSON.stringify(user),

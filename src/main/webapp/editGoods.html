@@ -87,6 +87,9 @@
 		document.getElementById('baseDetail').style.display="block";
 	}
 	function updateGoods(){
+		if(!confirm("确认提交？")){
+			return;
+		}
 		var goodsName=$('#goodsName').val();//品名
 		var introduce = $("#introduce").val();//介绍
 		var lowPrice=$('#lowPrice').val();//单价低价
