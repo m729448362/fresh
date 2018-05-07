@@ -23,12 +23,14 @@ import com.htzhny.entity.BuyCart;
 import com.htzhny.entity.BuyItem;
 import com.htzhny.entity.Goods;
 import com.htzhny.entity.Order;
+import com.htzhny.entity.OrderLog;
 import com.htzhny.entity.Order_item;
 import com.htzhny.entity.User;
 import com.htzhny.service.AddressService;
 import com.htzhny.service.GoodsService;
 import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
+import com.htzhny.service.Order_logService;
 import com.htzhny.service.UserService;
 import com.htzhny.util.CartItemUtil;
 
@@ -47,6 +49,8 @@ public class BuyCartController {
 	private AddressService addressService;
 	@Autowired
 	private Order_itemService order_itemService;
+	@Autowired
+	private Order_logService logService;
 	
 	//加入购物车
 	@RequestMapping(value="addGoods")
@@ -185,7 +189,8 @@ public class BuyCartController {
 			
 			Order_item order_item=new Order_item(id,goods_id,order_id,goods_amount,0.00);
 			order_itemService.addOrder_item(order_item);
-			
+			OrderLog orderlog=new OrderLog(order_id,formatDate,1);
+   	   		logService.addLog(orderlog);
 			}
 			buyCart.clearCart();
 			jsonObject.put("result","提交订单成功");
