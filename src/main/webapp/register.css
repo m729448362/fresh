@@ -125,7 +125,7 @@ input[type="button"] {
 	font-weight: 900;
 	outline: none;
 	font-family: 'Raleway', sans-serif;
-	padding: 12px 0px;
+	padding: 0.5em;
 	width: 35%;
 	font-size: 18px;
 	background:#1E90FF;
@@ -148,7 +148,7 @@ input[type="reset"] {
 	font-weight: 900;
 	outline: none;
 	font-family: 'Raleway', sans-serif;
-	padding: 12px 0px;
+	padding: 0.5em;
 	width: 35%;
 	font-size: 18px;
 	background:#1E90FF;
