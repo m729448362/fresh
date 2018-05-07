@@ -1,7 +1,9 @@
 package com.htzhny.controller;
 
 import java.math.BigDecimal;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.htzhny.entity.Bill;
 import com.htzhny.entity.Goods;
 import com.htzhny.entity.Order;
+import com.htzhny.entity.OrderLog;
 import com.htzhny.entity.OrderQuery;
 import com.htzhny.entity.Order_item;
 import com.htzhny.entity.PageBean;
@@ -26,6 +29,7 @@ import com.htzhny.entity.User;
 import com.htzhny.service.BillService;
 import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
+import com.htzhny.service.Order_logService;
 import com.htzhny.service.UserService;
 
 import net.sf.json.JSONObject;
@@ -40,6 +44,8 @@ public class OrderController {
 	private BillService billService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private Order_logService logService;
 	@RequestMapping(value="selectCountByStatus", method = RequestMethod.POST)
 	//查询某个订单状态的总数
 	public  @ResponseBody JSONObject selectCountByStatus(@RequestBody Map<String, Object> params){
@@ -159,6 +165,24 @@ public class OrderController {
 		Integer result=orderService.updateStatus(status, id);
 		jsonObject.put("result", result);
 		
+   		Date dt =new Date(); 
+		String formatDate = "";  
+		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
+	    formatDate = dFormat.format(dt); 
+	    if(status==2){
+   		OrderLog orderlog=new OrderLog(id,formatDate,2);
+   		logService.addLog(orderlog);
+   		}else if(status==3){
+   			OrderLog orderlog=new OrderLog(id,formatDate,3);
+   	   		logService.addLog(orderlog);
+   		}else if(status==4){
+   			OrderLog orderlog=new OrderLog(id,formatDate,4);
+   	   		logService.addLog(orderlog);
+   		}else if(status==6){
+   			OrderLog orderlog=new OrderLog(id,formatDate,7);
+   	   		logService.addLog(orderlog);
+   		}
+   		jsonObject.put("result", result);
 		return jsonObject;
 	}
 	/**		@RequestMapping(value="updateRealPrice", method = RequestMethod.POST)

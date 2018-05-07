@@ -16,11 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.htzhny.entity.Order;
+import com.htzhny.entity.OrderLog;
 import com.htzhny.entity.Order_item;
 import com.htzhny.entity.Order_itemQuery;
 import com.htzhny.entity.PageBean;
 import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
+import com.htzhny.service.Order_logService;
 
 import net.sf.json.JSONObject;
 
@@ -31,6 +33,8 @@ public class Order_itemController {
 	private Order_itemService order_itemService;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private Order_logService logService;
 	@RequestMapping(value="addOrder_item")
 	//生成订单项
 	public @ResponseBody JSONObject addOrder_item(@RequestBody Map<String, Object> params){
@@ -96,13 +100,17 @@ public class Order_itemController {
 	//查询某个订单的所有订单项
 	public @ResponseBody JSONObject  selectAllByOrderId(@RequestBody Map<String, Object> params){
 		
-		String id= (String)params.get("id");
+		String order_id= (String)params.get("id");
 		Integer currentPage= (Integer)params.get("currentPage");
 		JSONObject jsonObject = new JSONObject();
-		PageBean<Order_itemQuery> pageBean =order_itemService.selectAllByOrderId(currentPage, id);
+		PageBean<Order_itemQuery> pageBean =order_itemService.selectAllByOrderId(currentPage, order_id);
 		List<Order_itemQuery> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);
     	jsonObject.put("list1",list1);
+    	List<OrderLog> orderLogList=logService.findOneOrderLog(order_id);
+    	if(orderLogList.size()>0){
+    		jsonObject.put("orderLogList",orderLogList);
+    	}
 		return jsonObject;
 	}
 

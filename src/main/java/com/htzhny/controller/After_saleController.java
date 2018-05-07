@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSON;
 import com.htzhny.entity.Address;
 import com.htzhny.entity.After_sale;
 import com.htzhny.entity.After_saleQuery;
+import com.htzhny.entity.OrderLog;
 import com.htzhny.entity.Order_item;
 import com.htzhny.entity.Order_itemAndAfter_saleQuery;
 import com.htzhny.entity.Order_itemQuery;
@@ -30,6 +31,7 @@ import com.htzhny.entity.User;
 import com.htzhny.service.After_saleService;
 import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
+import com.htzhny.service.Order_logService;
 
 import net.sf.json.JSONObject;
 
@@ -42,6 +44,8 @@ public class After_saleController {
 	private Order_itemService order_itemService;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private Order_logService logService;
 	
 	//增加售后记录
     @RequestMapping(value="addAfter_sale", method = RequestMethod.POST)
@@ -59,6 +63,14 @@ public class After_saleController {
    			String order_id=after_sale.getA_order_id();
    			orderService.updateStatus(5,order_id );
    		}
+   		String order_id=after_sale.getA_order_id();
+   		Date dt =new Date(); 
+		String formatDate = "";  
+		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
+	    formatDate = dFormat.format(dt); 
+	    
+   		OrderLog orderlog=new OrderLog(order_id,formatDate,5);
+   		logService.addLog(orderlog);
    		jsonObject.put("result", result);
 	return jsonObject;
     }
@@ -80,6 +92,10 @@ public class After_saleController {
    		if(result!=0){
    			orderService.updateStatus(6, order_id);
    		}
+   		OrderLog orderlog=new OrderLog(order_id,formatDate,6);
+   		logService.addLog(orderlog);
+   		OrderLog orderlog1=new OrderLog(order_id,formatDate,7);
+   		logService.addLog(orderlog1);
    		jsonObject.put("result", result);
 	return jsonObject;
     }
