@@ -26,7 +26,9 @@
 	var highPrice = sessionStorage.getItem("highPrice");
 	var obj = sessionStorage.getItem('user');//
 	var user=JSON.parse(obj);
-     var message;//请求参数
+    var message;//请求参数
+    var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货"};
+
 	$(document).ready(function(c) {
 		message={
 				"id":orderId,   //orderId
@@ -41,6 +43,7 @@
              contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数
                  //alert(data.result);
+            	 orderLogList = data.orderLogList; //订单日志列表
                  data = data.list1;
                  if(data){
                 	 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
@@ -48,13 +51,19 @@
                      }
                      $("#account").text("￥"+orderPrice+"元");//更改订单金额
                      if(orderStatus==5){
-                     	document.getElementById("afterSales").style.display ="block";
+                     	//document.getElementById("afterSales").style.display ="block";
                      	findAfterSaleInfo(data.id);//售后信息查询
                      }
                      if(orderStatus==3){
-                     	
-             			$('#updateOrderStatus').append('<input type="button" value="已发货" onclick="updateOrderStatus()">');
-             		}
+               			$('#updateOrderStatus').append('<input type="button" value="已发货" onclick="updateOrderStatus()">');
+               		 }
+                     if(orderLogList){//订单日志信息
+	                	  //document.getElementById("orderLog").style.display ="block";
+	                	  for(var i=0;i<orderLogList.length;i++){//data.length是获取data的长度。for循环
+	                		  $("#log").append("<tr><td>"+eventName[parseInt(orderLogList[i].event)]+"</td><td>"+orderLogList[i].handle_time+"</td></tr>");    
+	                	  }
+	                  }
+	                  showMsg(1);//默认展示商品信息
                  }
              },
              error: function (er) {          //失败，回调函数
@@ -145,6 +154,19 @@
 	      });
 		 
 	 }
+	function showMsg(type){//展示信息
+		if(type==1){//商品信息
+			document.getElementById("orderLog").style.display ="none";//日志信息不显示
+			document.getElementById("goodsDetail").style.display ="block";//商品信息显示
+			 if(orderStatus==5){
+              	document.getElementById("afterSales").style.display ="block";
+              	//findAfterSaleInfo(data.id);//售后信息查询
+              }
+		}else{
+			document.getElementById("goodsDetail").style.display ="none";//商品信息不显示
+			document.getElementById("orderLog").style.display ="block";
+		}
+	}
 </script>
 </head>
 <body>
@@ -162,41 +184,64 @@
 		    	</ul>
 		    </div>
   		</td></th>
+  		<tr>
+  			<td>
+	  			<div>
+			    	<ul>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(1)">商品信息</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(2)">日志信息</a></li>
+			    	</ul>
+			    </div>
+  			</td>
+  		</tr>
   	</table>
-    <table class="table table-hover text-center" id="order">
-      <tr>
-        <th>品名</th>
-        <th>单价</th>
-        <th>数量</th>
-        <th>报价</th>
-      </tr>
-      <volist name="list" id="vo">
-    </table>
-  </div>
-  <div class="footer">
-	<a href="javaScript:findMoreOrderByStatus()">查看更多</a>
-</div>
-  <div id="price"> 
-  	<strong>
-  		<b>总计：</b>
-  		<b id="account">￥16.30元</b>
-  	</strong>
-  </div>
+  	</div>
  </form>
-  <div id="afterSales" style="display:none">
-  	<div>
-  		<strong>
-  			<b>申请售后原因：</b>
-  		</strong>
-  			
-  		<input type="textarea" value="" id="reason"></input>
-  	</div>
-  	<div id="dealWith">
-  	</div>
-  	<div id="afterSaleStatus">
-  	</div>
-  </div>
-  <div id="updateOrderStatus">
+ <p/><p/>
+ <div id="goodsDetail" style="display:none;"><b>订单商品信息:</b>
+	 <table class="table table-hover text-center" id="order">
+	      <tr>
+	        <th>品名</th>
+	        <th>单价</th>
+	        <th>数量</th>
+	        <th>报价</th>
+	      </tr>
+	      <volist name="list" id="vo">
+	    </table>
+	  <div class="footer">
+		<a href="javaScript:findMoreOrderByStatus()">查看更多</a>
+	</div>
+    <div id="price"> 
+	  	<strong>
+	  		<b>总计：</b>
+	  		<b id="account">￥16.30元</b>
+	  	</strong>
+	</div>
+    <div id="afterSales" style="display:none">
+	  	<div>
+	  		<strong>
+	  			<b>申请售后原因:</b>
+	  		</strong>
+	  			
+	  		<input type="textarea" value="" id="reason"></input>
+	  	</div>
+	  	<div id="dealWith">
+	  	</div>
+	  	<div id="afterSaleStatus">
+	  	</div>
+	</div>
+	<div id="updateOrderStatus">
+	</div>
+</div>
+<p/><p/>
+<div id="orderLog" style="display=none;">
+	<div><b>订单日志信息:</b></div>
+	<table class="table table-hover text-center" id="log">
+      <tr>
+      	<th>事件</th>
+        <th>时间</th>
+      </tr>
+    </table>
 </div>
 </body>
 </html>

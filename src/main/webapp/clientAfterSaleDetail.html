@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-cn">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -22,6 +22,7 @@ var pages=0;
 var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成"};
 var obj = sessionStorage.getItem('user');//
 var user=JSON.parse(obj);
+var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货"};
 
 var totalPrice=0//总计金额
 	$(document).ready(function(c) {
@@ -41,14 +42,15 @@ var totalPrice=0//总计金额
              dataType: 'json',     
              contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数
-                 data = data.list;
+            	if(data){
+             		orderLogList = data.orderLogList;
+              		data = data.list;
+             	}
              	if(data.length>0){
              		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
                         $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_real_price+"</td></tr>");
                     	totalPrice=data[i].goods_amount*data[i].goods_real_price+totalPrice;
                     }
-                   	document.getElementById("price").style.display="none";
-                   	document.getElementById("afterSales").style.display="block";
                    	$("#reason").val(data[0].after_sale_reason);//更改售后原因
                    	$("#reason").attr("disabled",true);//更改售后原因不可编辑
                    	$("#img").html("");
@@ -58,7 +60,15 @@ var totalPrice=0//总计金额
                    		$("#dealWith").append("<input type='button' onclick=\"updateAfterSale('"+data[0].after_sale_id+"')\" value='提交'/>");//处理方式
                    	}
              	}
-                 
+             	if(pages==1){
+             		if(orderLogList.length>0){//订单日志信息
+                    	  //document.getElementById("orderLog").style.display ="block";
+                    	  for(var i=0;i<orderLogList.length;i++){//data.length是获取data的长度。for循环
+                    		  $("#log").append("<tr><td>"+eventName[parseInt(orderLogList[i].event)]+"</td><td>"+orderLogList[i].handle_time+"</td></tr>");    
+                    	  }
+                      }
+                   	showMsg(1);//显示信息
+             	}
              },
              error: function (er) {          //失败，回调函数
                  alert(er);
@@ -106,12 +116,22 @@ var totalPrice=0//总计金额
              }
          });
 	}
+	function showMsg(type){//展示信息
+		if(type==1){//商品信息
+			document.getElementById("orderLog").style.display ="none";//日志信息不显示
+			document.getElementById("goodsDetail").style.display ="block";//商品信息显示
+			document.getElementById("price").style.display="none";
+           	document.getElementById("afterSales").style.display="block";
+		}else{
+			document.getElementById("goodsDetail").style.display ="none";//商品信息不显示
+			document.getElementById("orderLog").style.display ="block";
+		}
+	}
 </script>
 </head>
 <body>
 <form method="post" action="" id="listform">
   <div class="panel admin-panel">
-  	<div class=""><a></a></div>
     <div class="panel-head"><strong> 订单详情</strong></div>
     <table>
   		<th><td>
@@ -123,23 +143,35 @@ var totalPrice=0//总计金额
 		    	</ul>
 		    </div>
   		</td></th>
+  		<tr>
+  			<td>
+	  			<div>
+			    	<ul>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(1)">商品信息</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(2)">日志信息</a></li>
+			    	</ul>
+			    </div>
+  			</td>
+  		</tr>
   	</table>
-    <table class="table table-hover text-center" id="order">
-      <tr>
-        <th>菜名</th>
-        <th>数量</th>
-        
-        <th>报价(元)</th>
-      </tr>
-      <volist name="list" id="vo">
-    </table>
   </div>
-   <div class="footer">
-	<a href="javaScript:findMoreOrderByStatus()">查看更多</a>
-</div>
+</form>
+<p/><p/>
+<div id="goodsDetail" style="display:none;">
+	<b>订单商品信息:</b>
+	<table class="table table-hover text-center" id="order">
+	  <tr>
+	    <th>菜名</th>
+	    <th>数量</th>
+	    <th>报价(元)</th>
+	  </tr>
+	  <volist name="list" id="vo">
+	</table>
+	<div class="footer">
+		<a href="javaScript:findMoreOrderByStatus()">查看更多</a>
+	</div>
   <div id="price" style="float:right;"> 
   </div>
- </form>
   <div id="afterSales">
   	<div >
   		<strong>
@@ -156,6 +188,17 @@ var totalPrice=0//总计金额
 	</div>
 	
   </div>
+</div>
+<p/><p/>
+<div id="orderLog" style="display=none;">
+	<div><b>订单日志信息:</b></div>
+	<table class="table table-hover text-center" id="log">
+      <tr>
+      	<th>事件</th>
+        <th>时间</th>
+      </tr>
+    </table>
+</div>   
 <script type="text/javascript">
 </script>
 </body>

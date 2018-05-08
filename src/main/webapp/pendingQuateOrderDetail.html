@@ -16,6 +16,8 @@
 <script>
 var orderId =sessionStorage.getItem("orderId");
 var pages = 0;
+var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货"};
+
 $(document).ready(function(c) {
 
 			//初始化方法
@@ -80,11 +82,21 @@ function findMoreOrderByStatus(){//查看更多
              dataType: 'json',              //数据返回类型，可以是xml、json等
              contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数
+            	orderLogList = data.orderLogList; //订单日志列表
             	data=data.list1;
              	if(data){
              		for(var i=0;i<data.length;i++){
                     	$("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>￥:<input type='text' id='"+data[i].goods_id+"'/></td><td style='display:none;'>"+data[i].id+"</td></tr>");
                  	}
+             		if(pages==1){
+             			if(orderLogList.length>0){//订单日志信息
+                        	  //document.getElementById("orderLog").style.display ="block";
+                        	  for(var i=0;i<orderLogList.length;i++){//data.length是获取data的长度。for循环
+                        		  $("#log").append("<tr><td>"+eventName[parseInt(orderLogList[i].event)]+"</td><td>"+orderLogList[i].handle_time+"</td></tr>");    
+                        	  }
+                          }
+                       	showMsg(1);//显示信息
+             		}
              	}
              },
              error: function (er) {          //失败，回调函数
@@ -92,6 +104,15 @@ function findMoreOrderByStatus(){//查看更多
              }
          });		
    }
+	function showMsg(type){//展示信息
+		if(type==1){//商品信息
+			document.getElementById("orderLog").style.display ="none";//日志信息不显示
+			document.getElementById("goodsDetail").style.display ="block";//商品信息显示
+		}else{
+			document.getElementById("goodsDetail").style.display ="none";//商品信息不显示
+			document.getElementById("orderLog").style.display ="block";
+		}
+	}
 </script>
 </head>
 <body>
@@ -108,23 +129,44 @@ function findMoreOrderByStatus(){//查看更多
 		    	</ul>
 		    </div>
   		</td></th>
+  		<tr>
+  			<td>
+	  			<div>
+			    	<ul>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(1)">商品信息</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(2)">日志信息</a></li>
+			    	</ul>
+			    </div>
+  			</td>
+  		</tr>
   	</table>
-    <div><strong>待报价的订单详情如下：</strong></div>
-    <table class="table table-hover text-center" id="order">
-      <tr>
-        <th>菜名</th>
-        <th>数量</th>
-        <th>价格</th>
-        <th>报价</th>
-        <th style="display:none;">id</th>
-      </tr>
-        
-    </table>
-    <input type="button" value="确定" onclick="updateOrder()"></input>
   </div>
 </form>
-<div class="footer">
-	<a href="javaScript:findMoreOrderByStatus()">查看更多</a>
+<div id="goodsDetail" style="display:none;"><b>订单商品信息:</b>
+	 <table class="table table-hover text-center" id="order">
+	   <tr>
+	     <th>菜名</th>
+	     <th>数量</th>
+	     <th>价格</th>
+	     <th>报价</th>
+	     <th style="display:none;">id</th>
+	   </tr>
+	     
+	 </table>
+	 <input type="button" value="确定" onclick="updateOrder()"></input>
+	<div class="footer">
+		<a href="javaScript:findMoreOrderByStatus()">查看更多</a>
+	</div>
+</div>
+<p/><p/>
+<div id="orderLog" style="display=none;">
+	<div><b>订单日志信息:</b></div>
+	<table class="table table-hover text-center" id="log">
+      <tr>
+      	<th>事件</th>
+        <th>时间</th>
+      </tr>
+    </table>
 </div>
 <script type="text/javascript">
 
