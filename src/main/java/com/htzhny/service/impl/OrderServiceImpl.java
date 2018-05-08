@@ -1,5 +1,8 @@
 package com.htzhny.service.impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,12 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.htzhny.dao.BillDao;
 import com.htzhny.dao.OrderDao;
+import com.htzhny.dao.OrderLogDao;
 import com.htzhny.entity.Bill;
 import com.htzhny.entity.Goods;
 import com.htzhny.entity.Order;
+import com.htzhny.entity.OrderLog;
 import com.htzhny.entity.OrderQuery;
 import com.htzhny.entity.PageBean;
 import com.htzhny.service.OrderService;
+import com.htzhny.service.Order_logService;
 
 
 
@@ -25,6 +31,8 @@ public class OrderServiceImpl implements OrderService{
 	private OrderDao orderDao;
 	@Autowired
 	private BillDao billDao;
+	@Autowired
+	private OrderLogDao logDao;
 	@Override
 	@Transactional(readOnly=true)
 	public PageBean<OrderQuery> selectUserOrderByStatus(Integer currentPage, Integer status,Integer user_id) {
@@ -149,6 +157,23 @@ public class OrderServiceImpl implements OrderService{
 			double month_pay_money=bill.getMonth_pay_money()+real_price;
 			billDao.updateMonthPayMoney(month_pay_money,user_id);
 		}
+		Date dt =new Date(); 
+		String formatDate = "";  
+		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
+	    formatDate = dFormat.format(dt); 
+	    if(status==2){
+   		OrderLog orderlog=new OrderLog(id,formatDate,2);
+   		logDao.addLog(orderlog);
+   		}else if(status==3){
+   			OrderLog orderlog=new OrderLog(id,formatDate,3);
+   			logDao.addLog(orderlog);
+   		}else if(status==4){
+   			OrderLog orderlog=new OrderLog(id,formatDate,4);
+   			logDao.addLog(orderlog);
+   		}else if(status==6){
+   			OrderLog orderlog=new OrderLog(id,formatDate,7);
+   			logDao.addLog(orderlog);
+   		}
 		return orderDao.updateStatus(status,id);
 	}
 

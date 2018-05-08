@@ -165,24 +165,8 @@ public class OrderController {
 		Integer result=orderService.updateStatus(status, id);
 		jsonObject.put("result", result);
 		
-   		Date dt =new Date(); 
-		String formatDate = "";  
-		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
-	    formatDate = dFormat.format(dt); 
-	    if(status==2){
-   		OrderLog orderlog=new OrderLog(id,formatDate,2);
-   		logService.addLog(orderlog);
-   		}else if(status==3){
-   			OrderLog orderlog=new OrderLog(id,formatDate,3);
-   	   		logService.addLog(orderlog);
-   		}else if(status==4){
-   			OrderLog orderlog=new OrderLog(id,formatDate,4);
-   	   		logService.addLog(orderlog);
-   		}else if(status==6){
-   			OrderLog orderlog=new OrderLog(id,formatDate,7);
-   	   		logService.addLog(orderlog);
-   		}
-   		jsonObject.put("result", result);
+   		
+   		
 		return jsonObject;
 	}
 	/**		@RequestMapping(value="updateRealPrice", method = RequestMethod.POST)
