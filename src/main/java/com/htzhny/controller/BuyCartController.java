@@ -164,10 +164,10 @@ public class BuyCartController {
 					return null;
 							}
 			Date dt =new Date(); 
-			String formatDate = "";  
+			
 			DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
-		    formatDate = dFormat.format(dt); 
-		    String create_time = DateFormat.getDateInstance().format(dt);  
+		    String create_time = dFormat.format(dt); 
+		    
 			String order_id= (String) params.get("order_id");
 			String delivery_time=(String) params.get("delivery_time");
 			String address=(String) params.get("address");

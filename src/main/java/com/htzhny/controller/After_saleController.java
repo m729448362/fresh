@@ -165,7 +165,10 @@ public class After_saleController {
     	String order_id=(String) params.get("order_id");
     	PageBean<Order_itemAndAfter_saleQuery> pagebean =after_saleService.selectOneById(currentPage,order_id);
     	List<Order_itemAndAfter_saleQuery> list=pagebean.getLists();
-
+    	List<OrderLog> orderLogList=logService.findOneOrderLog(order_id);
+    	if(orderLogList.size()>0){
+    		jsonObject.put("orderLogList",orderLogList);
+    	}
     	jsonObject.put("list",list);
     	
     	return jsonObject;
