@@ -189,7 +189,7 @@ public class BuyCartController {
 			
 			Order_item order_item=new Order_item(id,goods_id,order_id,goods_amount,0.00);
 			order_itemService.addOrder_item(order_item);
-			OrderLog orderlog=new OrderLog(order_id,formatDate,1);
+			OrderLog orderlog=new OrderLog(order_id,create_time,1);
    	   		logService.addLog(orderlog);
 			}
 			buyCart.clearCart();
