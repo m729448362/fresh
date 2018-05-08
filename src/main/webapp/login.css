@@ -103,13 +103,20 @@ input[type="text"]:hover, input[type="password"]:hover{
 	
 }
 .button h4 a{
-	float:left;
-	font-size: 16px;
-	color: #999;
-	font-weight: 400;
-	font-family: 'Droid Sans', sans-serif;
-	margin-top: 15px;
-	margin-left: 21px;
+	color: #fff;
+	cursor: pointer;
+	font-weight: 900;
+	outline: none;
+	font-family: 'Raleway', sans-serif;
+	padding: 12px 0px;
+	width: 35%;
+	font-size: 18px;
+	background:#1E90FF;
+	border:2px solid #1E90FF;
+	border-radius: 0.5em;
+	-webkit-border-radius:0.5em;
+	-moz-border-radius:0.5em;
+	-o-border-radius:0.5em;
 }
 .button h4 a:hover{
 	color:#000000;

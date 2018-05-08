@@ -5,7 +5,6 @@
 <link href="register.css" rel="stylesheet" type="text/css" media="all" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 <!-- -->
 <script type="text/script">
 	
@@ -89,10 +88,10 @@
 <body>
 <!-- contact-form -->	
 <div class="message warning">
-<div class="inset">
-	<div class="login-head">
-		<h1>用户注册</h1>
-	</div>
+	<div class="inset">
+		<div class="login-head">
+			<h1>用户注册</h1>
+		</div>
 		<form>
 			<li>
 				<p>账号:</p>
@@ -117,22 +116,18 @@
 			   	<input type="password" autocomplete="new-password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" id="repassword">
 			    </input> 
 			 </li>
-			
-				
-		<div class="clear"> </div><div class="submit">
+			<div class="clear"> </div>
+			<div class="submit">
 				<input type="button" value="注册" onclick="register()" dir="rtl">
-			</input>
-			<input type="reset" value="重置"> 
-  </div>
-  </form>
-		</div>					
-	</div>
-	</div>
-	<div class="clear"> </div>
-<!--- footer --->
-<div class="footer">
-	<!-- <p><![CDATA[Copyright  2014.]]></p> -->
+				</input>
+				<input type="reset" value="重置"/> 
+		  	</div>
+	  	</form>
+	</div>					
 </div>
-<div style="display:none"><script src='http://v7.cnzz.com/stat.php?id=155540&web_id=155540' language='JavaScript' charset='gb2312'></script></div>
+<li style='visibility: hidden'>
+	<input type="password" autocomplete="new-password" value="请输入密码" id="password2" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}"> <a href="#" class="icon lock"></a>
+</li>
+<div class="clear"> </div>
 </body>
 </html>
