@@ -19,14 +19,14 @@ var orderStatus=6;//订单状态
 var message;//后台参数
 var payStatus=sessionStorage.getItem("payStatus");//支付状态
 if(!payStatus){
-	payStatus=0;//未支付
+	payStatus=1;//未支付
 }
 	$(document).ready(function(c) {
 			//初始化方法
         findMoreOrder();//查找账单
 		
 	});
-	function getOrder(payStatus){//获取本月账单 历史账单
+	function getOrder(payStatus){//获取1：本月账单，2：上月待支付账单 3：历史账单
 		pages=0;
 		sessionStorage.setItem("payStatus",payStatus);
 		sessionStorage.removeItem("findUserId");
@@ -37,7 +37,7 @@ if(!payStatus){
 		pages+=1;
 		message={                          //数据
                 "currentPage":""+pages,
-                "pay_status":""+payStatus
+                "bill_status":""+payStatus
             };
 		$.ajax({//
             url: "/fresh/order/selectAllOrderByPayStatus.action",        //后台url
@@ -47,8 +47,8 @@ if(!payStatus){
             contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数    画页面
             	//data={"list1":[{"address":"贵阳市贵阳一中","create_time":"2018-6-5","delivery_time":"2018-6-6","id":"1535452","order_high_price":100.5,"order_low_price":88.2,"order_real_price":0,"order_status":1,"pay_status":0,"user_company":"贵阳一中123","user_id":2},{"address":"贵州省贵阳一中","create_time":"2018-4-22","delivery_time":"2018-4-7","id":"268d5b7cd-6f24-4a73-bfc7-89774ef57c75","order_high_price":61.6,"order_low_price":54,"order_real_price":0,"order_status":6,"pay_status":0,"user_company":"贵阳一中123","user_id":2}],"mseller_month_total_money":81.0};
-            	 $("#allAccount").text(data.mseller_month_total_money+"元");//应付金额
-            	 $("#account").text(data.mseller_month_total_money+"元");//应付金额
+            	 $("#allAccount").text(data.seller_month_total_money+"元");//应付金额
+            	 $("#account").text(data.seller_month_total_money+"元");//应付金额
             	 userList = data.userList;
            	     data=data.list1;
                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
@@ -108,7 +108,7 @@ if(!payStatus){
 		}else{
 			sessionStorage.setItem("findUserId",obj.value);
 			findMoreOrderByUserId(obj.value);
-			if(payStatus==0){
+			if(payStatus!=3){
 				$('#updatePayStatus').html('<input type="button" value="已支付" onclick="updatePayStatus()">');
 			}
 		}
@@ -167,8 +167,9 @@ if(!payStatus){
   	</table>
   	<div>
 	   	<ul id="billTitle">
-	   		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(0)">本月账单</a></li>
-	   		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(1)">历史账单</a></li>
+	   		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(1)">本月账单</a></li>
+	   		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(2)">上月待支付账单</a></li>
+	   		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(3)">历史账单</a></li>
 	   	</ul>
 	</div>
 	<div>

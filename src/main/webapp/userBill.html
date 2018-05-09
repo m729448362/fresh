@@ -20,13 +20,13 @@ var payStatus=sessionStorage.getItem("payStatus");//支付状态
 var obj = sessionStorage.getItem('user');//
 var user=JSON.parse(obj);
 if(!payStatus){
-	payStatus=0;//未支付
+	payStatus=1;//未支付
 }
 	$(document).ready(function(c) {
 			//初始化方法
 		findMoreOrder();
 	});
-	function getOrder(payStatus){//获取本月账单
+	function getOrder(payStatus){//获取1：本月账单，2：上月待支付账单 3：历史账单
 		pages=0;
 		sessionStorage.setItem("payStatus",payStatus);
 		window.location.reload();
@@ -37,10 +37,10 @@ if(!payStatus){
 		message={                          //数据
                 "user_id":""+user.id,//用户id
                 "currentPage":""+pages,
-                "pay_status":""+payStatus
+                "bill_status":""+payStatus
             };
 		$.ajax({//根据userId查找本月账单
-            url: "/fresh/order/selectUserOrderByPayStatus.action",        //后台url
+            url: "/fresh/order/selectUserOrderByBillStatus.action",        //后台url
             data: JSON.stringify(message),
             type: "POST",                   //类型，POST或者GET
             dataType: 'json',              //数据返回类型，可以是xml、json等
@@ -83,8 +83,9 @@ if(!payStatus){
   		</td></tr>
   	</table>
     	<ul id="billTitle">
-    		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(0)">本月账单</a></li>
-    		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(1)">历史账单</a></li>
+    		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(1)">本月账单</a></li>
+	   		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(2)">上月待支付账单</a></li>
+	   		<li style="float:left;padding:0.2em;"><a href="javascript:getOrder(3)">历史账单</a></li>
     	</ul>
     <table class="table table-hover text-center" id="myBillList">
       <tr>
