@@ -61,4 +61,7 @@
 	<select id="selectOneOrderById" parameterType="java.lang.String" resultType="com.htzhny.entity.Order">
 		select * from t_order where id=#{id}
 	</select>
+	<select id="selectUserOrder" parameterType="java.lang.Integer" resultType="OrderQuery">
+		select * from t_order where user_id=#{user_id} and order_status=6 and pay_status=0
+	</select>
 </mapper>

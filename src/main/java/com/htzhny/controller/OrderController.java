@@ -164,31 +164,9 @@ public class OrderController {
 		String id= (String)params.get("id");
 		Integer result=orderService.updateStatus(status, id);
 		jsonObject.put("result", result);
-		
-   		
-   		
 		return jsonObject;
 	}
-	/**		@RequestMapping(value="updateRealPrice", method = RequestMethod.POST)
-//报价
-	public @ResponseBody JSONObject updateRealPrice(@RequestBody Map<String, Object> params){
-		
-		
-		JSONObject jsonObject = new JSONObject();
 
-		String order_id= (String)params.get("order_id");
-		List<Order_item> list=order_itemService.selectAllItem(order_id);
-		double orderRealPrice=0.00;
-		for(Order_item order_item:list){
-			orderRealPrice=+order_item.getGoods_real_price()*order_item.getGoods_amount();
-		}
-		BigDecimal bg=new BigDecimal(orderRealPrice);
-		double  orderRealPriceFormat= bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-		
-		jsonObject.put("orderRealPriceFormat", orderRealPriceFormat);
-		return jsonObject;
-		
-	}*/
 	@RequestMapping(value="updatePayStatus", method = RequestMethod.POST)
 	//修改订单支付状态
 	public @ResponseBody JSONObject updatePayStatus(@RequestBody Map<String, Object> params){
@@ -206,7 +184,16 @@ public class OrderController {
 		
 		JSONObject jsonObject = new JSONObject();
 		Integer user_id= (Integer)params.get("user_id");
-		
+		List<OrderQuery> list=orderService.selectUserOrder(user_id);
+		Date dt =new Date(); 
+		String formatDate = "";  
+		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
+	    formatDate = dFormat.format(dt);
+		for(OrderQuery order:list){
+			String id=order.getId();
+			OrderLog orderlog=new OrderLog(id,formatDate,3);
+   			logService.addLog(orderlog);
+		}
 		
 		Integer result=orderService.updatePayStatusByUser(user_id);
 		

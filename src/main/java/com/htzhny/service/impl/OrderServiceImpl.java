@@ -212,6 +212,11 @@ public class OrderServiceImpl implements OrderService{
 		return orderDao.selectUserOrderByStatusNoPage(status, user_id);
 	}
 
+	@Override
+	public List<OrderQuery> selectUserOrder(Integer user_id) {
+		return orderDao.selectUserOrder(user_id);
+	}
+
 
 
 
