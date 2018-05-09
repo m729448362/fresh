@@ -9,7 +9,7 @@ public class Bill {
 	private Integer user_id;//账单所属用户id
 	private String onemonth;//账单所属月份
 	private double month_pay_money;//每月应该支付的金额
-	private Integer flag;//是否当月账单 1:当月账单 0：之前月份账单
+	private Integer flag;//是否当月账单 1:当月账单 2：上月未支付账单，3：历史账单
 	private String remake;//备注
 	
 	public Integer getFlag() {

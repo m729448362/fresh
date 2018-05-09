@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 import com.alibaba.fastjson.JSON;
+import com.htzhny.dao.BillDao;
+import com.htzhny.dao.OrderDao;
 import com.htzhny.entity.Bill;
 import com.htzhny.entity.Goods;
 import com.htzhny.entity.Order;
@@ -46,6 +48,10 @@ public class OrderController {
 	private UserService userService;
 	@Autowired
 	private Order_logService logService;
+	@Autowired
+	private OrderDao orderDao;
+	@Autowired
+	private BillDao billDao;
 	@RequestMapping(value="selectCountByStatus", method = RequestMethod.POST)
 	//查询某个订单状态的总数
 	public  @ResponseBody JSONObject selectCountByStatus(@RequestBody Map<String, Object> params){
@@ -84,31 +90,29 @@ public class OrderController {
 		jsonObject.put("userList",userList);
 		String str= (String)params.get("status");
     	Integer status=Integer.parseInt(str);
-    	
-    	
 		PageBean<OrderQuery> pageBean =orderService.selectAllOrderByStatus(currentPage, status);
 		List<OrderQuery> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);
     	jsonObject.put("list1",list1);
 		return jsonObject;
 	}
-	@RequestMapping(value="selectUserOrderByPayStatus", method = RequestMethod.POST)
-	//通过支付状态状态查询某个用户的所有账单
-	public @ResponseBody JSONObject selectUserOrderByPayStatus(@RequestBody Map<String, Object> params){
+	@RequestMapping(value="selectUserOrderByBillStatus", method = RequestMethod.POST)
+	//通过账单状态状态查询某个用户的所有账单
+	public @ResponseBody JSONObject selectUserOrderByBillStatus(@RequestBody Map<String, Object> params){
 		JSONObject jsonObject = new JSONObject();
 		
 		String str1= (String)params.get("currentPage");
 		Integer currentPage=Integer.parseInt(str1);
 		String str=(String) params.get("user_id");
 		Integer user_id=Integer.parseInt(str);
-		String str2= (String)params.get("pay_status");
-		Integer pay_status=Integer.parseInt(str2);
+		String str2= (String)params.get("bill_status");
+		Integer bill_status=Integer.parseInt(str2);
     	
-		PageBean<OrderQuery> pageBean =orderService.selectUserOrderByPayStatus(currentPage, pay_status, user_id);
+		PageBean<OrderQuery> pageBean =orderService.selectUserOrderByBillStatus(currentPage, bill_status, user_id);
 		List<OrderQuery> list=pageBean.getLists();
 		String list1=JSON.toJSONString(list);
     	jsonObject.put("list1",list1);
-    	Bill bill=billService.selectBillByUserId(user_id);
+    	Bill bill=billService.selectBillByUserId(user_id,bill_status);
     	if(bill!=null){
     		double month_pay_money=bill.getMonth_pay_money();
     		jsonObject.put("month_pay_money",month_pay_money);
@@ -118,28 +122,28 @@ public class OrderController {
 		return jsonObject;
 	}
 	@RequestMapping(value="selectAllOrderByPayStatus", method = RequestMethod.POST)
-	//通过支付状态状态查询所有用户的所有账单
-		public @ResponseBody JSONObject selectAllOrderByPayStatus(@RequestBody Map<String, Object> params){
+	//通过账单状态状态查询所有用户的所有账单
+		public @ResponseBody JSONObject selectAllOrderByBillStatus(@RequestBody Map<String, Object> params){
 			JSONObject jsonObject = new JSONObject();
 			String str1= (String)params.get("currentPage");
 			Integer currentPage=Integer.parseInt(str1);
-			String str= (String)params.get("pay_status");
-			Integer pay_status=Integer.parseInt(str);
+			String str= (String)params.get("bill_status");
+			Integer bill_status=Integer.parseInt(str);
 			
 			List<User> userList =userService.selectAllUser();
 			jsonObject.put("userList",userList);
-			PageBean<OrderQuery> pageBean =orderService.selectAllOrderByPayStatus(currentPage, pay_status);
+			PageBean<OrderQuery> pageBean =orderService.selectAllOrderByBillStatus(currentPage, bill_status);
 			List<OrderQuery> list=pageBean.getLists();
 			String list1=JSON.toJSONString(list);
 	    	jsonObject.put("list1",list1);
-	    	List<Bill> billList=billService.selectAllBill();
+	    	List<Bill> billList=billService.selectAllBill(bill_status);
 	    	double seller_month_total_money=0.00;
 	    	for(Bill bill:billList){
 	    		seller_month_total_money =+ bill.getMonth_pay_money();
 	    		
 	    		
 	    	}
-	    	jsonObject.put("mseller_month_total_money",seller_month_total_money);
+	    	jsonObject.put("seller_month_total_money",seller_month_total_money);
 	    	return jsonObject;
 		}
 	@RequestMapping(value="addOrder", method = RequestMethod.POST)
@@ -191,12 +195,18 @@ public class OrderController {
 	    formatDate = dFormat.format(dt);
 		for(OrderQuery order:list){
 			String id=order.getId();
+			orderDao.updateBillStatus(3);
 			OrderLog orderlog=new OrderLog(id,formatDate,3);
    			logService.addLog(orderlog);
 		}
 		
 		Integer result=orderService.updatePayStatusByUser(user_id);
-		
+		Bill bill=billService.selectBillByUserId(user_id,2);
+		if(result!=0 && bill!=null){
+			bill.setFlag(3);
+			billDao.updateFlag(bill);
+			
+		}
 		jsonObject.put("result", result);
 			
 		

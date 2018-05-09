@@ -20,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.htzhny.dao.BillDao;
+import com.htzhny.dao.OrderDao;
 import com.htzhny.entity.Bill;
+import com.htzhny.entity.Order;
 import com.htzhny.entity.User;
 import com.htzhny.service.BillService;
+import com.htzhny.service.OrderService;
 import com.htzhny.service.UserService;
 
 import net.sf.json.JSONObject;
@@ -39,6 +43,10 @@ public class UserController {
 	
 	@Autowired(required=true)
     private BillService billService;
+	@Autowired(required=true)
+	private OrderDao orderDao;
+	@Autowired(required=true)
+	private BillDao billDao;
     @RequestMapping("/view")
     public String view() {
         return "main/login";
@@ -65,7 +73,7 @@ public class UserController {
     			jsonObject.put("user",user1);
     			if(user.getUser_type()==1){
     			Integer user_id=user.getId();
-    			Bill bill=billService.selectBillByUserId(user_id);
+    			Bill bill=billService.selectBillByUserId(user_id,1);
     			Calendar cal=Calendar.getInstance();
     			Date dt =new Date(); 
     			cal.setTime(dt);
@@ -74,25 +82,25 @@ public class UserController {
     			if(bill!=null){
     				String a=bill.getOnemonth(); //得到账单的年月
     				Integer oldYear=Integer.parseInt(a.substring(0, 4));
-    			
     				Integer oldMonth=Integer.parseInt(a.substring(5));
-    			
-    			
-
     				if(oldYear==year){//年份是否相等
     					if(oldMonth<month){ //新的月份如果大于数据库中存储的月份，为改用户新增一个月份的账单。
     						String id =UUID.randomUUID().toString();
     						String year_month=year+"-"+month;
     						Bill newBill=new Bill(id,user_id,year_month,0.00,1,"");
     						billService.addBill(newBill);
-    						bill.setFlag(0);
+    						bill.setFlag(2);
+    						billDao.updateFlag(bill);
+    						orderDao.updateBillStatus(2);
     					}
     				}else if(oldYear<year){
     					String id =UUID.randomUUID().toString();
     					String year_month=year+"-"+month;
     					Bill newBill=new Bill(id,user_id,year_month,0.00,1,"");
     					billService.addBill(newBill);
-    					bill.setFlag(0);
+    					bill.setFlag(2);
+    					billDao.updateFlag(bill);
+    					orderDao.updateBillStatus(2);
     			}
     			}else {
     				String id =UUID.randomUUID().toString();

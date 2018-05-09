@@ -12,6 +12,7 @@ public class OrderQuery {
 	private int user_id;//订单所属用户id
 	private String user_company;
 	private int pay_status;//支付状态 0:未支付 1：已支付
+	private int bill_status;// 1：本月账单，2：上月待支付账单 3：历史账单
 	public String getId() {
 		return id;
 	}
@@ -78,6 +79,14 @@ public class OrderQuery {
 	public void setPay_status(int pay_status) {
 		this.pay_status = pay_status;
 	}
+	
+
+	public int getBill_status() {
+		return bill_status;
+	}
+	public void setBill_status(int bill_status) {
+		this.bill_status = bill_status;
+	}
 	@Override
 	public String toString() {
 		return "OrderQuery [id=" + id + ", address=" + address + ", delivery_time=" + delivery_time
@@ -88,7 +97,7 @@ public class OrderQuery {
 	}
 	public OrderQuery(String id, String address, String delivery_time, double order_low_price, double order_high_price,
 			double order_real_price, int order_status, String create_time, int user_id, String user_company,
-			int pay_status) {
+			int pay_status,int bill_status) {
 		super();
 		this.id = id;
 		this.address = address;
@@ -101,6 +110,7 @@ public class OrderQuery {
 		this.user_id = user_id;
 		this.user_company = user_company;
 		this.pay_status = pay_status;
+		this.bill_status=bill_status;
 	}
 	public OrderQuery() {
 		super();

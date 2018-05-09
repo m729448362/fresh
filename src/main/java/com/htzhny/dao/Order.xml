@@ -13,6 +13,7 @@
 		<result column="user_id" property="user_id"/>
 		<result  column="user_company" property="user_company"/>
 		<result column="pay_status" property="pay_status"/>
+		<result column="bill_status" property="bill_status"/>
 
 	</resultMap>
 	<select id="selectCountByStatus" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -31,8 +32,8 @@
 		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where order_status=#{2} limit #{0},#{1}
 	</select>
 	<insert id="addOrder" parameterType="com.htzhny.entity.Order" >
-		insert into t_order(id,address,delivery_time,order_low_price,order_high_price,order_real_price,order_status,create_time,user_id,pay_status)
-		values(#{id},#{address},#{delivery_time},#{order_low_price},#{order_high_price},#{order_real_price},#{order_status},#{create_time},#{user_id},#{pay_status})
+		insert into t_order(id,address,delivery_time,order_low_price,order_high_price,order_real_price,order_status,create_time,user_id,pay_status,bill_status)
+		values(#{id},#{address},#{delivery_time},#{order_low_price},#{order_high_price},#{order_real_price},#{order_status},#{create_time},#{user_id},#{pay_status},#{bill_status})
 	</insert>
 	<update id="updateStatus">
 		update t_order set order_status=#{0} where id=#{1}
@@ -46,17 +47,17 @@
 			<update id="updatePayStatusByUser" parameterType="java.lang.Integer">
 		update t_order set pay_status=1 where user_id=#{0} and order_status=6 and pay_status=0
 	</update>
-	<select id="selectCountByUserByPayStatus" resultType="java.lang.Integer">
-		select count(1) from t_order where pay_status=#{0} and user_id=#{1}
+	<select id="selectCountByUserByBillStatus" resultType="java.lang.Integer">
+		select count(1) from t_order where bill_status=#{0} and user_id=#{1}
 	</select>
-	<select id="selectCountByPayStatus" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-		select count(1) from t_order where pay_status=#{pay_status}
+	<select id="selectCountByBillStatus" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(1) from t_order where bill_status=#{bill_status}
 	</select>
-	<select id="selectUserOrderByPayStatus" resultMap="OrderQuery">
-	select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where pay_status=#{2} and user_id=#{3} limit #{0},#{1}
+	<select id="selectUserOrderByBillStatus" resultMap="OrderQuery">
+	select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where bill_status=#{2} and user_id=#{3} limit #{0},#{1}
 	</select>
-	<select id="selectAllOrderByPayStatus" resultMap="OrderQuery">
-		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where pay_status=#{2} limit #{0},#{1}
+	<select id="selectAllOrderByBillStatus" resultMap="OrderQuery">
+		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where bill_status=#{2} limit #{0},#{1}
 	</select>
 	<select id="selectOneOrderById" parameterType="java.lang.String" resultType="com.htzhny.entity.Order">
 		select * from t_order where id=#{id}
@@ -64,4 +65,7 @@
 	<select id="selectUserOrder" parameterType="java.lang.Integer" resultType="OrderQuery">
 		select * from t_order where user_id=#{user_id} and order_status=6 and pay_status=0
 	</select>
+	<update id="updateBillStatus">
+		update t_order set bill_status=#{bill_status} where bill_status=1
+	</update>
 </mapper>

@@ -177,7 +177,7 @@ public class BuyCartController {
 			Double order_High_price=buyCart.getGoodsTotalHighPrice();
 			Integer order_status=1;
 			Integer pay_status=0;
-			Order order=new Order(order_id,address,delivery_time,order_low_price,order_High_price,0.00,order_status,create_time,user_id,pay_status);
+			Order order=new Order(order_id,address,delivery_time,order_low_price,order_High_price,0.00,order_status,create_time,user_id,pay_status,1);
 			orderService.addOrder(order);
 			
 			List<BuyItem>list=buyCart.getItems();

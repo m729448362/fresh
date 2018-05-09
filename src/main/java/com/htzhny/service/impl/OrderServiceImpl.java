@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public PageBean<OrderQuery> selectUserOrderByPayStatus(Integer currentPage, Integer pay_status, Integer user_id) {
+	public PageBean<OrderQuery> selectUserOrderByBillStatus(Integer currentPage, Integer bill_status, Integer user_id) {
 		PageBean<OrderQuery> pageBean=new PageBean<OrderQuery>();
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService{
 		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
-		int totalCount = orderDao.selectCountByUserByPayStatus(pay_status, user_id);
+		int totalCount = orderDao.selectCountByUserByBillStatus(bill_status, user_id);
 	    pageBean.setTotalCount(totalCount);
 	    //封装总页数
         double tc = totalCount;
@@ -106,12 +106,12 @@ public class OrderServiceImpl implements OrderService{
         Integer start=(currentPage-1)*pageSize;
         Integer size=pageBean.getPageSize();
         //封装每页显示的数据
-        List<OrderQuery> lists = orderDao.selectUserOrderByPayStatus(start, size, pay_status, user_id);
+        List<OrderQuery> lists = orderDao.selectUserOrderByBillStatus(start, size, bill_status, user_id);
         pageBean.setLists(lists);
 		return pageBean;
 	}
 	@Override
-	public PageBean<OrderQuery> selectAllOrderByPayStatus(Integer currentPage, Integer pay_status) {
+	public PageBean<OrderQuery> selectAllOrderByBillStatus(Integer currentPage, Integer bill_status) {
 		PageBean<OrderQuery> pageBean=new PageBean<OrderQuery>();
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
@@ -119,7 +119,7 @@ public class OrderServiceImpl implements OrderService{
 		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
-		int totalCount = orderDao.selectCountByPayStatus(pay_status);
+		int totalCount = orderDao.selectCountByBillStatus(bill_status);
 	    pageBean.setTotalCount(totalCount);
 	    //封装总页数
         double tc = totalCount;
@@ -128,7 +128,7 @@ public class OrderServiceImpl implements OrderService{
         Integer start=(currentPage-1)*pageSize;
         Integer size=pageBean.getPageSize();
         //封装每页显示的数据
-        List<OrderQuery> lists = orderDao.selectAllOrderByPayStatus(start, size, pay_status);
+        List<OrderQuery> lists = orderDao.selectAllOrderByBillStatus(start, size, bill_status);
         pageBean.setLists(lists);
 		return pageBean;
 	}
@@ -153,7 +153,7 @@ public class OrderServiceImpl implements OrderService{
 			Order order=orderDao.selectOneOrderById(id);
 			double real_price=order.getOrder_real_price();
 			Integer user_id=order.getUser_id();
-			Bill bill=billDao.selectBillByUserId(user_id);
+			Bill bill=billDao.selectBillByUserId(user_id,1);
 			double month_pay_money=bill.getMonth_pay_money()+real_price;
 			billDao.updateMonthPayMoney(month_pay_money,user_id);
 		}
@@ -182,15 +182,7 @@ public class OrderServiceImpl implements OrderService{
 		return orderDao.updateRealPrice(price, id);
 	}
 
-	@Override
-	public Integer selectCountByUserByPayStatus(Integer pay_status, Integer user_id) {
-		return orderDao.selectCountByUserByPayStatus(pay_status, user_id);
-	}
 
-	@Override
-	public Integer selectCountByPayStatus(Integer pay_status) {
-		return orderDao.selectCountByPayStatus(pay_status);
-	}
 
 	@Override
 	public Integer selectCountByUserByStatus(Integer order_status, Integer user_id) {

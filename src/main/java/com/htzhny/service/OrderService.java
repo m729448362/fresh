@@ -15,10 +15,9 @@ public interface OrderService{
 	public Integer updateStatus(Integer status,String id);
 	public Integer updateRealPrice(double price,String id);
 	public Integer updatePayStatus(Integer pay_status,String id);
-	public PageBean<OrderQuery> selectUserOrderByPayStatus(Integer currentPage,Integer pay_status,Integer user_id);
-	public PageBean<OrderQuery> selectAllOrderByPayStatus(Integer currentPage,Integer pay_status);
-	public Integer selectCountByUserByPayStatus(Integer pay_status,	Integer user_id);
-	public Integer selectCountByPayStatus(Integer pay_status);
+	public PageBean<OrderQuery> selectUserOrderByBillStatus(Integer currentPage,Integer bill_status,Integer user_id);
+	public PageBean<OrderQuery> selectAllOrderByBillStatus(Integer currentPage,Integer bill_status);
+
 	public Order selectOneOrderById(String id);
 	public Integer updatePayStatusByUser(Integer user_id);
 	public List<OrderQuery> selectUserOrderByStatusNoPage(Integer status,Integer user_id);

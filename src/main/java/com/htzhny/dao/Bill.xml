@@ -12,13 +12,16 @@
 	<insert id="addBill" parameterType="com.htzhny.entity.Bill">
 		insert into bill(id,user_id,onemonth,month_pay_money,flag,remake) values(#{id},#{user_id},#{onemonth},#{month_pay_money},#{flag},#{remake})
 	</insert>
-	<select id="selectBillByUserId" parameterType="java.lang.Integer" resultMap="BillQuery">
-		select * from bill where user_id=#{use_id} and flag=1;
+	<select id="selectBillByUserId" resultMap="BillQuery">
+		select * from bill where user_id=#{0} and flag=#{1};
 	</select>
 	<update id="updateMonthPayMoney" >
 		update bill set month_pay_money=#{0} where user_id=#{1}
 	</update>
-	<select id="selectAllBill" resultMap="BillQuery">
-		select * from bill where flag=1;
+	<select id="selectAllBill" parameterType="java.lang.Integer" resultMap="BillQuery">
+		select * from bill where flag=#{flag};
 	</select>
+	<update id="updateFlag" parameterType="com.htzhny.entity.Bill">
+		update bill set flag=#{flag} where id=#{id}
+	</update>
 </mapper>

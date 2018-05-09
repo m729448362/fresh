@@ -14,13 +14,13 @@ public interface OrderDao {
 	public Integer updateStatus(Integer status,String id);
 	public Integer updateRealPrice(double price,String id);
 	public Integer updatePayStatus(Integer pay_status,String id);
-	public List<OrderQuery> selectUserOrderByPayStatus(Integer start,Integer size,Integer pay_status,Integer user_id);
-	public List<OrderQuery> selectAllOrderByPayStatus(Integer start,Integer size,Integer pay_status);
-	public Integer selectCountByUserByPayStatus(Integer pay_status,	Integer user_id);
-	public Integer selectCountByPayStatus(Integer pay_status);
+	public List<OrderQuery> selectUserOrderByBillStatus(Integer start,Integer size,Integer bill_status,Integer user_id);
+	public List<OrderQuery> selectAllOrderByBillStatus(Integer start,Integer size,Integer bill_status);
+	public Integer selectCountByUserByBillStatus(Integer bill_status,Integer user_id);
+	public Integer selectCountByBillStatus(Integer bill_status);
 	public Order selectOneOrderById(String id);
 	public Integer updatePayStatusByUser(Integer user_id);
 	public List<OrderQuery> selectUserOrderByStatusNoPage(Integer status,Integer user_id);
 	public List<OrderQuery> selectUserOrder(Integer user_id);
-	
+	public Integer updateBillStatus(Integer bill_status);
 }

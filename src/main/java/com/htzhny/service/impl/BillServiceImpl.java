@@ -22,8 +22,8 @@ public class BillServiceImpl implements BillService{
 	}
 
 	@Override
-	public Bill selectBillByUserId(Integer user_id) {
-		return billDao.selectBillByUserId(user_id);
+	public Bill selectBillByUserId(Integer user_id,Integer flag) {
+		return billDao.selectBillByUserId(user_id,flag);
 	}
 
 	@Override
@@ -33,8 +33,8 @@ public class BillServiceImpl implements BillService{
 	}
 
 	@Override
-	public List<Bill> selectAllBill() {
-		return billDao.selectAllBill();
+	public List<Bill> selectAllBill(Integer flag) {
+		return billDao.selectAllBill(flag);
 	}
 
 
