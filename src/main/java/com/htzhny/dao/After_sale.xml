@@ -44,15 +44,15 @@
 	</select>
 	<select id="selectAllRecord" parameterType="java.lang.Integer" resultType="After_saleQuery">
 		select after_sale.after_sale_id,after_sale.a_order_id,user.user_name,t_order.delivery_time,after_sale.after_sale_reason,after_sale.handle_status from after_sale join user on after_sale.user_id=user.user_id join t_order
-		on after_sale.a_order_id=t_order.id where after_sale.user_id=#{2} limit #{0},#{1}
+		on after_sale.a_order_id=t_order.id where after_sale.user_id=#{2} and handle_status!=4 limit #{0},#{1}
 	</select>
 	<select id="selectAllByAdmin" parameterType="java.lang.Integer" resultType="After_saleQuery">
 		select after_sale.after_sale_id,after_sale.a_order_id,t_order.id,user.user_name,t_order.delivery_time,after_sale.after_sale_reason,after_sale.handle_status from after_sale join user on after_sale.user_id=user.user_id join t_order
-		on after_sale.a_order_id=t_order.id limit #{0},#{1}
+		on after_sale.a_order_id=t_order.id where handle_status!=4 limit #{0},#{1}
 	</select>
 	<select id="selectAllByTime" resultType="After_saleQuery">
 		select after_sale.after_sale_id,after_sale.a_order_id,t_order.id,user.user_name,t_order.delivery_time,after_sale.after_sale_reason,after_sale.handle_status from after_sale join user on after_sale.user_id=user.user_id join t_order
-		on after_sale.a_order_id=t_order.id where delivery_time=#{2} limit #{0},#{1}
+		on after_sale.a_order_id=t_order.id where delivery_time=#{2} and handle_status!=4 limit #{0},#{1}
 	</select>
 	<update id="updateHandleStatus" >
 		update after_sale set handle_status=#{1} where after_sale_id=#{0} 
