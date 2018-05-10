@@ -19,7 +19,7 @@
 	var orderId = sessionStorage.getItem("orderId");
 	var orderStatusName={"1":"待报价","2":"待确认","3":"待发货","4":"待收货","5":"售后处理中","6":"已完成"};
 	var orderStatus = sessionStorage.getItem("orderStatus");
-	var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成"};
+	var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成","4":"售后请求未通过"};
 	var pages=1;
 	var orderPrice = sessionStorage.getItem("orderPrice");
 	var lowPrice = sessionStorage.getItem("lowPrice");
@@ -27,7 +27,7 @@
 	var obj = sessionStorage.getItem('user');//
 	var user=JSON.parse(obj);
     var message;//请求参数
-    var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货"};
+    var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货","8":"付款", "9":"取消售后申请"};
 	$(document).ready(function(c) {
 		message={
 				"id":orderId,   //orderId

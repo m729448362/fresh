@@ -19,8 +19,8 @@
 var orderStatus = sessionStorage.getItem('orderStatus');
 var orderId = sessionStorage.getItem("orderId");
 var pages=0;
-var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成"};
-var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货"};
+var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成","4":"售后请求未通过"};
+var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货","8":"付款", "9":"取消售后申请"};
 var totalPrice=0//总计金额
 	$(document).ready(function(c) {
 			//初始化方法

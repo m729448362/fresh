@@ -19,10 +19,10 @@
 var orderStatus = sessionStorage.getItem('orderStatus');
 var orderId = sessionStorage.getItem("orderId");
 var pages=0;
-var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成"};
+var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成","4":"售后请求未通过"};
 var obj = sessionStorage.getItem('user');//
 var user=JSON.parse(obj);
-var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货"};
+var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货","8":"付款", "9":"取消售后申请"};
 
 var totalPrice=0//总计金额
 	$(document).ready(function(c) {
@@ -55,10 +55,10 @@ var totalPrice=0//总计金额
                    	$("#reason").attr("disabled",true);//更改售后原因不可编辑
                    	$("#img").html("");
                    	$("#afterSaleStatus").html("<strong><b>售后状态：</b><b>"+afterSaleStatusName[data[0].handle_status]+"</b></strong>");//售后状态	
-                   	if(data[0].handle_status==1){//未处理
+                   	if(data[0].handle_status==1||data[0].handle_status==4){//未处理
                    		$("#dealWith").html("<strong><b>处理方式：</b><input type='text' id='handWay'/></strong>");//处理方式
                    		$("#dealWith").append("</p><select id='handlingOpinions'><option value='1'>同意</option><option value='2' selected>驳回</option></select>");//是否同意申请
-                   		$("#dealWith").append("</p><input type='button' onclick=\"updateAfterSale('"+data[0].after_sale_id+"')\" value='提交'/>");//处理方式
+                   		$("#dealWith").append("</p><input type='button' onclick=\"submitAfterSale('"+data[0].after_sale_id+"')\" value='提交'/>");//处理方式
                    	}
              	}
              	if(pages==1){
@@ -79,7 +79,16 @@ var totalPrice=0//总计金额
 	function returnLastPage(){//返回上一页
 		window.history.go(-1); // 返回上一页  
 	}
-	function updateAfterSale(id){//更新售后信息
+	function submitAfterSale(id){//售后处理提交
+		var handlingOpinions = $('#handlingOpinions').val();
+		if(handlingOpinions==1){//同意
+			updateAfterSale(id);
+		}else{
+			updateHandleStatus(id);
+		}
+		
+	}
+	function updateAfterSale(id){//同意更新售后信息
 		var handle_way=$('#handWay').val();
 		var data= {                          //数据
 				"after_sale": {
@@ -100,6 +109,34 @@ var totalPrice=0//总计金额
 		}
 		$.ajax({//更新售后详情
              url: "/fresh/after_sale/updateAfter_sale.action",        //后台url
+             data: JSON.stringify(data),
+             type: "POST",                   //类型，POST或者GET
+             dataType: 'json',     
+             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
+             success: function (data) {      //成功，回调函数
+                 if(data.result==1){
+                	 alert("提交成功");
+                	 window.location.reload();
+                 }else{
+                	 alert("提交失败");
+                 }
+             },
+             error: function (er) {          //失败，回调函数
+            	 alert("提交失败");
+             }
+         });
+	}
+	function updateHandleStatus(id){//不同意
+		var handle_way=$('#handWay').val();
+		var data= {                          //数据
+				"after_sale_id": id,
+				"handle_status": 4
+	        };
+		if(!confirm("确认提交？")){
+			return;
+		}
+		$.ajax({//更新售后详情
+             url: "/fresh/after_sale/updateHandleStatus.action",        //后台url
              data: JSON.stringify(data),
              type: "POST",                   //类型，POST或者GET
              dataType: 'json',     
