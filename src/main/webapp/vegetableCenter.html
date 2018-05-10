@@ -21,7 +21,7 @@
 	var pages=0;//当前页数
 	var goodsType=sessionStorage.getItem("goodsType");
 	if(!goodsType){
-		goodsType=100;
+		goodsType='all';
 	}
 	$(document).ready(function(c) {
      	var data={
@@ -57,7 +57,7 @@
 		var data;//请求参数
 		pages+=1;
 		
-		if(goodsType==100){
+		if(goodsType=='all'){
 			data={
 	     			"currentPage":pages
 	    		};
@@ -73,8 +73,9 @@
 		                 //$("#goodsType").append("<table class='table table-hover text-center' id='goods'></table>");
 		            if(data){
 		            	for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-		                       $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='2'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td><td><input type='button' value='下架菜品' onclick=\"deleteGoods("+data[i].id+")\"/></td> </tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='编辑菜品' onclick=\"editGoods('"+data[i].id+"')\"></input></td></tr>");
-		                       //如果添加class或者id内容要加单引号例如：$("#first").append("<li class='a'>"+data[i].name+"</li>");
+		            		if(data[i].goods_status==1){
+			                       $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='2'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td><td><input type='button' value='下架菜品' onclick=\"deleteGoods("+data[i].id+")\"/></td> </tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='编辑菜品' onclick=\"editGoods('"+data[i].id+"')\"></input></td></tr>");
+		            		}
 		                   }
 		            }
            		  	
@@ -98,9 +99,9 @@
 	            	 data=data.list1;
 	             
 	             	if(data){
-	             		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-	                        $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='2'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td><td><input type='button' value='下架菜品' onclick=\"deleteGoods("+data[i].id+")\"/></td> </tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='编辑菜品' onclick=\"editGoods('"+data[i].id+"')\"></input></td></tr>");
-	           			}
+	             		if(data[i].goods_status==1){
+		                       $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='2'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td><td><input type='button' value='下架菜品' onclick=\"deleteGoods("+data[i].id+")\"/></td> </tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='编辑菜品' onclick=\"editGoods('"+data[i].id+"')\"></input></td></tr>");
+	            		}
 	             	}
 	             },
 	             
@@ -130,24 +131,12 @@
 		}
 		message={
 				"goods": {
-					"base_id": 0,
-					"goods_Recommended": 0,
-					"goods_create_time": "2018-6-6",
-					"goods_detail": "goodsDetailText",
-					"goods_high_price": 14,
-					"goods_img": "www.baidu.com",
-					"goods_introduce": "introduce",
-					"goods_low_price": 18,
-					"goods_name": "goodsName",
-					"goods_quality_report_id": 0,
-					"goods_resource_id": 0,
 					"goods_status": 0,
-					"goods_type": 0,
-					"id": goodsId
+					"goods_id": goodsId
 				}
 			};
 			$.ajax({//更新商品信息
-	             url: "/fresh/goods/updateGoods.action",        //后台url
+	             url: "/fresh/goods/updateGoodsStatus.action",        //后台url
 	             data: JSON.stringify(message),
 	             type: "POST",                   //类型，POST或者GET
 	             dataType: 'json',              //数据返回类型，可以是xml、json等
@@ -177,13 +166,14 @@
 	  			<div class="title">
 			    	<ul >
 				    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="./unUseGoods.html">已下架菜品</a></li>
 			    	</ul>
 			    </div>
 	  		</td>
 	  	</table>
 	  	<div style="float:right;" ><input type="button" onclick="editGoodsType()" value="编辑菜品种类"/></div>
 	   	<ul id="goodsType">
-	   		<li style="float:left;padding:0.2em;"><a onclick="javascript:getGoodsByType('100')">全部</a></li>
+	   		<li style="float:left;padding:0.2em;"><a onclick="javascript:getGoodsByType('all')">全部</a></li>
 	   	</ul>
 	   	<div style="float:right;"><input type="button" onclick="addGoods()" value="添加菜品"/></div>
 	    <table class="table table-hover text-center" id="goods">

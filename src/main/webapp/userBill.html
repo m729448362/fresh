@@ -46,7 +46,11 @@ if(!payStatus){
             dataType: 'json',              //数据返回类型，可以是xml、json等
             contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数    画页面
-            	 $("#account").text(data.month_pay_money+"元");//应付金额
+            	if(!data.month_pay_money){
+            		 $("#account").text("0元");//应付金额
+            	}else{
+            		 $("#account").text(data.month_pay_money+"元");//应付金额
+            	}
            	     data=data.list1;
            	  if(data){
            		for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环

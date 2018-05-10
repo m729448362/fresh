@@ -47,8 +47,16 @@ if(!payStatus){
             contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数    画页面
             	//data={"list1":[{"address":"贵阳市贵阳一中","create_time":"2018-6-5","delivery_time":"2018-6-6","id":"1535452","order_high_price":100.5,"order_low_price":88.2,"order_real_price":0,"order_status":1,"pay_status":0,"user_company":"贵阳一中123","user_id":2},{"address":"贵州省贵阳一中","create_time":"2018-4-22","delivery_time":"2018-4-7","id":"268d5b7cd-6f24-4a73-bfc7-89774ef57c75","order_high_price":61.6,"order_low_price":54,"order_real_price":0,"order_status":6,"pay_status":0,"user_company":"贵阳一中123","user_id":2}],"mseller_month_total_money":81.0};
-            	 $("#allAccount").text(data.seller_month_total_money+"元");//应付金额
-            	 $("#account").text(data.seller_month_total_money+"元");//应付金额
+            	if(!data.seller_month_total_money){
+            		$("#allAccount").text("0元");//应付金额
+            	}else{
+            		$("#allAccount").text(data.seller_month_total_money+"元");//应付金额
+            	}
+            	if(!data.seller_month_total_money){
+            		$("#account").text("0元");//应付金额
+            	}else{
+            		$("#account").text(data.seller_month_total_money+"元");//应付金额
+            	}
             	 userList = data.userList;
            	     data=data.list1;
                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
@@ -71,17 +79,21 @@ if(!payStatus){
 		message={                          //数据
                 "user_id":""+userId,//userId //用户id
                 "currentPage":""+pages,
-                "pay_status":""+payStatus
+                "bill_status":""+payStatus
             };
 		$.ajax({//根据userId查找本月账单
-            url: "/fresh/order/selectUserOrderByPayStatus.action",        //后台url
+            url: "/fresh/order/selectUserOrderByBillStatus.action",        //后台url
             data: JSON.stringify(message),
             type: "POST",                   //类型，POST或者GET
             dataType: 'json',              //数据返回类型，可以是xml、json等
             contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数    画页面
             	//data={"list1":[{"address":"贵阳市贵阳一中","create_time":"2018-6-5","delivery_time":"2018-6-6","id":"1535452","order_high_price":100.5,"order_low_price":88.2,"order_real_price":0,"order_status":1,"pay_status":0,"user_company":"贵阳一中123","user_id":2},{"address":"贵州省贵阳一中","create_time":"2018-4-22","delivery_time":"2018-4-7","id":"268d5b7cd-6f24-4a73-bfc7-89774ef57c75","order_high_price":61.6,"order_low_price":54,"order_real_price":0,"order_status":6,"pay_status":0,"user_company":"贵阳一中123","user_id":2}],"month_pay_money":81.0};
-            	 $("#account").text(data.month_pay_money+"元");//应付金额
+            	if(!data.month_pay_money){
+            		$("#account").text("0元");//应付金额
+            	}else{
+            		$("#account").text(data.month_pay_money+"元");//应付金额
+            	}
            	     data=data.list1;
                  for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
                   	$("#myBillList").append("<tr><td>"+data[i].id+"</td><td>"+data[i].order_real_price+"</td><td>"+data[i].address+"</td><td>"+data[i].delivery_time+"</td><td><a href='javascript:void(0)' onclick=\"getOrderDetail('"+data[i].id+"','"+data[i].order_real_price+"')\">查看</a></td></tr>");
@@ -203,7 +215,7 @@ if(!payStatus){
   </div>
   <div>
   	<strong style="float:right;"><b>本月应付金额:</b>
-  		<b id="account">￥27.9 元</b>
+  		<b id="account">￥0 元</b>
   	</strong>
   </div>
 </form>
