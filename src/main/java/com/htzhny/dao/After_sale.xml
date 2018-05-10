@@ -54,5 +54,11 @@
 		select after_sale.after_sale_id,after_sale.a_order_id,t_order.id,user.user_name,t_order.delivery_time,after_sale.after_sale_reason,after_sale.handle_status from after_sale join user on after_sale.user_id=user.user_id join t_order
 		on after_sale.a_order_id=t_order.id where delivery_time=#{2} limit #{0},#{1}
 	</select>
+	<update id="updateHandleStatus" >
+		update after_sale set handle_status=#{1} where after_sale_id=#{0} 
+	</update>
+	<select id="selectById" parameterType="java.lang.String" resultType="com.htzhny.entity.After_sale">
+		select * from after_sale where after_sale_id=#{after_sale_id}
+	</select>
 
 </mapper>

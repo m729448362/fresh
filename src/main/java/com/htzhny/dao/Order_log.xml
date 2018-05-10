@@ -13,4 +13,7 @@
 	<select id="findOneOrderLog" parameterType="String" resultMap="BaseOrderLog">
 		select * from order_log where order_id=#{order_id}
 	</select>
+	<select id="findOrderLog" resultMap="BaseOrderLog">
+		select * from order_log where order_id=#{0} and event=#{1}
+	</select>
 </mapper>

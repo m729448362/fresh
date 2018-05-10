@@ -53,4 +53,7 @@
 	<select id="selectGoodsStatus" parameterType="java.lang.Integer" resultMap="GoodsQuery">
 		select * from goods where goods_status=#{goods_status}
 	</select>
+	<update id="updateGoodsStatus" >
+		update goods set goods_status=#{0} where id=#{1}
+	</update>
 </mapper>

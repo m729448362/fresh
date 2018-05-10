@@ -115,4 +115,9 @@ public class GoodsServiceImpl implements GoodsService{
 	public List<Goods> selectGoodsStatus(Integer good_status) {
 		return goodsDao.selectGoodsStatus(good_status);
 	}
+
+	@Override
+	public Integer updateGoodsStatus(Integer goods_status,Integer goods_id) {
+		return goodsDao.updateGoodsStatus(goods_status, goods_id);
+	}
 }

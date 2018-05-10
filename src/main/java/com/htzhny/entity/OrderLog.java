@@ -10,7 +10,7 @@ public class OrderLog {
 	private Long log_id;
 	private String order_id;//订单id
 	private String handle_time;//处理时间
-	private Integer event;//处理事件 1：提交提单 2：报价 3：确认订单 4：发货  5:提交售后申请 6:售后处理完成  7： 确认收货 8：付款
+	private Integer event;//处理事件 1：提交提单 2：报价 3：确认订单 4：发货  5:提交售后申请 6:售后处理完成  7： 确认收货 8：付款  9:取消售后申请
 
 	public Long getLog_id() {
 		return log_id;

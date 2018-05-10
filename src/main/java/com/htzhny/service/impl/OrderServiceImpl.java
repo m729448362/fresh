@@ -168,8 +168,12 @@ public class OrderServiceImpl implements OrderService{
    			OrderLog orderlog=new OrderLog(id,formatDate,3);
    			logDao.addLog(orderlog);
    		}else if(status==4){
+   			if(logDao.findOrderLog(id, 4)!=null){
+   				OrderLog orderlog=new OrderLog(id,formatDate,9);
+   	   			logDao.addLog(orderlog);
+   			}else{
    			OrderLog orderlog=new OrderLog(id,formatDate,4);
-   			logDao.addLog(orderlog);
+   			logDao.addLog(orderlog);}
    		}else if(status==6){
    			OrderLog orderlog=new OrderLog(id,formatDate,7);
    			logDao.addLog(orderlog);

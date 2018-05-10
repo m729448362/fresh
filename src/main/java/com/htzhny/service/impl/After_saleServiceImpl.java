@@ -136,6 +136,18 @@ public class After_saleServiceImpl implements After_saleService{
 		return pageBean;
 	}
 
+	@Override
+	public Integer updateHandleStatus(String after_sale_id, Integer handle_status) {
+		return after_saleDao.updateHandleStatus(after_sale_id, handle_status);
+	}
+
+	@Override
+	public After_sale selectById(String after_sale_id) {
+		return after_saleDao.selectById(after_sale_id);
+	}
+
+
+
 
 
 }

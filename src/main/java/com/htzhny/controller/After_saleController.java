@@ -47,6 +47,7 @@ public class After_saleController {
 	@Autowired
 	private Order_logService logService;
 	
+	
 	//增加售后记录
     @RequestMapping(value="addAfter_sale", method = RequestMethod.POST)
     public @ResponseBody JSONObject addAfter_sale(@RequestBody Map<String, Object> params) {
@@ -173,4 +174,17 @@ public class After_saleController {
     	
     	return jsonObject;
     }
+    //取消售后申请
+    @RequestMapping(value="updateHandleStatus", method = RequestMethod.POST)
+    public @ResponseBody JSONObject updateHandleStatus(@RequestBody Map<String, Object> params){
+    	JSONObject jsonObject = new JSONObject();
+    	String after_sale_id=(String) params.get("after_sale_id");
+    	Integer handle_status=(Integer) params.get("handle_status");
+    	Integer result=after_saleService.updateHandleStatus(after_sale_id, handle_status);
+    	After_sale after_sale=after_saleService.selectById(after_sale_id);
+    	orderService.updateStatus(4, after_sale.getA_order_id());
+    	jsonObject.put("result", result);
+    	return jsonObject;
+    }
+    
 }

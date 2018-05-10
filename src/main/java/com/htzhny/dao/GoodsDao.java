@@ -16,4 +16,5 @@ public interface GoodsDao {
 	public Integer updateGoodsRecommendedstatus(String goods_id,Integer goods_Recommended);
 	public List<Goods> selectAll();
 	public List<Goods> selectGoodsStatus(Integer good_status);
+	public Integer updateGoodsStatus(Integer goods_status,Integer id);
 }

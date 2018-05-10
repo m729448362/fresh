@@ -139,4 +139,14 @@ public class GoodsController {
     	jsonObject.put("list1",list1);
 		return jsonObject;
 	}
+	@RequestMapping(value="updateGoodsStatus")
+	//上下架商品
+	public @ResponseBody JSONObject updateGoodsStatus(@RequestBody Map<String, Object> params){
+		JSONObject jsonObject = new JSONObject();
+		Integer goods_status=(Integer) params.get("goods_status");
+		Integer goods_id=(Integer) params.get("goods_id");
+		Integer result=goodsService.updateGoodsStatus(goods_status,goods_id);
+		jsonObject.put("result", result);
+		return jsonObject;
+	}
 }
