@@ -54,10 +54,10 @@
 		select count(1) from t_order where bill_status=#{bill_status}
 	</select>
 	<select id="selectUserOrderByBillStatus" resultMap="OrderQuery">
-	select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where bill_status=#{2} and user_id=#{3} limit #{0},#{1}
+	select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where bill_status=#{2} and order_status=6 and user_id=#{3} limit #{0},#{1}
 	</select>
 	<select id="selectAllOrderByBillStatus" resultMap="OrderQuery">
-		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where bill_status=#{2} limit #{0},#{1}
+		select t_order.*,user.user_company from t_order join user on t_order.user_id=user.id where bill_status=#{2} and order_status=6 limit #{0},#{1}
 	</select>
 	<select id="selectOneOrderById" parameterType="java.lang.String" resultType="com.htzhny.entity.Order">
 		select * from t_order where id=#{id}

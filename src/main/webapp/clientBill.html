@@ -120,8 +120,8 @@ if(!payStatus){
 		}else{
 			sessionStorage.setItem("findUserId",obj.value);
 			findMoreOrderByUserId(obj.value);
-			if(payStatus!=3){
-				$('#updatePayStatus').html('<input type="button" value="已支付" onclick="updatePayStatus()">');
+			if(payStatus==2){
+				$('#updatePayStatus').html('<input type="button" value="支付" onclick="updatePayStatus()">');
 			}
 		}
 		

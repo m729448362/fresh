@@ -57,7 +57,11 @@ var totalPrice=0//总计金额
                    	$("#afterSaleStatus").html("<strong><b>售后状态：</b><b>"+afterSaleStatusName[data[0].handle_status]+"</b></strong>");//售后状态	
                    	if(data[0].handle_status==1||data[0].handle_status==4){//未处理
                    		$("#dealWith").html("<strong><b>处理方式：</b><input type='text' id='handWay'/></strong>");//处理方式
+<<<<<<< Upstream, based on origin/master
                    		$("#dealWith").append("</p><select id='handlingOpinions'><option value='1'>同意</option><option value='2' selected>驳回</option></select>");//是否同意申请
+=======
+                   		$("#dealWith").append("</p><select id='handlingOpinions'><option value='1'>同意</option><option value='2' selected>拒绝</option></select>");//是否同意申请
+>>>>>>> 65f2c39 bill 2
                    		$("#dealWith").append("</p><input type='button' onclick=\"submitAfterSale('"+data[0].after_sale_id+"')\" value='提交'/>");//处理方式
                    	}
              	}
@@ -186,7 +190,7 @@ var totalPrice=0//总计金额
 	  			<div>
 			    	<ul>
 				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(1)">商品信息</a></li>
-				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(2)">日志信息</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(2)">订单状态流转信息</a></li>
 			    	</ul>
 			    </div>
   			</td>
@@ -229,7 +233,7 @@ var totalPrice=0//总计金额
 </div>
 <p/><p/>
 <div id="orderLog" style="display=none;">
-	<div><b>订单日志信息:</b></div>
+	<div><b>订单状态流转信息:</b></div>
 	<table class="table table-hover text-center" id="log">
       <tr>
       	<th>事件</th>

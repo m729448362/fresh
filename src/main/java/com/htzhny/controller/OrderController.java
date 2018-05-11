@@ -139,7 +139,7 @@ public class OrderController {
 	    	List<Bill> billList=billService.selectAllBill(bill_status);
 	    	double seller_month_total_money=0.00;
 	    	for(Bill bill:billList){
-	    		seller_month_total_money =+ bill.getMonth_pay_money();
+	    		seller_month_total_money = seller_month_total_money+bill.getMonth_pay_money();
 	    		
 	    		
 	    	}
