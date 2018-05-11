@@ -57,11 +57,7 @@ var totalPrice=0//总计金额
                    	$("#afterSaleStatus").html("<strong><b>售后状态：</b><b>"+afterSaleStatusName[data[0].handle_status]+"</b></strong>");//售后状态	
                    	if(data[0].handle_status==1||data[0].handle_status==4){//未处理
                    		$("#dealWith").html("<strong><b>处理方式：</b><input type='text' id='handWay'/></strong>");//处理方式
-<<<<<<< Upstream, based on origin/master
-                   		$("#dealWith").append("</p><select id='handlingOpinions'><option value='1'>同意</option><option value='2' selected>驳回</option></select>");//是否同意申请
-=======
                    		$("#dealWith").append("</p><select id='handlingOpinions'><option value='1'>同意</option><option value='2' selected>拒绝</option></select>");//是否同意申请
->>>>>>> 65f2c39 bill 2
                    		$("#dealWith").append("</p><input type='button' onclick=\"submitAfterSale('"+data[0].after_sale_id+"')\" value='提交'/>");//处理方式
                    	}
              	}
