@@ -82,7 +82,6 @@ var message;//请求参数
             contentType:'application/json;charset=UTF-8',
             success: function (data) {      //成功，回调函数
                 if(data.result==1){
-                	alert("删除成功");
                 	window.location.reload();
                 }
                 
@@ -110,7 +109,6 @@ var message;//请求参数
             success: function (data) {      //成功，回调函数
                 //alert(data.result);
             	if(data.result==1){
-                	alert("新增成功");
                 	window.location.reload();
                 }
             },

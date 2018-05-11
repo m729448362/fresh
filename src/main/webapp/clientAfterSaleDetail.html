@@ -115,8 +115,8 @@ var totalPrice=0//总计金额
              contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数
                  if(data.result==1){
-                	 alert("提交成功");
-                	 window.location.reload();
+                	 window.history.go(-1); // 返回上一页  
+                	 //window.location.reload();
                  }else{
                 	 alert("提交失败");
                  }
@@ -143,8 +143,8 @@ var totalPrice=0//总计金额
              contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数
                  if(data.result==1){
-                	 alert("提交成功");
-                	 window.location.reload();
+                	 window.history.go(-1); // 返回上一页  
+                	 //window.location.reload();
                  }else{
                 	 alert("提交失败");
                  }

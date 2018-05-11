@@ -83,7 +83,6 @@
 	          contentType:'application/json;charset=UTF-8',
 	          success: function (data) {      //成功，回调函数
 	          	if(data.result==1){
-	          		alert("修改成功");
 	          		sessionStorage.setItem("orderStatus",3);
 	          		window.location.href="./userOrderList.html";
 	           	}
@@ -108,7 +107,6 @@
 		          contentType:'application/json;charset=UTF-8',
 		          success: function (data) {      //成功，回调函数
 		          	if(data.result==1){
-		          		alert("修改成功");
 		          		sessionStorage.setItem("orderStatus",1);
 		          		window.location.href="./userOrderList.html";
 		           	}
@@ -187,7 +185,6 @@
 	             contentType:'application/json;charset=UTF-8',
 	             success: function (data) {      //成功，回调函数
 	             	if(data.result==1){
-	             		alert("添加成功");
 	             		updateOrderStatus();//修改订单状态
 	             	}
 	             },
@@ -246,7 +243,6 @@
 		          contentType:'application/json;charset=UTF-8',
 		          success: function (data) {      //成功，回调函数
 		          	if(data.result==1){
-		          		alert("修改成功");
 		          		sessionStorage.setItem("orderStatus",5);
 		          		window.location.href="./userOrderList.html";
 		           	}
@@ -270,7 +266,6 @@
 			          contentType:'application/json;charset=UTF-8',
 			          success: function (data) {      //成功，回调函数
 			          	if(data.result==1){
-			          		alert("修改成功");
 			          		window.location.href="./userOrderList.html";
 			           	}
 			          },
@@ -306,7 +301,6 @@
 			             contentType:'application/json;charset=UTF-8',
 			             success: function (data) {      //成功，回调函数
 			             	if(data.result==1){
-			             		alert("添加成功");
 			             		window.location.href="./userOrderList.html";
 			             	}
 			             },
