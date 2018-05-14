@@ -22,4 +22,5 @@ public interface OrderService{
 	public Integer updatePayStatusByUser(Integer user_id);
 	public List<OrderQuery> selectUserOrderByStatusNoPage(Integer status,Integer user_id);
 	public List<OrderQuery> selectUserOrder(Integer user_id);
+	
 }

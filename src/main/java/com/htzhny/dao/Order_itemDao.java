@@ -11,4 +11,6 @@ public interface Order_itemDao {
 	public List<Order_itemQuery> selectAllByOrderId( Integer start,Integer size,String id);
 	public Integer selectCount(String id);
 	public List<Order_item> selectAllItem(String order_id);
+	public Integer deleteOrderItem(String id);
+	
 }

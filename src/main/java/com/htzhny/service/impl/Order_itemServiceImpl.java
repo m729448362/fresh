@@ -57,6 +57,12 @@ public class Order_itemServiceImpl implements Order_itemService{
 	public List<Order_item> selectAllItem(String id) {
 		return order_itemDao.selectAllItem(id);
 	}
+	@Override
+	public Integer deleteOrderItem(String id) {
+		
+		return order_itemDao.deleteOrderItem(id);
+	}
+
 
 
 }
