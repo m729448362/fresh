@@ -12,4 +12,6 @@ public interface Order_itemService {
 	public PageBean<Order_itemQuery> selectAllByOrderId(Integer currentPage,String id);
 	public Integer selectCount(String id);
 	public List<Order_item> selectAllItem(String id);
+	public Integer deleteOrderItem(String id);
+	
 }

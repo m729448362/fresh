@@ -120,10 +120,11 @@ public class BuyCartController {
 		BuyCart buyCart=(BuyCart) request.getSession().getAttribute("buyCart");
 		if(null!=buyCart){
 			jsonObject.put("buyCart",buyCart);
+			jsonObject.put("result","1");
 			return jsonObject;
 		}else{
-			jsonObject.put("result","buyCartIsNull");
-		return jsonObject;
+			jsonObject.put("result","0");
+			return jsonObject;
 		}
 	}
 	//结算（生成订单）

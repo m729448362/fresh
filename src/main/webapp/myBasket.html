@@ -23,22 +23,18 @@
 	            dataType: 'json',              //数据返回类型，可以是xml、json等
 	            contentType:'application/json;charset=UTF-8',
 	            success: function (data) {      //成功，回调函数
-	                //alert(data.result);
-	                //var data = {"buyCart":{"goodsAmount":6.0,"goodsTotalHighPrice":92.4,"goodsTotalLowPrice":83.0,"items":[{"amount":4,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一棵大白菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":14.5,"goods_name":"白菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":1}},{"amount":2,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一颗大青菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":12.5,"goods_name":"青菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":0,"id":2}}]}}
-	                data = data.buyCart.items;
-	                
-	                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-						$("#myBasket").append("<tr><td style='display:none;'>"+data[i].goods.id+"</td><td>"+data[i].goods.goods_name+"</td><td>"+data[i].goods.goods_low_price+"~"+data[i].goods.goods_high_price+"</td><td><input id='amount' type='number' min='1' value='"+data[i].amount+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods("+data[i].goods.id+")\"/></td></tr>");
+	            	if(data.result==0||data.buyCart.items.length<1){
+	                	$('#myBasket').html("<a href=\"./goodsList.html\">您的菜篮中暂时没有蔬菜!去买菜。</a>");
+	                	$('#buttonGroup').hide();
+	                }else{
+	                	data = data.buyCart.items;
+		                for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+							$("#myBasket").append("<tr><td style='display:none;'>"+data[i].goods.id+"</td><td>"+data[i].goods.goods_name+"</td><td>"+data[i].goods.goods_low_price+"~"+data[i].goods.goods_high_price+"</td><td><input id='amount' type='number' min='1' value='"+data[i].amount+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods("+data[i].goods.id+")\"/></td></tr>");
+		                }
 	                }
 	            },
 	            error: function (er) {          //失败，回调函数
 	                alert(er);
-	             //     var data = {"buyCart":{"goodsAmount":6.0,"goodsTotalHighPrice":92.4,"goodsTotalLowPrice":83.0,"items":[{"amount":4,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一棵大白菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":14.5,"goods_name":"白菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":1,"id":1}},{"amount":2,"goods":{"base_id":0,"goods_Recommended":0,"goods_create_time":"2018-6-6","goods_detail":"一颗大青菜","goods_high_price":15.4,"goods_img":"www.baidu.com","goods_introduce":"","goods_low_price":12.5,"goods_name":"青菜","goods_quality_report_id":0,"goods_resource_id":0,"goods_status":1,"goods_type":0,"id":2}}]}}
-	              //  data = data.buyCart.items;
-	                
-	               // for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-	                //	$("#myBasket").append("<tr><td style='display:none;'>"+data[i].goods.id+"</td><td>"+data[i].goods.goods_name+"</td><td>"+data[i].goods.goods_low_price+"~"+data[i].goods.goods_high_price+"</td><td><input id='amount' type='number' min='0' value='"+data[i].amount+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods("+data[i].goods.id+")\"/></td></tr>");
-	                //}
 	            }
 	        });
 	});
@@ -153,9 +149,11 @@
         
     </table>
   </div>
-  <div class="button-group">  <a class="button border-red" href="javascript:createOrder()"><span class="icon-trash-o"></span> 结算</a> </div>
-  <div class="button-group">  <a class="button border-red" href="javascript:deleteAllGoods()"><span class="icon-trash-o"></span> 清空</a> </div>
-</form>
+  <div id="buttonGroup">
+	  <div class="button-group">  <a class="button border-red" href="javascript:createOrder()"><span class="icon-trash-o"></span> 结算</a> </div>
+	  <div class="button-group">  <a class="button border-red" href="javascript:deleteAllGoods()"><span class="icon-trash-o"></span> 清空</a> </div>
+  </div>
+  </form>
 <script type="text/javascript">
 
 

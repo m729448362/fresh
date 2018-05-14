@@ -41,13 +41,15 @@
              dataType: 'json',              //数据返回类型，可以是xml、json等
              contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数
-                 //alert(data.result);
-             	//data = {"list1":[{"goods_amount":2,"goods_high_price":15.4,"goods_id":2,"goods_low_price":12.5,"goods_name":"青菜","goods_real_price":10,"id":"560454da-3bc4-4b76-b3d0-e6c1cae011cb","order_id":"26508e2f35-5037-4e4f-80ba-10f9ecdfdd28"},{"goods_amount":3,"goods_high_price":15.4,"goods_id":1,"goods_low_price":14.5,"goods_name":"白菜","goods_real_price":10,"id":"aef26d2d-b96e-4a0e-890b-7828779cd632","order_id":"26508e2f35-5037-4e4f-80ba-10f9ecdfdd28"}],"orderLogList":[{"event":1,"handle_time":"2018-5-6","log_id":1,"order_id":"26508e2f35-5037-4e4f-80ba-10f9ecdfdd28"},{"event":2,"handle_time":"2018-5-6","log_id":2,"order_id":"26508e2f35-5037-4e4f-80ba-10f9ecdfdd28"}]};
                  orderLogList = data.orderLogList; //订单日志列表
              	 data = data.list1;
                  if(data){
-                	 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                         $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_real_price+"</td></tr>");
+                	 if(data.length==1){//如果只有一个订单项   删除就是取消订单
+                		 $("#order").append("<tr><td>"+data[0].goods_name+"</td><td>"+data[0].goods_low_price+"~"+data[0].goods_high_price+"</td><td>"+data[0].goods_amount+"</td><td>"+data[0].goods_real_price+"</td><td><input type='button' value='删除' onclick=\"cancelOrder()\"/></td></tr>");
+                	 }else{
+                		 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+                    		 $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_real_price+"</td><td><input type='button' value='删除' onclick=\"deleteGoods('"+data[i].id+"')\"/></td></tr>");
+                    	 }
                 	 }
 	                  $("#orderStatus").text(orderStatusName[orderStatus]);//更改订单状态
 	                  if(orderStatus!=1){
@@ -212,7 +214,7 @@
                  data = data.list1;
                  if(data){
                 	 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                         $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_real_price+"</td></tr>");
+                         $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_real_price+"</td><td><input type='button' value='删除' onclick=\"deleteGoods('"+data[i].id+"')\"/></td></tr>");
                      }
                      $("#orderStatus").text(orderStatusName[orderStatus]);//更改订单状态
                      if(orderStatus!=1){
@@ -318,6 +320,9 @@
             	//$('#confirm').attr("display","block");
             	document.getElementById("confirm").style.display ="block";
             }
+			if(orderStatus==3){//待发货订单详情
+				document.getElementById("pendingDetail").style.display ="block";
+			}
             if(orderStatus==4){//待收货订单详情页面。可以提交售后信息
             	document.getElementById("afterSales").style.display ="block";
             }
@@ -325,6 +330,26 @@
 			document.getElementById("goodsDetail").style.display ="none";//商品信息不显示
 			document.getElementById("orderLog").style.display ="block";
 		}
+	}
+	function deleteGoods(goodsId){//删除一个购物项
+		if(!confirm("确认删除？")){
+			return;
+		}
+		var data ={"id":""+goodsId};
+		$.ajax({
+	            url: "/fresh/order_item/deleteOrderItem.action",        //后台url
+	            data: JSON.stringify(data),
+	            type: "POST",                   //类型，POST或者GET
+	            dataType: 'json',              //数据返回类型，可以是xml、json等
+	            contentType:'application/json;charset=UTF-8',
+	            success: function (data) {      //成功，回调函数
+	                //alert(data.result);
+	                window.location.reload(); 
+	            },
+	            error: function (er) {          //失败，回调函数
+	                alert(er);
+	            }
+	        });
 	}
 </script>
 </head>
@@ -364,6 +389,7 @@
         <th>单价</th>
         <th>数量</th>
         <th>报价</th>
+        <th>操作</th>
       </tr>
       <volist name="list" id="vo">
     </table>
@@ -381,7 +407,6 @@
 
  <div id="confirm" style="display:none;">
  	<input type="button" value="确认订单" onclick="confirmOrder()"/>
- 	<input type="button" value="取消订单" onclick="cancelOrder()"/>
  </div>
   <div id="afterSales" style="display:none;">
   	<div>
@@ -402,6 +427,9 @@
 		<div id="container"></div>
 	</div>
   </div>
+   <div id="pendingDetail" style="display:none;">
+   		<input type="button" value="取消订单" onclick="cancelOrder()"/>
+  	</div>
 </div>
 <p/><p/>
 <div id="orderLog" style="display=none;">

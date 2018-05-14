@@ -9,8 +9,8 @@ public class After_sale {
 	private int user_id;//所属用户ID
 	private String a_order_id;//订单id
 	private String after_sale_reason;//申请售后理由
-	private int handle_status; //1：未受理 2：处理中 3：处理完成 4：售后请求未通过
-	private String handle_way; //售后处理方式
+	private int handle_status; //1：发起申请 2：同意申请 3：拒绝申请 
+	private String handle_way; // 1:开红字发票 2：补发 
 	private String handle_person;//售后处理人
 	private String handle_time; //受理时间
 	private String prove_img;//证明图片

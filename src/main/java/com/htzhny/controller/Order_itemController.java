@@ -71,8 +71,8 @@ public class Order_itemController {
 				
 				
 				if(result!=0 && i==0){
-				Integer status=2;
-				orderService.updateStatus(2, order_id);}
+				
+				orderService.updateStatus(3, order_id);}
 				
 					
 				
@@ -111,6 +111,15 @@ public class Order_itemController {
     	if(orderLogList.size()>0){
     		jsonObject.put("orderLogList",orderLogList);
     	}
+		return jsonObject;
+	}
+	@RequestMapping(value="deleteOrderItem")
+	//删除指定订单项
+	public @ResponseBody JSONObject  deleteOrderItem(@RequestBody Map<String, Object> params){
+		JSONObject jsonObject = new JSONObject();
+		String id= (String)params.get("id");
+		Integer result=order_itemService.deleteOrderItem(id);
+		jsonObject.put("result",result);
 		return jsonObject;
 	}
 

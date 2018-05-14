@@ -27,4 +27,8 @@
 	<select id="selectAllItem" parameterType="java.lang.String" resultType="com.htzhny.entity.Order_item">
 		select * from order_item where order_id=#{order_id}
 	</select>
+	<delete id="deleteOrderItem" parameterType="java.lang.String">
+		delete from order_item where id=#{id}
+	</delete>
+
 </mapper>
