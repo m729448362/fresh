@@ -62,6 +62,11 @@ public class Order_itemServiceImpl implements Order_itemService{
 		
 		return order_itemDao.deleteOrderItem(id);
 	}
+	@Override
+	public Integer addCompleteOrderItem(Order_item item) {
+		return order_itemDao.addCompleteOrderItem(item);
+	}
+
 
 
 

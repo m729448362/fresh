@@ -12,5 +12,6 @@ public interface Order_itemDao {
 	public Integer selectCount(String id);
 	public List<Order_item> selectAllItem(String order_id);
 	public Integer deleteOrderItem(String id);
-	
+	public Integer addCompleteOrderItem(Order_item item);
+
 }

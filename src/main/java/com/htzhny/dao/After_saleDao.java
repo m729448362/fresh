@@ -19,4 +19,5 @@ public interface After_saleDao {
 	public List<Order_itemAndAfter_saleQuery> selectOneById(Integer start,Integer size,String order_id);
 	public Integer updateHandleStatus(String after_sale_id,Integer handle_status);
 	public After_sale selectById(String after_sale_id);
+	
 }

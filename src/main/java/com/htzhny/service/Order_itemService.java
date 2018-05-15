@@ -13,5 +13,5 @@ public interface Order_itemService {
 	public Integer selectCount(String id);
 	public List<Order_item> selectAllItem(String id);
 	public Integer deleteOrderItem(String id);
-	
+	public Integer addCompleteOrderItem(Order_item item);
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import com.htzhny.entity.OrderLog;
 import com.htzhny.entity.Order_item;
 import com.htzhny.entity.Order_itemQuery;
 import com.htzhny.entity.PageBean;
+import com.htzhny.service.BillService;
 import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
 import com.htzhny.service.Order_logService;
@@ -35,6 +37,7 @@ public class Order_itemController {
 	private OrderService orderService;
 	@Autowired
 	private Order_logService logService;
+	
 	@RequestMapping(value="addOrder_item")
 	//生成订单项
 	public @ResponseBody JSONObject addOrder_item(@RequestBody Map<String, Object> params){
@@ -119,8 +122,37 @@ public class Order_itemController {
 		JSONObject jsonObject = new JSONObject();
 		String id= (String)params.get("id");
 		Integer result=order_itemService.deleteOrderItem(id);
+		
 		jsonObject.put("result",result);
 		return jsonObject;
 	}
+	@RequestMapping(value="updateOrderItem")
+	//给申请售后的商品的价格加负号
+	public @ResponseBody JSONObject  updateOrderItem(@RequestBody Map<String, Object> params){
+		JSONObject jsonObject = new JSONObject();
+		ArrayList<Order_item> list= (ArrayList<Order_item>) params.get("itemList");
+		Integer result=0;
+		for(int i = 0 ; i < list.size() ; i++) {
+		 	
+			Order_item order_item=JSON.parseObject(JSON.toJSONString(list.get(i)),Order_item.class);
+			String id=UUID.randomUUID().toString();
+			order_item.setId(id);
+			order_item.setGoods_real_price(-order_item.getGoods_real_price());
+	
 
+			result+=order_itemService.addCompleteOrderItem(order_item);
+			
+		}
+		jsonObject.put("result",result);
+		return jsonObject;
+	}
 }
+
+
+
+
+
+
+
+
+
