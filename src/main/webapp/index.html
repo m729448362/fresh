@@ -86,6 +86,16 @@
 		sessionStorage.setItem('goodsId', goodsId);
 	    location.href="./goodsDetail.html"; 
 	}
+    function openOrderList(type){
+    	if(type==1){
+    		sessionStorage.setItem('orderStatus', 1);
+    		location.href="./userOrderList.html";
+    	}else{
+    		sessionStorage.setItem('orderStatus', 3);
+    		location.href="./clientOrderList.html";
+    	}
+    	
+    }
 </script>
 </head>
 <body>
@@ -99,7 +109,7 @@
 			    	<ul>
 				    	<li style="float:left;padding:0.2em;"><a href="./goodsList.html">去买菜</a></li>
 				    	<li style="float:left;padding:0.2em;"><a href="./myBasket.html">我的菜篮</a></li>
-				    	<li style="float:left;padding:0.2em;"><a href="./userOrderList.html">我的订单</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:void(0);" onclick="openOrderList(1)">我的订单</a></li>
 				    	<li style="float:left;padding:0.2em;"><a href="./userBill.html">结算中心</a></li>
 				    	<li style="float:left;padding:0.2em;"><a href="./user.html">个人中心</a></li>
 			    	</ul>
@@ -116,7 +126,7 @@
 	  			<div class="title">
 			    	<ul>
 				    	<li style="float:left;padding:0.2em;"><a href="./pendingQuateOrder.html">待报价</a></li>
-				    	<li style="float:left;padding:0.2em;"><a href="./clientOrderList.html">订单处理</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:void(0);" onclick="openOrderList(2)">订单处理</a></li>
 				    	<li style="float:left;padding:0.2em;"><a href="./clientBill.html">账单中心</a></li>
 				    	<li style="float:left;padding:0.2em;"><a href="./vegetableCenter.html">菜品中心</a></li>
 			    	</ul>

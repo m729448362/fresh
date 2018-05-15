@@ -21,12 +21,6 @@
 	var pages=0;
 	var orderStatusName={"1":"待报价","2":"待确认","3":"待发货","4":"待收货","5":"售后处理中","6":"已完成"};
 $(document).ready(function(c) {
-//	if(orderStatus==6){
-//		window.location.href="./userBill.html";//跳转到账单页面
-//	}
-//	else {
-//		findMoreOrderByStatus();
-//	}
 	findMoreOrderByStatus();
 	
 });
@@ -36,6 +30,7 @@ function getOrderDetail(orderId,orderPrice,lowPrice,highPrice){//跳转到订单
 	 sessionStorage.setItem("orderPrice",orderPrice);
 	 sessionStorage.setItem("lowPrice",lowPrice);
 	 sessionStorage.setItem("highPrice",highPrice);
+	 sessionStorage.setItem("bill",0);
 	  if(orderStatus==5){
 		 window.location.href="./userAfterSaleDetail.html"; //售后详情页面
 	 }else{

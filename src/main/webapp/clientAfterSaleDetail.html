@@ -19,11 +19,12 @@
 var orderStatus = sessionStorage.getItem('orderStatus');
 var orderId = sessionStorage.getItem("orderId");
 var pages=0;
-var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成","4":"售后请求未通过"};
+var afterSaleStatusName={"1": "发起申请","2": "同意申请","3": "拒绝申请"};
 var obj = sessionStorage.getItem('user');//
 var user=JSON.parse(obj);
 var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货","8":"付款", "9":"取消售后申请"};
-
+var handleWayName = {"1": "开红字发票","2": "补发"};
+var handleWay;
 var totalPrice=0//总计金额
 	$(document).ready(function(c) {
 			//初始化方法
@@ -51,13 +52,14 @@ var totalPrice=0//总计金额
                         $("#order").append("<tr><td>"+data[i].goods_name+"</td><td>"+data[i].goods_amount+"</td><td>"+data[i].goods_real_price+"</td></tr>");
                     	totalPrice=data[i].goods_amount*data[i].goods_real_price+totalPrice;
                     }
+             		handleWay = data[0].handle_way;
                    	$("#reason").val(data[0].after_sale_reason);//更改售后原因
                    	$("#reason").attr("disabled",true);//更改售后原因不可编辑
                    	$("#img").html("");
                    	$("#afterSaleStatus").html("<strong><b>售后状态：</b><b>"+afterSaleStatusName[data[0].handle_status]+"</b></strong>");//售后状态	
                    	if(data[0].handle_status==1||data[0].handle_status==4){//未处理
-                   		$("#dealWith").html("<strong><b>处理方式：</b><input type='text' id='handWay'/></strong>");//处理方式
-                   		$("#dealWith").append("</p><select id='handlingOpinions'><option value='1'>同意</option><option value='2' selected>拒绝</option></select>");//是否同意申请
+                       	$("#dealWith").html("<strong><b>处理方式：</b><b>"+handleWayName[data[0].handle_way]+"</b></strong>");//处理方式
+                   		$("#dealWith").append("</p><select id='handlingOpinions'><option value='2'>同意</option><option value='3' selected>拒绝</option></select>");//是否同意申请
                    		$("#dealWith").append("</p><input type='button' onclick=\"submitAfterSale('"+data[0].after_sale_id+"')\" value='提交'/>");//处理方式
                    	}
              	}
@@ -81,7 +83,7 @@ var totalPrice=0//总计金额
 	}
 	function submitAfterSale(id){//售后处理提交
 		var handlingOpinions = $('#handlingOpinions').val();
-		if(handlingOpinions==1){//同意
+		if(handlingOpinions==2){//同意
 			updateAfterSale(id);
 		}else{
 			updateHandleStatus(id);
@@ -89,7 +91,6 @@ var totalPrice=0//总计金额
 		
 	}
 	function updateAfterSale(id){//同意更新售后信息
-		var handle_way=$('#handWay').val();
 		var data= {                          //数据
 				"after_sale": {
 					"after_sale_id": id,
@@ -97,8 +98,8 @@ var totalPrice=0//总计金额
 					//"order_id": orderId,
 					"a_order_id": orderId,
 					"after_sale_reason":$("#reason").val(),
-					"handle_status": 3,
-					"handle_way": handle_way,
+					"handle_status": 2,
+					"handle_way": handleWay,
 					"handle_person": user.id,
 					"handle_time": "",
 					"prove_img": "www.baidu.com"
@@ -130,7 +131,7 @@ var totalPrice=0//总计金额
 		var handle_way=$('#handWay').val();
 		var data= {                          //数据
 				"after_sale_id": id,
-				"handle_status": 4
+				"handle_status": 3
 	        };
 		if(!confirm("确认提交？")){
 			return;

@@ -19,7 +19,7 @@
 	var orderId = sessionStorage.getItem("orderId");
 	var orderStatusName={"1":"待报价","2":"待确认","3":"待发货","4":"待收货","5":"售后处理中","6":"已完成"};
 	var orderStatus = sessionStorage.getItem("orderStatus");
-	var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成","4":"售后请求未通过"};
+	var afterSaleStatusName={"1": "发起申请","2": "同意申请","3": "拒绝申请"};
 	var pages=1;
 	var orderPrice = sessionStorage.getItem("orderPrice");
 	var lowPrice = sessionStorage.getItem("lowPrice");
@@ -34,7 +34,6 @@
 				"id":orderId,   //orderId
                 "currentPage":pages
 		};
-			//初始化方法
 		$.ajax({//根据订单id查询订单详情
              url: "/fresh/order_item/selectAllByOrderId.action",        //后台url
              data:JSON.stringify(message),
@@ -51,14 +50,12 @@
                      }
                      $("#account").text("￥"+orderPrice+"元");//更改订单金额
                      if(orderStatus==5){
-                     	//document.getElementById("afterSales").style.display ="block";
                      	findAfterSaleInfo(data.id);//售后信息查询
                      }
                      if(orderStatus==3){
                			$('#updateOrderStatus').append('<input type="button" value="发货" onclick="updateOrderStatus()">');
                		 }
                      if(orderLogList){//订单日志信息
-	                	  //document.getElementById("orderLog").style.display ="block";
 	                	  for(var i=0;i<orderLogList.length;i++){//data.length是获取data的长度。for循环
 	                		  $("#log").append("<tr><td>"+eventName[parseInt(orderLogList[i].event)]+"</td><td>"+orderLogList[i].handle_time+"</td></tr>");    
 	                	  }
@@ -155,15 +152,14 @@
 	 }
 	function showMsg(type){//展示信息
 		if(type==1){//商品信息
-			document.getElementById("orderLog").style.display ="none";//日志信息不显示
-			document.getElementById("goodsDetail").style.display ="block";//商品信息显示
+			$('#orderLog').hide();
+			$('#goodsDetail').show();
 			 if(orderStatus==5){
-              	document.getElementById("afterSales").style.display ="block";
-              	//findAfterSaleInfo(data.id);//售后信息查询
+				 $('#afterSales').hide();
               }
 		}else{
-			document.getElementById("goodsDetail").style.display ="none";//商品信息不显示
-			document.getElementById("orderLog").style.display ="block";
+			$('#goodsDetail').hide();
+			$('#orderLog').show();
 		}
 	}
 </script>

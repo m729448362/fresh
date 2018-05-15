@@ -19,9 +19,10 @@
 var orderStatus = sessionStorage.getItem('orderStatus');
 var orderId = sessionStorage.getItem("orderId");
 var pages=0;
-var afterSaleStatusName={"1": "未受理","2": "处理中","3": "处理完成","4":"售后请求未通过"};
+var afterSaleStatusName={"1": "发起申请","2": "同意申请","3": "拒绝申请"};
 var eventName = {"1":"提交提单", "2":"报价", "3":"确认订单", "4":"发货", "5":"提交售后申请", "6":"售后处理完成", "7":"确认收货","8":"付款", "9":"取消售后申请"};
 var totalPrice=0//总计金额
+var handleWayName = {"1": "开红字发票","2": "补发"};
 	$(document).ready(function(c) {
 			//初始化方法
 		findMoreOrderByStatus();
@@ -53,7 +54,7 @@ var totalPrice=0//总计金额
                    	$("#reason").val(data[0].after_sale_reason);//更改售后原因
                    	$("#reason").attr("disabled",true);//更改售后原因不可编辑
                    	$("#img").html("");
-                   	$("#dealWith").html("<strong><b>处理方式：</b><b>"+data[0].handle_way+"</b></strong>");//处理方式
+                   	$("#dealWith").html("<strong><b>处理方式：</b><b>"+handleWayName[data[0].handle_way]+"</b></strong>");//处理方式
                    	$("#afterSaleStatus").html("<strong><b>售后状态：</b><b>"+afterSaleStatusName[data[0].handle_status]+"</b></strong>");//售后状态	
              	}
              	if(pages==1){
