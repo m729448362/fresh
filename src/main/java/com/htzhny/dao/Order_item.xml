@@ -27,7 +27,7 @@
 		select count(1) from order_item where order_id=#{order_id}
 	</select>
 	<select id="selectAllByOrderId" resultMap="Order_itemQuery">
-		select a.id,a.goods_id,b.goods_name,a.order_id,a.goods_amount,a.is_after_sale,b.goods_low_price,b.goods_high_price,a.goods_real_price from order_item a inner join goods b on a.goods_id=b.id where order_id=#{2} and is_after_sale !=2 limit #{0},#{1}
+		select a.id,a.goods_id,b.goods_name,a.order_id,a.goods_amount,a.is_after_sale,b.goods_low_price,b.goods_high_price,a.goods_real_price from order_item a inner join goods b on a.goods_id=b.id where order_id=#{2} limit #{0},#{1}
 	</select>
 	<select id="selectAllItem" parameterType="java.lang.String" resultType="com.htzhny.entity.Order_item">
 		select * from order_item where order_id=#{order_id}
