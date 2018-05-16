@@ -10,6 +10,7 @@ public class Order_item {
 	private String order_id;//订单ID
 	private Integer goods_amount;//商品数量
 	private double goods_real_price;//单个商品实际报价
+	private Integer is_after_sale;//是否售后  0:正常订单项 1：售后订单项 2：补发订单
 	
 	public String getId() {
 		return id;
@@ -43,8 +44,24 @@ public class Order_item {
 		this.goods_real_price = goods_real_price;
 	}
 	
+	public Integer getIs_after_sale() {
+		return is_after_sale;
+	}
+	public void setIs_after_sale(Integer is_after_sale) {
+		this.is_after_sale = is_after_sale;
+	}
 	public Order_item() {
 		super();
+	}
+	
+	public Order_item(String id, int goods_id, String order_id, Integer goods_amount, double goods_real_price,Integer is_after_sale) {
+		super();
+		this.id = id;
+		this.goods_id = goods_id;
+		this.order_id = order_id;
+		this.goods_amount = goods_amount;
+		this.goods_real_price = goods_real_price;
+		this.is_after_sale=is_after_sale;
 	}
 	
 	public Order_item(String id, int goods_id, String order_id, Integer goods_amount, double goods_real_price) {

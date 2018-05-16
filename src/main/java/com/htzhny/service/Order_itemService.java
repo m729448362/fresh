@@ -14,4 +14,5 @@ public interface Order_itemService {
 	public List<Order_item> selectAllItem(String id);
 	public Integer deleteOrderItem(String id);
 	public Integer addCompleteOrderItem(Order_item item);
+	public Integer updateAfterSale(Integer is_after_sale,String id);
 }

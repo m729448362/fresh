@@ -116,6 +116,7 @@ public class Order_itemController {
     	}
 		return jsonObject;
 	}
+	
 	@RequestMapping(value="deleteOrderItem")
 	//删除指定订单项
 	public @ResponseBody JSONObject  deleteOrderItem(@RequestBody Map<String, Object> params){
@@ -135,11 +136,12 @@ public class Order_itemController {
 		for(int i = 0 ; i < list.size() ; i++) {
 		 	
 			Order_item order_item=JSON.parseObject(JSON.toJSONString(list.get(i)),Order_item.class);
+			order_itemService.updateAfterSale(1, order_item.getId());
 			String id=UUID.randomUUID().toString();
 			order_item.setId(id);
 			order_item.setGoods_real_price(-order_item.getGoods_real_price());
-	
-
+			order_item.setIs_after_sale(2);
+			order_itemService.updateAfterSale(1, id);
 			result+=order_itemService.addCompleteOrderItem(order_item);
 			
 		}

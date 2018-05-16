@@ -66,6 +66,10 @@ public class Order_itemServiceImpl implements Order_itemService{
 	public Integer addCompleteOrderItem(Order_item item) {
 		return order_itemDao.addCompleteOrderItem(item);
 	}
+	@Override
+	public Integer updateAfterSale(Integer is_after_sale,String id) {
+		return order_itemDao.updateAfterSale(is_after_sale,id);
+	}
 
 
 
