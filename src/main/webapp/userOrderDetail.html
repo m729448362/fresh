@@ -46,29 +46,23 @@
              	 data = data.list1;
                  if(data){
                 	 if(data.length==1){//如果只有一个订单项   删除就是取消订单
-                		 $("#order").append("<tr><td><input style='display:none;' type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[0].id+"'/></td><td>"+data[0].goods_name+"</td><td>"+data[0].goods_low_price+"~"+data[0].goods_high_price+"</td><td><input type='number' disabled='true' min=0 max='"+data[0].goods_amount+"' value='"+data[0].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"cancelOrder()\"/></td></tr>");
+                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[0].id+"'/></td><td>"+data[0].goods_name+"</td><td>"+data[0].goods_low_price+"~"+data[0].goods_high_price+"</td><td><div>"+data[0].goods_amount+"</div><input type='number' min=0 max='"+data[0].goods_amount+"' value='"+data[0].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"cancelOrder()\"/><input type='button' value='修改' onclick=\"editOrder(this)\"/></td></tr>");
                 	 }else{
                 		 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                    		 $("#order").append("<tr><td><input style='display:none;' type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='number' disabled='true' min=0 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods('"+data[i].id+"')\"/></td></tr>");
+                    		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div>"+data[0].goods_amount+"</div><input type='number'min=0 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods('"+data[i].id+"')\"/><input type='button' value='修改' onclick=\"editOrder(this)\"/></td></tr>");
                     	 }
                 	 }
-                	 if(orderStatus!=3){//订单项操作列处理
-               		    var tableTd = "td:eq(5),th:eq(5)";
-               		    $('#order tr').find(tableTd).hide();
-                	 }
-                	 if(orderStatus!=6||bill==1){//售后操作列隐藏
-                		 var tableTd = "td:eq(0),th:eq(0)";
-                		 $('#order tr').find(tableTd).hide();
-                	 }else{//售后操作  增加点击事件
-                		 $("#order tr:gt(0)").click(function () {
-                			if($(this).find('td:eq(0) input[type="checkbox"]').is(':checked')){
-                			 	$(this).find('td:eq(0) input[type="checkbox"]').prop('checked', false);
-                	 		}else{
-                	 			$(this).find('td:eq(0) input[type="checkbox"]').prop('checked', true);
-                	 		}
-                			$(this).find('td:eq(3) input[type="number"]').removeAttr("disabled");
-             		     });
-                	 }
+                	 if(orderStatus!=3&&orderStatus!=4){//订单项操作列处理
+             		    var tableTd = "td:eq(5),th:eq(5)";
+             		    $('#order tr').find(tableTd).hide();
+	              	 }else{
+	              		 if(orderStatus==4){
+	              			$('#order tr:gt(0) td').find('input[value="删除"]').hide();
+	              		 }else{
+	              			$('#order tr:gt(0) td').find('input[value="修改"]').hide();
+	              		 }
+	              	 }
+                	 $('#order tr:gt(0) td').find('input[type="number"]').hide();
 	                  $("#orderStatus").text(orderStatusName[orderStatus]);//更改订单状态
 	                  if(orderStatus!=1){
 	                  	$("#account").text("￥"+orderPrice+"元");//更改订单金额
@@ -206,7 +200,7 @@
                  data = data.list1;
                  if(data){
                 	 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                		 $("#order").append("<tr><td><input style='display:none;' type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='number' disabled='true' min=0 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods('"+data[i].id+"')\"/></td></tr>");
+                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div>"+data[0].goods_amount+"</div><input style='display:none;' type='number' min=0 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods('"+data[i].id+"')\"/><input type='button' value='修改' onclick=\"editOrder(this)\"/></td></tr>");
                 	 }
                      $("#orderStatus").text(orderStatusName[orderStatus]);//更改订单状态
                      if(orderStatus!=1){
@@ -214,24 +208,16 @@
                      }else{
                      	$("#account").text("￥"+lowPrice+"~"+highPrice+"元");//更改订单金额
                      }
-                     if(orderStatus!=3){//订单项操作列处理
-                		    var tableTd = "td:eq(5),th:eq(5)";
-                		    $('#order tr').find(tableTd).hide();
-                 	 }
-                     if(orderStatus!=6||bill==1){//售后操作列隐藏
-                		 var tableTd = "td:eq(0),th:eq(0)";
-                		 $('#order tr').find(tableTd).hide();
-                	 }else{//售后操作  增加点击事件
-                		 $("#order tr:gt(0)").unbind();//解绑之前的点击事件
-                		 $("#order tr:gt(0)").click(function () {
-                			if($(this).find('td:eq(0) input[type="checkbox"]').is(':checked')){
-                			 	$(this).find('td:eq(0) input[type="checkbox"]').prop('checked', false);
-                	 		}else{
-                	 			$(this).find('td:eq(0) input[type="checkbox"]').prop('checked', true);
-                	 		}
-                			$(this).find('td:eq(3) input[type="number"]').removeAttr("disabled");
-             		     });
-                	 }
+                     if(orderStatus!=3&&orderStatus!=4){//订单项操作列处理
+              		    var tableTd = "td:eq(5),th:eq(5)";
+              		    $('#order tr').find(tableTd).hide();
+ 	              	 }else{	
+ 	              		 if(orderStatus==4){
+ 	              			$('#order tr:gt(0) td').find('input[value="删除"]').hide();
+ 	              		 }else{
+ 	              			$('#order tr:gt(0) td').find('input[value="修改"]').hide();
+ 	              		 }
+ 	              	 }
                  }
              },
              error: function (er) {          //失败，回调函数
@@ -300,7 +286,7 @@
  		var param = {};
 		var list =new Array();
  		$('#order tr:gt(0)').each(function(){
- 			if($(this).find('td:eq(0) input[type="checkbox"]').is(':checked')){
+ 			if($(this).find('td:eq(3) input[type="number"]').is(':visible')){
  				param={				//list格式
  						"id": $(this).find('td:eq(0) input[type="checkbox"]').val(),
  						"goods_id": $(this).find('td:eq(0) input[type="text"]').val(),
@@ -371,8 +357,6 @@
 			}
             if(orderStatus==4){//待收货订单详情页面
             	$('#confirmReceipt').show();
-            }
-            if(orderStatus==6&&bill==0){//已完成订单详情。可以提交售后信息    
             	$('#afterSales').show();
             }
 		}else{
@@ -399,6 +383,15 @@
 	                alert(er);
 	            }
 	        });
+	}
+	function editOrder(obj){//售后，将数量变为可编辑
+		if($(obj).parent().siblings().find('input[type="number"]').is(":hidden")){
+			$(obj).parent().siblings().find('input[type="number"]').show();
+			$(obj).parent().siblings().find('div').hide();
+		}else{
+			$(obj).parent().siblings().find('input[type="number"]').hide();
+			$(obj).parent().siblings().find('div').show();
+		}
 	}
 </script>
 </head>
@@ -434,7 +427,7 @@
   <div id="goodsDetail"><b>订单商品信息:</b>
     <table class="table table-hover text-center" id="order">
       <tr>
-      	<th></th>
+      	<th style='display:none;'></th>
         <th>品名</th>
         <th>单价</th>
         <th>数量</th>
