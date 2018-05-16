@@ -122,8 +122,14 @@ public class Order_itemController {
 	public @ResponseBody JSONObject  deleteOrderItem(@RequestBody Map<String, Object> params){
 		JSONObject jsonObject = new JSONObject();
 		String id= (String)params.get("id");
+		String order_id=(String) params.get("order_id");
+		Double orderRealPrice=(Double) params.get("orderRealPrice");
+		Integer amount=(Integer) params.get("amount");
+		Double goods_real_price=(Double) params.get("goods_real_price");
 		Integer result=order_itemService.deleteOrderItem(id);
-		
+		 orderRealPrice= orderRealPrice-amount*goods_real_price;
+		 
+		 orderService.updateRealPrice(orderRealPrice, order_id);
 		jsonObject.put("result",result);
 		return jsonObject;
 	}
