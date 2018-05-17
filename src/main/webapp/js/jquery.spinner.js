@@ -69,7 +69,7 @@
         return value
       }
 
-      function isInvalid(value) { return isNaN(+value) || value < options.min || value > options.max;}
+      function isInvalid(value) {var reg = new RegExp("[^0-9]","g"); return isNaN(+value) || value < options.min || value > options.max || !reg.test(value);}
 
       function getValue(field) {
         field = field || textField;
