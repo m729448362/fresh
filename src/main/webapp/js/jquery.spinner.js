@@ -17,7 +17,7 @@
       var defaults = {value:1, min:0 ,max:10000}
       var options = $.extend(defaults, opts)
       var keyCodes = {up:38, down:40}
-      var container = $('<div></div>')
+      var container = $('<div>请输入申请售后数量:</div>')
       container.addClass('spinner')
       var textField = $(this).addClass('value').attr('maxlength', '3').val(options.value)
         .bind('keyup paste change', function (e) {
@@ -69,7 +69,7 @@
         return value
       }
 
-      function isInvalid(value) {var reg = new RegExp("[^0-9]","g"); return isNaN(+value) || value < options.min || value > options.max || !reg.test(value);}
+      function isInvalid(value) {var reg = new RegExp("[^0-9]",'g'); return reg.test(value) || isNaN(+value) || value < options.min || value > options.max;}
 
       function getValue(field) {
         field = field || textField;

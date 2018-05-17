@@ -47,10 +47,10 @@
              	 data = data.list1;
                  if(data){
                 	 if(data.length==1){//如果只有一个订单项   删除就是取消订单
-                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[0].goods_id+"'/><input type='checkbox' value='"+data[0].id+"'/></td><td>"+data[0].goods_name+"</td><td>"+data[0].goods_low_price+"~"+data[0].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[0].goods_amount+"</div><input class='goodsAmount' type='text' min=1 max='"+data[0].goods_amount+"' value='"+data[0].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[0].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"cancelOrder()\"/><input type='button' value='修改' onclick=\"editOrder(this)\"/></td></tr>");
+                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[0].goods_id+"'/><input type='checkbox' value='"+data[0].id+"'/></td><td>"+data[0].goods_name+"</td><td>"+data[0].goods_low_price+"~"+data[0].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[0].goods_amount+"</div><input class='goodsAmount' type='text' min=1 max='"+data[0].goods_amount+"' value='"+data[0].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[0].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"cancelOrder()\"/><input type='button' value='申请售后' onclick=\"editOrder(this)\"/></td></tr>");
                 	 }else{
                 		 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                    		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[i].goods_amount+"</div><input class='goodsAmount' type='text' min=1 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods(this)\"/><input type='button' value='修改' onclick=\"editOrder(this)\"/></td></tr>");
+                    		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[i].goods_amount+"</div><input class='goodsAmount' type='text' min=1 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods(this)\"/><input type='button' value='申请售后' onclick=\"editOrder(this)\"/></td></tr>");
                     	 }
                 	 }
                 	 if(orderStatus!=3&&orderStatus!=4){//订单项操作列处理
@@ -60,7 +60,7 @@
 	              		 if(orderStatus==4){
 	              			$('#order tr:gt(0) td').find('input[value="删除"]').hide();
 	              		 }else{
-	              			$('#order tr:gt(0) td').find('input[value="修改"]').hide();
+	              			$('#order tr:gt(0) td').find('input[value="申请售后"]').hide();
 	              		 }
 	              	 }
                 	 $('#order tr:gt(0)').find('td:eq(3)').each(function(){
@@ -203,7 +203,7 @@
                  data = data.list1;
                  if(data){
                 	 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[0].goods_amount+"</div><input style='display:none;' class='goodsAmount' type='text' min=1 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods(this)\"/><input type='button' value='修改' onclick=\"editOrder(this)\"/></td></tr>");
+                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[0].goods_amount+"</div><input style='display:none;' class='goodsAmount' type='text' min=1 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods(this)\"/><input type='button' value='申请售后' onclick=\"editOrder(this)\"/></td></tr>");
                 	 }
                      $("#orderStatus").text(orderStatusName[orderStatus]);//更改订单状态
                      if(orderStatus!=1){
@@ -218,7 +218,7 @@
  	              		 if(orderStatus==4){
  	              			$('#order tr:gt(0) td').find('input[value="删除"]').hide();
  	              		 }else{
- 	              			$('#order tr:gt(0) td').find('input[value="修改"]').hide();
+ 	              			$('#order tr:gt(0) td').find('input[value="申请售后"]').hide();
  	              		 }
  	              	 }
                  }
@@ -355,7 +355,6 @@
 			}
             if(orderStatus==4){//待收货订单详情页面
             	$('#confirmReceipt').show();
-            	$('#afterSales').show();
             }
 		}else{
 			$('#goodsDetail').hide();
@@ -407,6 +406,18 @@
 			$(obj).find('td:eq(3) div[class="goodsAmountText"]').show();
 			$(obj).find('td:eq(3) div[class="spinner"]').hide();
 		}
+		var showFlag=false;//售后信息是否显示 标志
+		$('#order tr:gt(0)').find('div[class="spinner"]').each(function(){
+			if(!$(this).is(":hidden")){
+				showFlag=true;
+			}
+		});
+		if(showFlag){
+			$('#afterSales').show();
+		}else{
+			$('#afterSales').hide();
+		}
+		
 	}
 	function getMax(obj)  
 	{  
