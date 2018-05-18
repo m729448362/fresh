@@ -47,10 +47,10 @@
              	 data = data.list1;
                  if(data){
                 	 if(data.length==1){//如果只有一个订单项   删除就是取消订单
-                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[0].goods_id+"'/><input type='checkbox' value='"+data[0].id+"'/></td><td>"+data[0].goods_name+"</td><td>"+data[0].goods_low_price+"~"+data[0].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[0].goods_amount+"</div><input class='goodsAmount' type='text' min=1 max='"+data[0].goods_amount+"' value='"+data[0].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[0].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"cancelOrder()\"/><input type='button' value='申请售后' onclick=\"editOrder(this)\"/></td></tr>");
+                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[0].goods_id+"'/><input type='checkbox' value='"+data[0].id+"'/></td><td>"+data[0].goods_name+"</td><td>"+data[0].goods_low_price+"~"+data[0].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[0].goods_amount+"</div><input class='goodsAmount' type='number' min=1 max='"+data[0].goods_amount+"' value='"+data[0].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[0].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"cancelOrder()\"/><input type='button' value='申请售后' onclick=\"editOrder(this)\"/></td></tr>");
                 	 }else{
                 		 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                    		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[i].goods_amount+"</div><input class='goodsAmount' type='text' min=1 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods(this)\"/><input type='button' value='申请售后' onclick=\"editOrder(this)\"/></td></tr>");
+                    		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[i].goods_amount+"</div><input class='goodsAmount' type='number' min=1 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods(this)\"/><input type='button' value='申请售后' onclick=\"editOrder(this)\"/></td></tr>");
                     	 }
                 	 }
                 	 if(orderStatus!=3&&orderStatus!=4){//订单项操作列处理
@@ -64,7 +64,7 @@
 	              		 }
 	              	 }
                 	 $('#order tr:gt(0)').find('td:eq(3)').each(function(){
-                		 $(this).find('input[type="text"]').hide();
+                		 $(this).find('input[type="number"]').hide();
                 	 });
 	                  $("#orderStatus").text(orderStatusName[orderStatus]);//更改订单状态
 	                  if(orderStatus!=1){
@@ -203,7 +203,7 @@
                  data = data.list1;
                  if(data){
                 	 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
-                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[0].goods_amount+"</div><input style='display:none;' class='goodsAmount' type='text' min=1 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods(this)\"/><input type='button' value='申请售后' onclick=\"editOrder(this)\"/></td></tr>");
+                		 $("#order").append("<tr><td style='display:none;'><input type='text' value='"+data[i].goods_id+"'/><input type='checkbox' value='"+data[i].id+"'/></td><td>"+data[i].goods_name+"</td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><div class='goodsAmountText'>"+data[0].goods_amount+"</div><input style='display:none;' class='goodsAmount' type='number' min=1 max='"+data[i].goods_amount+"' value='"+data[i].goods_amount+"'/></td><td><input type='text' disabled='true' value='"+data[i].goods_real_price+"'/></td><td><input type='button' value='删除' onclick=\"deleteGoods(this)\"/><input type='button' value='申请售后' onclick=\"editOrder(this)\"/></td></tr>");
                 	 }
                      $("#orderStatus").text(orderStatusName[orderStatus]);//更改订单状态
                      if(orderStatus!=1){
@@ -284,12 +284,12 @@
  		var param = {};
 		var list =new Array();
  		$('#order tr:gt(0)').each(function(){
- 			if($(this).find('td:eq(3) input[type="text"]').is(':visible')){
+ 			if($(this).find('td:eq(3) input[type="number"]').is(':visible')){
  				param={				//list格式
  						"id": $(this).find('td:eq(0) input[type="checkbox"]').val(),
  						"goods_id": $(this).find('td:eq(0) input[type="text"]').val(),
  						"order_id":orderId,
- 						"goods_amount":$(this).find('td:eq(3) input[type="text"]').val(),
+ 						"goods_amount":$(this).find('td:eq(3) input[type="number"]').val(),
  						"goods_real_price":$(this).find('td:eq(4) input[type="text"]').val()
  				  };
  				list.push(param);
@@ -394,14 +394,17 @@
 	function editOrder(obj){//售后，将数量变为可编辑
 		var tr1 = obj.parentNode.parentNode.rowIndex;  //得到当前所在行
 		obj = '#order tr:eq('+tr1+')'; 
-		if($(obj).find('td:eq(3) input[type="text"]').is(":hidden")){
+		if($(obj).find('td:eq(4) input[type="text"]').val()<0){//
+			return;
+		}
+		if($(obj).find('td:eq(3) input[type="number"]').is(":hidden")){
 			$(obj).find('td:eq(3) div[class="goodsAmountText"]').hide();
 			//div spinner 需要隐藏，已经存在的不执行
 			if(!$(obj).find('td:eq(3) div[class="spinner"]').length>0){
-				$(obj).find('td:eq(3) input[type="text"]').spinner({min: getMin(obj), max: getMax(obj), value:getDefault(obj)});
+				$(obj).find('td:eq(3) input[type="number"]').spinner({min: getMin(obj), max: getMax(obj), value:getDefault(obj)});
 			}
 			$(obj).find('td:eq(3) div[class="spinner"]').show();
-			$(obj).find('td:eq(3) input[type="text"]').show();
+			$(obj).find('td:eq(3) input[type="number"]').show();
 		}else{
 			$(obj).find('td:eq(3) div[class="goodsAmountText"]').show();
 			$(obj).find('td:eq(3) div[class="spinner"]').hide();
@@ -421,14 +424,14 @@
 	}
 	function getMax(obj)  
 	{  
-	  return $(obj).find('td:eq(3) input[type="text"]').attr('max');  
+	  return $(obj).find('td:eq(3) input[type="number"]').attr('max');  
 	}  
 	function getMin(obj)  
 	{  
-	  return $(obj).find('td:eq(3) input[type="text"]').attr('min');   
+	  return $(obj).find('td:eq(3) input[type="number"]').attr('min');   
 	}
 	function getDefault(obj){
-		return $(obj).find('td:eq(3) input[type="text"]').attr('value');
+		return $(obj).find('td:eq(3) input[type="number"]').attr('value');
 	}
 </script>
 </head>

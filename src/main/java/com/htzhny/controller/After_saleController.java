@@ -182,7 +182,7 @@ public class After_saleController {
     	Integer handle_status=(Integer) params.get("handle_status");
     	Integer result=after_saleService.updateHandleStatus(after_sale_id, handle_status);
     	After_sale after_sale=after_saleService.selectById(after_sale_id);
-    	orderService.updateStatus(4, after_sale.getA_order_id());
+    	orderService.updateStatus(6, after_sale.getA_order_id());
     	jsonObject.put("result", result);
     	return jsonObject;
     }
