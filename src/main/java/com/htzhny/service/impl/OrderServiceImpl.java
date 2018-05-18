@@ -161,8 +161,8 @@ public class OrderServiceImpl implements OrderService{
 		String formatDate = "";  
 		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
 	    formatDate = dFormat.format(dt); 
-	    if(status==2){
-   			OrderLog orderlog=new OrderLog(id,formatDate,3);
+	    if(status==3){
+   			OrderLog orderlog=new OrderLog(id,formatDate,2);
    			logDao.addLog(orderlog);
    		}else if(status==4){
    			if(logDao.findOrderLog(id, 4)!=null){
