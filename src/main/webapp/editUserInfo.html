@@ -52,7 +52,7 @@ var user = JSON.parse(obj);
 	             success: function (data) {      //成功，回调函数
 	            	 if(!data.result){
 	            		 sessionStorage.setItem("user",JSON.stringify(data.user));
-	            		 //returnLastPage();
+	            		 returnLastPage();
 	            	 }else{
 	            		 alert("修改失败");
 	            	 }
@@ -86,11 +86,11 @@ var user = JSON.parse(obj);
 	        <th style="text-align:center; padding:0.5em 2em;" ></th>
 	      </tr>
 	      <volist name="list" id="vo">
-	        <tr>
+	        <!-- <tr>
 	          <td>头像:<input type="file" value="sdgsdg" id="demo_input" /> 
 				</td>
 	          
-	        </tr>
+	        </tr> -->
 	        <tr>
 	          <td>姓名:<input type="text" id="name" value="张三" disabled="true"/></td>
 	        </tr>

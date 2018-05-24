@@ -43,7 +43,7 @@
 	                 	}
 	             },
 	             error: function (er) {          //失败，回调函数
-	                 alert(er);
+	                // alert(er);
 	             }
 	         });
 		
@@ -72,11 +72,14 @@
 	         });
 	}
 	function addAddress(){//新增收货地址
+		sessionStorage.removeItem("addressId");
 		window.location.href="editAddress.html"; 
 	}
 	function editAddress(){//修改收货地址
 		var addressId=$('#addressSelect').val();
-		sessionStorage.setItem("addressId",addressId);
+		if(addressId){
+			sessionStorage.setItem("addressId",addressId);
+		}
 		window.location.href="editAddress.html"; 
 	}
 </script>

@@ -18,50 +18,52 @@
 	var message;//请求参数
 	var goods;//产品信息
 	$(document).ready(function(c) {
-		message =  {                          //数据
-                "goodsId":goodsId
-        };
 		if(goodsId){
-			$.ajax({//查询商品详情
-	             url: "/fresh/goods/selectGoodsById.action",        //后台url
-	             data: JSON.stringify(message),
-	             type: "POST",                   //类型，POST或者GET
-	             dataType: 'json',              //数据返回类型，可以是xml、json等
-	             contentType:'application/json;charset=UTF-8',
-	             success: function (data) {      //成功，回调函数    画页面
-	            	//data = {"goods" : {"goods_name":"大白菜","goods_low_price":12.6,"goods_high_price":15.8,"goods_type":1,"goods_detai":"一颗大白菜","goods_status":1,"goods_Recommended":0,
-	            	//	"goods_create_time":"2018-6-6","goods_img":"www.baidu.com"}};
-                 	data = data.goods;
-                 	if(data){
-                 		$('#img').val(data.goods_img);//图片
-                     	$('#goodsName').val(data.goods_name);//品名
-    					$('#lowPrice').val(data.goods_low_price);//单价低价
-    					$('#highPrice').val(data.goods_high_price);//单价高价
-    					$('#base').val(data.base);//基地id
-    					$('#goodsDetailText').val(data.goods_detai);//产品详情
-    					$('#inspectionReportText').val(data.inspectionReportText);//质检详情
-    					$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
-    					$('#baseDetailText').val(data.baseDetailText);//基地详情
-                 	}
-	             },
-	             error: function (er) {          //失败，回调函数
-	                 alert(er);
-	               /*  var data = {"goods" : {"goods_name":"大白菜","goods_low_price":12.6,"goods_high_price":15.8,"goods_type":1,"goods_detai":"一颗大白菜","goods_status":1,"goods_Recommended":0,
-		            		"goods_create_time":"2018-6-6","goods_img":"www.baidu.com"}};
+			message =  {                          //数据
+	                "goodsId":goodsId
+	        };
+				$.ajax({//查询商品详情
+		             url: "/fresh/goods/selectGoodsById.action",        //后台url
+		             data: JSON.stringify(message),
+		             type: "POST",                   //类型，POST或者GET
+		             dataType: 'json',              //数据返回类型，可以是xml、json等
+		             contentType:'application/json;charset=UTF-8',
+		             success: function (data) {      //成功，回调函数    画页面
+		            	//data = {"goods" : {"goods_name":"大白菜","goods_low_price":12.6,"goods_high_price":15.8,"goods_type":1,"goods_detai":"一颗大白菜","goods_status":1,"goods_Recommended":0,
+		            	//	"goods_create_time":"2018-6-6","goods_img":"www.baidu.com"}};
 	                 	data = data.goods;
-	                 	$('#img').val(data.goods_img);//图片
-	                 	$('#goodsName').val(data.goods_name);//品名
-	                 	$('#introduce').val(data.goods_name);//产品介绍
-						$('#lowPrice').val(data.goods_low_price);//单价低价
-						$('#highPrice').val(data.goods_high_price);//单价高价
-						$('#base').val(data.base);//基地id
-						$('#goodsDetailText').val(data.goods_detai);//产品详情
-						$('#inspectionReportText').val(data.inspectionReportText);//质检详情
-						$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
-						$('#baseDetailText').val(data.baseDetailText);//基地详情 */
-	             }
-	         });
+	                 	if(data){
+	                 		$('#img').val(data.goods_img);//图片
+	                     	$('#goodsName').val(data.goods_name);//品名
+	    					$('#lowPrice').val(data.goods_low_price);//单价低价
+	    					$('#highPrice').val(data.goods_high_price);//单价高价
+	    					$('#base').val(data.base);//基地id
+	    					$('#goodsDetailText').val(data.goods_detai);//产品详情
+	    					$('#inspectionReportText').val(data.inspectionReportText);//质检详情
+	    					$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
+	    					$('#baseDetailText').val(data.baseDetailText);//基地详情
+	                 	}
+		             },
+		             error: function (er) {          //失败，回调函数
+		                 alert(er);
+		               /*  var data = {"goods" : {"goods_name":"大白菜","goods_low_price":12.6,"goods_high_price":15.8,"goods_type":1,"goods_detai":"一颗大白菜","goods_status":1,"goods_Recommended":0,
+			            		"goods_create_time":"2018-6-6","goods_img":"www.baidu.com"}};
+		                 	data = data.goods;
+		                 	$('#img').val(data.goods_img);//图片
+		                 	$('#goodsName').val(data.goods_name);//品名
+		                 	$('#introduce').val(data.goods_name);//产品介绍
+							$('#lowPrice').val(data.goods_low_price);//单价低价
+							$('#highPrice').val(data.goods_high_price);//单价高价
+							$('#base').val(data.base);//基地id
+							$('#goodsDetailText').val(data.goods_detai);//产品详情
+							$('#inspectionReportText').val(data.inspectionReportText);//质检详情
+							$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
+							$('#baseDetailText').val(data.baseDetailText);//基地详情 */
+		             }
+		         });
+			}
 		}
+		
 	});
 	function editGoodsDetail(){
 		document.getElementById('goodsDetail').style.display="block";
@@ -107,10 +109,10 @@
 						"goods_Recommended": 0,
 						"goods_create_time": "2018-6-6",
 						"goods_detail": goodsDetailText,
-						"goods_high_price": lowPrice,
+						"goods_high_price": highPrice,
 						"goods_img": "www.baidu.com",
 						"goods_introduce": introduce,
-						"goods_low_price": highPrice,
+						"goods_low_price": lowPrice,
 						"goods_name": goodsName,
 						"goods_quality_report_id": 0,
 						"goods_resource_id": 0,

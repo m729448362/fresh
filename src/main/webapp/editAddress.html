@@ -19,31 +19,33 @@
 	var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
 	var user =JSON.parse(obj);//user对象 
 	$(document).ready(function(c) {
-		var message={
-			 "id":parseInt(addressId)//地址
-		};
 		if(addressId){
-			$.ajax({//根据地址id查询收货地址详情
-	            url: "/fresh/address/findAddressById.action",        //后台url
-	            data: JSON.stringify(message),
-	            type: "POST",                   //类型，POST或者GET
-	            dataType: 'json',              //数据返回类型，可以是xml、json等
-	            contentType:'application/json;charset=UTF-8',
-	            success: function (data) {      //成功，回调函数
-	                //alert(data.result);
-	            	//var data={"address":{"address_detail":"dsadad","create_time":"sadada","id":1,"receiver":"dsa","receiver_phone":"","status":1,"user_id":2}};
-	            	data = data.address;
-	            	if(data){
-	            		$('#address').val(data.address_detail);
-		                $('#phone').val(data.receiver_phone);
-		                $('#receiver').val(data.receiver);
-	            	}
-	            },
-	            error: function (er) {          //失败，回调函数
-	                alert("查询失败");
-	            }
-	        });
+			var message={
+					 "id":parseInt(addressId)//地址
+				};
+					$.ajax({//根据地址id查询收货地址详情
+			            url: "/fresh/address/findAddressById.action",        //后台url
+			            data: JSON.stringify(message),
+			            type: "POST",                   //类型，POST或者GET
+			            dataType: 'json',              //数据返回类型，可以是xml、json等
+			            contentType:'application/json;charset=UTF-8',
+			            success: function (data) {      //成功，回调函数
+			                //alert(data.result);
+			            	//var data={"address":{"address_detail":"dsadad","create_time":"sadada","id":1,"receiver":"dsa","receiver_phone":"","status":1,"user_id":2}};
+			            	data = data.address;
+			            	if(data){
+			            		$('#address').val(data.address_detail);
+				                $('#phone').val(data.receiver_phone);
+				                $('#receiver').val(data.receiver);
+			            	}
+			            },
+			            error: function (er) {          //失败，回调函数
+			                alert("查询失败");
+			            }
+			        });
+				}
 		}
+		
 		
 	});
 	function returnLastPage(){//返回上一页

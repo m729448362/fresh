@@ -69,8 +69,6 @@
 	             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
 	             success: function (data) {      //成功，回调函数    画页面
 	            	data = data.list1;
-		            	 //$("#goods").remove();//移除
-		                 //$("#goodsType").append("<table class='table table-hover text-center' id='goods'></table>");
 		            if(data){
 		            	for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
 		            		if(data[i].goods_status==1){
@@ -97,12 +95,13 @@
 	             contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
 	             success: function (data) {      //成功，回调函数    画页面
 	            	 data=data.list1;
-	             
-	             	if(data){
-	             		if(data[i].goods_status==1){
-		                       $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='2'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td><td><input type='button' value='下架菜品' onclick=\"deleteGoods("+data[i].id+")\"/></td> </tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='编辑菜品' onclick=\"editGoods('"+data[i].id+"')\"></input></td></tr>");
-	            		}
-	             	}
+	            	 for(var i=0;i<data.length;i++){//data.length是获取data的长度。for循环
+		             	if(data){
+		             		if(data[i].goods_status==1){
+			                       $("#goods").append("<tr><td rowspan='2'><img src="+data[i].id+"></td><td colspan='2'><a href='javascript:openPage("+data[i].id+")'>"+data[i].goods_name+"</a></td><td><input type='button' value='下架菜品' onclick=\"deleteGoods("+data[i].id+")\"/></td> </tr><tr><td><input type='button' value='基地严选'/></td><td>"+data[i].goods_low_price+"~"+data[i].goods_high_price+"</td><td><input type='button' value='编辑菜品' onclick=\"editGoods('"+data[i].id+"')\"></input></td></tr>");
+		            		}
+		             	}
+	            	 }
 	             },
 	             
 	             error: function (er) {          //失败，回调函数
@@ -123,6 +122,7 @@
 		window.location.href="./editGoods.html";
 	}
 	function addGoods(){//添加菜品
+		sessionStorage.removeItem("goodsId");
 		window.location.href="./editGoods.html";
 	}
 	function deleteGoods(goodsId){//下架菜品
@@ -130,10 +130,8 @@
 			return;
 		}
 		message={
-				"goods": {
-					"goods_status": 0,
-					"goods_id": goodsId
-				}
+				"goods_status": 0,
+				"goods_id": goodsId
 			};
 			$.ajax({//更新商品信息
 	             url: "/fresh/goods/updateGoodsStatus.action",        //后台url

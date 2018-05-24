@@ -49,10 +49,8 @@
 			return;
 		}
 		message={
-				"goods": {
-					"goods_status": 1,
-					"goods_id": goodsId
-				}
+				"goods_status": 1,
+				"goods_id": parseInt(goodsId)
 			};
 			$.ajax({//更新商品信息
 	             url: "/fresh/goods/updateGoodsStatus.action",        //后台url
@@ -62,7 +60,7 @@
 	             contentType:'application/json;charset=UTF-8',
 	             success: function (data) {      //成功，回调函数    画页面
 	                 	if(data.result==1){
-	                 		widow.location.reload();
+	                 		window.location.reload();
 	                 	}else{
 	                 		alert("下架失败");
 	                 	}

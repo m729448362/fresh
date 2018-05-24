@@ -27,7 +27,7 @@
 				      "user_type": "1",
 				      "user_phone": document.getElementById("userLoginAccount").value,
 				      "user_id_type": "1",
-				      "user_id_card": document.getElementById("IdCard").value,
+				      "user_id_card": "",
 				      "user_birthday": "",
 				      "user_company": "",
 				      "create_time": "",
@@ -43,10 +43,9 @@
 	             dataType: 'json',              //数据返回类型，可以是xml、json等
 	             contentType:'application/json;charset=UTF-8',
 	             success: function (data) {      //成功，回调函数
-	                 //alert(data.result);
-	             	if(data.result==1){
-	             		sessionStorage.setItem("user_type","1");
-		                window.location.href="index.html"; 
+	             	if(data.user){
+	             		sessionStorage.setItem("user",JSON.stringify(data.user));
+		                window.location.href="./index.html"; 
 	             	}
 	             },
 	             error: function (er) {          //失败，回调函数
@@ -75,12 +74,12 @@
 			return false;
 		}
 	    //身份证号（18位）正则
-		var cP = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
-		if(cP.test(document.getElementById("IdCard").value)){
-			alert("身份证号输入错误");
-			document.mobileform.mobile.focus(); 
-			return false;
-		}
+		//var cP = /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+		//if(cP.test(document.getElementById("IdCard").value)){
+		//	alert("身份证号输入错误");
+		//	document.mobileform.mobile.focus(); 
+		//	return false;
+		//}
 	} 
 </script>
 </head>
@@ -98,12 +97,12 @@
 			</input></li>
 				
 			<div class="clear"> </div>
-			<li>
+			<!-- <li>
 				<p>身份证号:</p>
 				<input type="text" class="text" id="IdCard" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '请输入身份证号';}">
 			</input></li>
 				
-			<div class="clear"> </div>
+			<div class="clear"> </div> -->
 			<li>
 				<p>密码:</p>
 				<input type="password" autocomplete="new-password"  value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" id="password"> 

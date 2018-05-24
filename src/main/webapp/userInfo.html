@@ -20,7 +20,7 @@ var user = JSON.parse(obj);
 	$(document).ready(function(c) {
 			//初始化方法
 		<!-- 用户对象 -->
-		$("#img").html(user.img);	//给用户资料赋值
+		//$("#img").html(user.img);	//给用户资料赋值
 		$("#name").val(user.user_name);
 		$("#birthday").val(user.user_birthday);
 		$("#userCompany").val(user.user_company);
@@ -53,9 +53,9 @@ var user = JSON.parse(obj);
 	        <th style="text-align:center; padding:0.5em 2em;" ></th>
 	      </tr>
 	      <volist name="list" id="vo">
-	        <tr>
+	        <!-- <tr>
 	          <td>头像:<input type="file" id="img" disabled="true"/></td>
-	        </tr>
+	        </tr> -->
 	        <tr>
 	          <td>姓名:<input type="text" id="name" value="张三" disabled="true"/></td>
 	        </tr>
