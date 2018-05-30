@@ -89,18 +89,17 @@ function findMoreOrderByStatus(){
 <body>
 <form method="post" action="" id="listform">
   <div class="panel admin-panel">
-  	<header class="panel-head" ><strong>所有订单</strong></header> 
-  	<table>
-  		<tr><td>
-  			<div class="title">
-		    	<ul>
-			    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
-			    	<!-- <li style="float:left;padding:0.2em;"><a href="javascript:returnLastPage()">返回上一级</a></li>
-			    	<li style="float:left;padding:0.2em;"><a href="./myBasket.html">我的菜篮</a></li> -->
-		    	</ul>
-		    </div>
-  		</td></tr>
-  	</table>
+  	<table id="title" style="background-color:#20B2AA">
+	  		<tr><td>
+	  			<div class="title">
+			    	<ul >
+				    	<li style="float:left;padding:0.2em;"><a href="./index.html"  style="color:#FFFFFF;font-size:25px;">返回</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="#" style="color:#FFFFFF;font-size:25px;">所有订单</a></li>
+			    	</ul>
+			    </div>
+	  		</td> </tr>
+	  		<tr style="visibility: hidden;"><td>111111111111111111111111111111111111111111111111111111111111</td></tr>
+	  	</table>
     	<ul >
     		<!-- <li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('2')">待确认订单</a></li> -->
     		<li style="float:left;padding:0.2em;"><a href="javaScript:findOrderByStatus('3')">待发货订单</a></li>

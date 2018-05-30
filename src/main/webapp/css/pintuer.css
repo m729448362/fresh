@@ -36,7 +36,7 @@ code,kbd,pre,samp{font-family:monospace, monospace;font-size:1em;}
 button,input,optgroup,select,textarea{margin:0;font:inherit;}
 button{overflow:visible;}
 button,select{text-transform:none;}
-button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer;background:#0ae;}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer;background:#00CCFF;border-radius: 5px;}
 button[disabled],html input[disabled]{cursor:default;}
 button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0;}
 input{line-height:normal;}

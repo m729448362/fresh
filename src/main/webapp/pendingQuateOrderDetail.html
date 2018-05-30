@@ -117,23 +117,23 @@ function findMoreOrderByStatus(){//查看更多
 <body>
 <form method="post" action="" id="listform">
   <div class="panel admin-panel">
-  	<header class="panel-head" ><strong>报价</strong></header> 
-  	<table>
+  	<table id="title" style="background-color:#20B2AA">
   		<tr><td>
   			<div class="title">
-		    	<ul>
-			    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
-			    	<li style="float:left;padding:0.2em;"><a href="javascript:returnLastPage()">返回上一页</a></li>
-			    <!-- <li style="float:left;padding:0.2em;"><a href="./myBasket.html">我的菜篮</a></li> -->
+		    	<ul >
+			    	<li style="float:left;padding:0.2em;"><a href="javascript:returnLastPage()" style="color:#FFFFFF;font-size:25px;">返回</a></li>
+			    	<li style="float:left;padding:0.2em;"><a href="#" style="color:#FFFFFF;font-size:25px;">报价</a></li>
+			    	<li style="float:left;padding:0.2em;"><a href="./index.html"  style="color:#FFFFFF;font-size:25px;">首页</a></li>
 		    	</ul>
 		    </div>
-  		</td></tr>
+  		</td>
+  		<tr style="visibility: hidden;"><td>111111111111111111111111111111111111111111111111111111111111</td></tr>
   		<tr>
   			<td>
 	  			<div>
 			    	<ul>
-				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(1)">商品信息</a></li>
-				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(2)">订单状态流转信息</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(1)" style="color:#FFFFFF;font-size:25px;">商品信息</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="javascript:showMsg(2)" style="color:#FFFFFF;font-size:25px;">订单状态流转信息</a></li>
 			    	</ul>
 			    </div>
   			</td>
@@ -141,7 +141,7 @@ function findMoreOrderByStatus(){//查看更多
   	</table>
   </div>
 </form>
-<div id="goodsDetail" style="display:none;"><b>订单商品信息:</b>
+<div id="goodsDetail" style="display:none;"><h2>订单商品信息:</h2>
 	 <table class="table table-hover text-center" id="order">
 	   <tr>
 	     <th>菜名</th>
@@ -159,7 +159,7 @@ function findMoreOrderByStatus(){//查看更多
 </div>
 <p/><p/>
 <div id="orderLog" style="display=none;">
-	<div><b>订单状态流转信息:</b></div>
+	<div><h2>订单状态流转信息:</h2></div>
 	<table class="table table-hover text-center" id="log">
       <tr>
       	<th>事件</th>

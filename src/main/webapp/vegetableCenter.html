@@ -157,30 +157,34 @@
 <div>
 	<form method="post" id="listform">
 	  <div class="panel admin-panel">
-	  	<header class="panel-head" ><strong> 菜品中心</strong></header> 
-	  	<table id="title">
+	  	<table id="title" style="background-color:#20B2AA">
 	  		<tr><td>
 	  			<div class="title">
-			    	<ul >
-				    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
-				    	<li style="float:left;padding:0.2em;"><a href="./unUseGoods.html">已下架菜品</a></li>
+			    	<ul>
+				    	<li style="float:left;padding:0.2em;"><a href="./index.html"  style="color:#FFFFFF;font-size:25px;">返回</a></li>
+				    	<li style="float:left;padding:0.2em;"><a href="#" style="color:#FFFFFF;font-size:25px;">菜品中心</a></li>
+			    		<li style="float:left;padding:0.2em;"><a href="./unUseGoods.html"  style="color:#FFFFFF;font-size:25px;">已下架菜品</a></li>
 			    	</ul>
 			    </div>
-	  		</td>
+	  		</td></tr>
+	  		<tr style="visibility: hidden;"><td colspan="3">111111111111111111111111111111111111111111111111111111111111</td></tr>
 	  	</table>
-	  	<div style="float:right;" ><input type="button" onclick="editGoodsType()" value="编辑菜品种类"/></div>
+	  	</div> 
+	  	<div style="float:right;" >
+	  		<input type="button" onclick="editGoodsType()" value="编辑菜品种类" />
+	  	</div>
 	   	<ul id="goodsType">
 	   		<li style="float:left;padding:0.2em;"><a onclick="javascript:getGoodsByType('all')">全部</a></li>
 	   	</ul>
 	   	<div style="float:right;"><input type="button" onclick="addGoods()" value="添加菜品"/></div>
 	    <table class="table table-hover text-center" id="goods">
 	    </table>
-	  </div>
 	</form>
 </div>
 <div class="footer" style="poestion:relative">
 	<a href="javaScript:findMoreGoods()">查看更多</a>
 </div>
+
 <script type="text/javascript">
 
 

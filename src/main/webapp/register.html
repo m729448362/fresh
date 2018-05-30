@@ -91,10 +91,11 @@
 			<h1>用户注册</h1>
 		</div>
 		<form>
+			<ul>
 			<li>
 				<p>账号:</p>
-				<input type="text" class="text" id="userLoginAccount" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '请输入手机号';}">
-			</input></li>
+				<input type="text" class="text" id="userLoginAccount" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '请输入手机号';}"/>
+			</li>
 				
 			<div class="clear"> </div>
 			<!-- <li>
@@ -114,6 +115,7 @@
 			   	<input type="password" autocomplete="new-password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" id="repassword">
 			    </input> 
 			 </li>
+			 </ul>
 			<div class="clear"> </div>
 			<div class="submit">
 				<input type="button" value="注册" onclick="register()" dir="rtl">
