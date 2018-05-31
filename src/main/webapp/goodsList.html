@@ -14,6 +14,7 @@
 <script type="text/javascript" src="js/JquerySession.js"></script>
 <script type="text/javascript" src="js/json.js"></script>
 <script type="text/javascript" src="js/back.js"></script>
+<script type="text/javascript" src="js/layer.js"></script>
 <script type="text/javascript">
 
 	var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
@@ -130,7 +131,7 @@
              contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数    画页面
             	 if(data){
-            		 //alert("添加成功");
+            		 layer.msg('添加成功');
             	 }
                    },
              error: function (er) {          //失败，回调函数

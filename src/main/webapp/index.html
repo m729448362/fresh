@@ -9,13 +9,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
-<!-- -->
 <script src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/JquerySession.js"></script>
 <script type="text/javascript" src="js/include.js"></script>
 <script type="text/javascript" src="js/json.js"></script>
 <script type="text/javascript" src="js/back.js"></script>
+<script type="text/javascript" src="js/layer.js"></script>
 <script>
 	$(document).ready(function(c) {
 		
@@ -77,6 +77,7 @@
              contentType:'application/json;charset=UTF-8',
              success: function (data) {      //成功，回调函数    画页面
                  	//alert(data.result);
+            	 	layer.msg('添加成功');
                    },
              error: function (er) {          //失败，回调函数
                  alert(er);
@@ -105,18 +106,17 @@
 	<div id="user" style="display:none;">
 		<table border=0>
 			<tr><td style="text-align: center;background-color:#20B2AA"><h2 style="color:#FFFFFF;">生鲜系统客户端</h2></td></tr>
-			<tr style="background-color:#20B2AA"><td style="color:#20B2AA;">11111111111111111111111111111111111111111111111</td></tr>
+			<tr style="background-color:#20B2AA"><td style="color:#20B2AA;">11111111111111111111111111111111111111111111111111111</td></tr>
 		</table>  
   	</div>
   	<div id="supplier" style="display:none;">
 	  	<table border=0>
 			<tr><td style="text-align: center;background-color:#20B2AA"><h2 style="color:#FFFFFF;">生鲜系统供应商端</h2></td></tr>
-			<tr style="background-color:#20B2AA;"><td style="color:#20B2AA;">11111111111111111111111111111111111111111111111</td></tr>
+			<tr style="background-color:#20B2AA;"><td style="color:#20B2AA;">11111111111111111111111111111111111111111111111111111</td></tr>
 		</table> 
   	
   </div>
-  <div class="panel admin-panel">
-  		<div class="panel-head"><h2> 市场行情</h2> <a href="#" style="float:right;display:none;" id="modifyPrice">修改行情价格</a></div>
+  		<div><h2> 市场行情</h2> <a href="#" style="float:right;display:none;" id="modifyPrice">修改行情价格</a></div>
     <table class="table table-hover text-center" id="market">
       <tr>
         <th style="text-align:center; padding:20px; display:none">ID</th>
@@ -126,9 +126,8 @@
         <th>均价</th>
       </tr>
     </table>
-  </div>
    <div class="panel admin-panel" id="supplierRecommend" style="display:none">
-  		<div class="panel-head"><h2>推荐菜品</h2> <a href="editRecommendDishes.html" style="float:right;" id="modifyRecommend">修改推荐菜品</a></div>
+  		<div><h2>推荐菜品</h2> <a href="editRecommendDishes.html" style="float:right;" id="modifyRecommend">修改推荐菜品</a></div>
   		<table class="table table-hover text-center" id="recommendDishes1">
 	      <tr>
 	        <td>蔬菜名称</td>
@@ -159,7 +158,7 @@
 			    	<li style="float:left;padding:0.2em;"><a href="./user.html" style="color:#FFFFFF;font-size:15px;">个人中心</a></li>
 			    </ul>
 			  </td></tr>
-			<tr style="visibility: hidden;"><td>11111111111111111111111111111111111111111111111</td></tr>
+			<tr style="visibility: hidden;"><td>11111111111111111111111111111111111111111111111111111</td></tr>
 		</table>  
   </div>
   <div class="foot" id="supplierFoot" style="display:none;">
@@ -172,7 +171,7 @@
 			    	<li style="float:left;padding:0.2em;"><a href="./vegetableCenter.html" style="color:#FFFFFF;font-size:20px;">菜品中心</a></li>
 		    	</ul>
 			  </td></tr>
-			<tr style="visibility: hidden;"><td>11111111111111111111111111111111111111111111111</td></tr>
+			<tr style="visibility: hidden;"><td>11111111111111111111111111111111111111111111111111111</td></tr>
 		</table>  
   </div>
 </body>

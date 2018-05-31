@@ -13,6 +13,7 @@
 <script type="text/javascript" src="js/JquerySession.js"></script>
 <script type="text/javascript" src="js/json.js"></script>
 <script type="text/javascript" src="js/back.js"></script>
+<script type="text/javascript" src="js/layer.js"></script>
 <script>
 	var obj = sessionStorage.getItem('user');//{"userName":"Mr wang","userType":1}
 	var user =JSON.parse(obj);//user对象 
@@ -100,6 +101,7 @@
              dataType: 'json',   
              contentType:'application/json;charset=UTF-8',//数据返回类型，可以是xml、json等
              success: function (data) {      //成功，回调函数    画页面
+            	 	layer.msg('添加成功');
                    },
              error: function (er) {          //失败，回调函数
                  alert(er);
@@ -137,18 +139,18 @@
 </head>
 <body>
  <div class="panel admin-panel">
- 	<header class="panel-head" ><strong>商品详情</strong></header> 
- 	<table>
- 		<tr><td>
- 			<div class="title">
-	    	<ul>
-		    	<li style="float:left;padding:0.2em;"><a href="./index.html">返回首页</a></li>
-		    	<li style="float:left;padding:0.2em;"><a href="javascript:returnLastPage()">返回上一级</a></li>
-		    	<li style="float:left;padding:0.2em;"><a href="./myBasket.html">我的菜篮</a></li>
-	    	</ul>
-	    </div>
- 		</td></tr>
- 	</table>
+ 	<table id="title" style="background-color:#20B2AA">
+  		<tr><td>
+  			<div class="title">
+		    	<ul >
+		    		<li style="float:left;padding:0.2em;"><a href="javascript:returnLastPage()"  style="color:#FFFFFF;font-size:25px;">返回</a></li>
+			    	<li style="float:left;padding:0.2em;"><a href="#" style="color:#FFFFFF;font-size:25px;">商品详情</a></li>
+			    	<li style="float:left;padding:0.2em;"><a href="./index.html"  style="color:#FFFFFF;font-size:25px;">首页</a></li>
+		    	</ul>
+		    </div>
+  		</td></tr>
+  		<tr style="visibility: hidden;"><td colspan="3">111111111111111111111111111111111111111111111111111111111111</td></tr>
+  	</table> 
    <table class="table table-hover text-center">
      <tr>
        <td rowspan="5"><img src="./images/vegetable3.jpg"/></td>
