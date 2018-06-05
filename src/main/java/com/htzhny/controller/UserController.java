@@ -129,6 +129,10 @@ public class UserController {
     	JSONObject jsonObject = new JSONObject();
     	Map<String,Object> map=(Map<String, Object>) params.get("user");
     	User user=JSON.parseObject(JSON.toJSONString(map),User.class);
+    	if(null!=userService.findUserByUserName(user.getUser_name())){
+    		jsonObject.put("result", "user has exist!");
+    		return jsonObject;
+    	}
     	Date dt =new Date(); 
 		String formatDate = "";  
 		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //HH表示24小时制；  
