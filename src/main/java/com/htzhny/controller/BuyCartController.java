@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.UUID;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +32,9 @@ import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
 import com.htzhny.service.Order_logService;
 import com.htzhny.service.UserService;
+import com.htzhny.session.MySessionContext;
 import com.htzhny.util.CartItemUtil;
+import com.htzhny.util.SessionUtil;
 
 import net.sf.json.JSONObject;
 
@@ -56,15 +58,19 @@ public class BuyCartController {
 	@RequestMapping(value="addGoods")
 	public @ResponseBody JSONObject addGoods(@RequestBody Map<String, Object> params,HttpServletRequest request){
 		JSONObject jsonObject = new JSONObject();
-		
+		SessionUtil sessionUtil=SessionUtil.getInstance();
+		HttpSession session = sessionUtil.getSession(request);
+		if(session==null){
+			session = request.getSession();
+		}
 		String str= (String)params.get("goodsId");
 		Integer goods_id=Integer.parseInt(str);
 		Integer amount= (Integer)params.get("amount");
 		
 		BuyCart buyCart=null;
 		
-		if(null!=request.getSession().getAttribute("buyCart")){
-			buyCart=(BuyCart) request.getSession().getAttribute("buyCart");
+		if(null!=session.getAttribute("buyCart")){
+			buyCart=(BuyCart) session.getAttribute("buyCart");
 		}
 		if(null==buyCart){
 			buyCart=new BuyCart();
@@ -76,7 +82,7 @@ public class BuyCartController {
 		buyCart.addItem(buyItem);
 		
 		
-		request.getSession().setAttribute("buyCart", buyCart);
+		session.setAttribute("buyCart", buyCart);
 		jsonObject.put("buyCart",buyCart);
 		return jsonObject;
 	}
@@ -117,7 +123,12 @@ public class BuyCartController {
 	@RequestMapping(value="selectBuyCart")
 	public @ResponseBody JSONObject selectBuyCart(HttpServletRequest request ){
 		JSONObject jsonObject = new JSONObject();
-		BuyCart buyCart=(BuyCart) request.getSession().getAttribute("buyCart");
+		SessionUtil sessionUtil=SessionUtil.getInstance();
+		HttpSession session = sessionUtil.getSession(request);
+		if(session==null){
+			session = request.getSession();
+		}
+		BuyCart buyCart=(BuyCart) session.getAttribute("buyCart");
 		if(null!=buyCart){
 			jsonObject.put("buyCart",buyCart);
 			jsonObject.put("result","1");

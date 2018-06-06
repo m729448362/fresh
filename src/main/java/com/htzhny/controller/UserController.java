@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ public class UserController {
     	JSONObject jsonObject = new JSONObject();
     	String user_name=(String) params.get("user_name");
     	String password=(String) params.get("password");
-    	User user = userService.findUserByUserName(user_name);
+    	User user = userService.findUserByUserName(user_name); 
     	if(null!=user){
     		if(password.equals(user.getPassword())){
     			request.getSession().setAttribute("user", user);
@@ -109,7 +110,9 @@ public class UserController {
 					billService.addBill(newBill);
     			}
     			}
-    		    
+    			HttpSession session = request.getSession();  
+    	    	String sessionId = session.getId();
+    	    	jsonObject.put("sessionId",sessionId);
     			return jsonObject;
     
     			

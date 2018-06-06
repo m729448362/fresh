@@ -8,9 +8,11 @@ version="3.1" metadata-complete="true">
 <param-value>classpath:spring-mybatis.xml</param-value>
 </context-param>
 <listener>
-<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 </listener>
-
+<listener>
+	<listener-class>com.htzhny.session.SessionListener</listener-class>  
+</listener>
 <!-- 配置SpringMVC环境 -->
 <servlet>
 <servlet-name>springMVC</servlet-name>
