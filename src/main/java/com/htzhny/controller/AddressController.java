@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import com.alibaba.fastjson.JSON;
 import com.htzhny.entity.Address;
 import com.htzhny.entity.User;
 import com.htzhny.service.AddressService;
+import com.htzhny.util.SessionUtil;
 
 import net.sf.json.JSONObject;
 
@@ -54,8 +56,13 @@ public class AddressController {
 	@RequestMapping(value="findAddressByUserId", method = RequestMethod.POST)
 	//查询所有地址
 	public  @ResponseBody JSONObject findAddressByUserId(@RequestBody Map<String, Object> params,HttpServletRequest request){
+		SessionUtil sessionUtil=SessionUtil.getInstance();
+		HttpSession session = sessionUtil.getSession(request);
+		if(session==null){
+			session = request.getSession();
+		}
 		
-		User user=(User) request.getSession().getAttribute("user");
+		User user=(User) session.getAttribute("user");
 		Integer user_id=user.getId();
 		JSONObject jsonObject = new JSONObject();
 		List<Address> list=addressService.findAddressByUserId(user_id);

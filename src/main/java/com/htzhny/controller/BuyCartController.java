@@ -89,8 +89,13 @@ public class BuyCartController {
 	//清空购物车
 	@RequestMapping(value="clearBuyCart")
 	public  @ResponseBody JSONObject clearBuyCart(HttpServletRequest request){
+		SessionUtil sessionUtil=SessionUtil.getInstance();
+		HttpSession session = sessionUtil.getSession(request);
+		if(session==null){
+			session = request.getSession();
+		}
 		JSONObject jsonObject = new JSONObject();
-		BuyCart buyCart=(BuyCart) request.getSession().getAttribute("buyCart");
+		BuyCart buyCart=(BuyCart) session.getAttribute("buyCart");
 		
 		if(null!=buyCart){
 			buyCart.getItems().clear();
@@ -104,9 +109,14 @@ public class BuyCartController {
 	//删除一个购物项
 	@RequestMapping(value="deleteItem")
 	public @ResponseBody JSONObject deleteItem(@RequestBody Map<String, Object> params,HttpServletRequest request ){
+		SessionUtil sessionUtil=SessionUtil.getInstance();
+		HttpSession session = sessionUtil.getSession(request);
+		if(session==null){
+			session = request.getSession();
+		}
 		JSONObject jsonObject = new JSONObject();
 		Integer goods_id= (Integer)params.get("goods_id");
-		BuyCart buyCart=(BuyCart) request.getSession().getAttribute("buyCart");
+		BuyCart buyCart=(BuyCart) session.getAttribute("buyCart");
 		if(null!=buyCart){
 			Goods goods=new Goods();
 			goods.setId(goods_id);
@@ -141,9 +151,14 @@ public class BuyCartController {
 	//结算（生成订单）
 		@RequestMapping(value="createOrder")
 		public @ResponseBody JSONObject createOrder(@RequestBody Map<String, Object> params,HttpServletRequest request ){
+			SessionUtil sessionUtil=SessionUtil.getInstance();
+			HttpSession session = sessionUtil.getSession(request);
+			if(session==null){
+				session = request.getSession();
+			}
 			JSONObject jsonObject = new JSONObject();
 			String uuid=UUID.randomUUID().toString();
-			User user=(User) request.getSession().getAttribute("user");
+			User user=(User) session.getAttribute("user");
 			Integer user_id=user.getId();
 			String id=user_id.toString();
 			
@@ -152,7 +167,7 @@ public class BuyCartController {
 			List<Address> list=addressService.findAddressByUserId(user_id);
 			jsonObject.put("Address",list);
 			List<CartItemUtil> list1=(List<CartItemUtil>)params.get("list");
-			BuyCart buyCart=(BuyCart) request.getSession().getAttribute("buyCart");
+			BuyCart buyCart=(BuyCart) session.getAttribute("buyCart");
 			List<BuyItem> items=buyCart.getItems();
 			for(int i=0;i<list1.size();i++){
 				CartItemUtil cartItem=JSON.parseObject(JSON.toJSONString(list1.get(i)),CartItemUtil.class);
@@ -164,14 +179,19 @@ public class BuyCartController {
 			}
 				
 			
-			request.getSession().setAttribute("buyCart", buyCart);
+			session.setAttribute("buyCart", buyCart);
 			return jsonObject;
 		}
 		//提交订单、、、、、、、、
 		@RequestMapping(value="submitOrder")
 		public @ResponseBody JSONObject submitOrder(@RequestBody Map<String, Object> params,HttpServletRequest request ){
+			SessionUtil sessionUtil=SessionUtil.getInstance();
+			HttpSession session = sessionUtil.getSession(request);
+			if(session==null){
+				session = request.getSession();
+			}
 			JSONObject jsonObject = new JSONObject();
-			BuyCart buyCart=(BuyCart) request.getSession().getAttribute("buyCart");
+			BuyCart buyCart=(BuyCart) session.getAttribute("buyCart");
 			if(null==buyCart){
 					return null;
 							}
@@ -183,7 +203,7 @@ public class BuyCartController {
 			String order_id= (String) params.get("order_id");
 			String delivery_time=(String) params.get("delivery_time");
 			String address=(String) params.get("address");
-			User user=(User) request.getSession().getAttribute("user");
+			User user=(User) session.getAttribute("user");
 			Integer user_id=user.getId();
 			Double order_low_price=buyCart.getGoodsTotalLowPrice();
 			Double order_High_price=buyCart.getGoodsTotalHighPrice();

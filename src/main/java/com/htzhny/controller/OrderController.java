@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
 import com.htzhny.service.Order_logService;
 import com.htzhny.service.UserService;
+import com.htzhny.util.SessionUtil;
 
 import net.sf.json.JSONObject;
 @Controller
@@ -63,11 +65,16 @@ public class OrderController {
 	@RequestMapping(value="selectUserOrderByStatus", method = RequestMethod.POST)
 	//通过状态查询某个用户的所有订单
 	public @ResponseBody JSONObject selectUserOrderByStatus(@RequestBody Map<String, Object> params,HttpServletRequest request){
+		SessionUtil sessionUtil=SessionUtil.getInstance();
+		HttpSession session = sessionUtil.getSession(request);
+		if(session==null){
+			session = request.getSession();
+		}
 		JSONObject jsonObject = new JSONObject();
 		Integer currentPage= (Integer)params.get("currentPage");
     	Integer user_id= (Integer)params.get("user_id");
     	if(user_id==0){
-    		User user=(User) request.getSession().getAttribute("user");
+    		User user=(User) session.getAttribute("user");
 			user_id=user.getId();
     	}
     	String str= (String)params.get("status");

@@ -1,8 +1,11 @@
 package com.htzhny.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.htzhny.entity.After_sale;
-import com.htzhny.entity.After_saleQuery;
+
 import com.htzhny.entity.Goods;
 import com.htzhny.entity.PageBean;
 import com.htzhny.service.GoodsService;
@@ -28,8 +31,20 @@ public class GoodsController {
 	private GoodsService goodsService;
 	@RequestMapping(value="addGoods", method = RequestMethod.POST)
 	//添加商品
-	public  @ResponseBody JSONObject addGoods(@RequestBody Map<String, Object> params){
-		
+	public  @ResponseBody JSONObject addGoods(MultipartFile file,@RequestBody Map<String, Object> params){
+        String filePath = "C:\\upload";//保存图片的路径
+        //获取原始图片的拓展名
+        String originalFilename = file.getOriginalFilename();
+        //新的文件名字
+        String newFileName = UUID.randomUUID()+originalFilename;
+        //封装上传文件位置的全路径
+        File targetFile = new File(filePath,newFileName); 
+        try {
+			file.transferTo(targetFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		JSONObject jsonObject = new JSONObject();
    		Map<String,Object> map=(Map<String, Object>)params.get("goods");
    		Goods goods=JSON.parseObject(JSON.toJSONString(map),Goods.class);

@@ -29,6 +29,7 @@ import com.htzhny.entity.User;
 import com.htzhny.service.BillService;
 import com.htzhny.service.OrderService;
 import com.htzhny.service.UserService;
+import com.htzhny.util.SessionUtil;
 
 import net.sf.json.JSONObject;
 
@@ -66,10 +67,15 @@ public class UserController {
     	User user = userService.findUserByUserName(user_name); 
     	if(null!=user){
     		if(password.equals(user.getPassword())){
-    			request.getSession().setAttribute("user", user);
+    			SessionUtil sessionUtil=SessionUtil.getInstance();
+    			HttpSession session = sessionUtil.getSession(request);
+    			if(session==null){
+    				session = request.getSession();
+    			}
+    			session.setAttribute("user", user);
     			String result="1";
     			jsonObject.put("result",result);
-    			User user2=(User) request.getSession().getAttribute("user");
+    			User user2=(User) session.getAttribute("user");
     			String user1=JSON.toJSONString(user);
     			jsonObject.put("user",user1);
     			if(user.getUser_type()==1){
@@ -110,7 +116,7 @@ public class UserController {
 					billService.addBill(newBill);
     			}
     			}
-    			HttpSession session = request.getSession();  
+
     	    	String sessionId = session.getId();
     	    	jsonObject.put("sessionId",sessionId);
     			return jsonObject;
@@ -144,8 +150,13 @@ public class UserController {
 	    user.setCreate_time(formatDate);
 	    user.setUser_last_login_time(formatDate);
     	Integer result=userService.addUser(user);
+		SessionUtil sessionUtil=SessionUtil.getInstance();
+		HttpSession session = sessionUtil.getSession(request);
+		if(session==null){
+			session = request.getSession();
+		}
     	if(1==result){
-    		request.getSession().setAttribute("user", user);
+    		session.setAttribute("user", user);
     		String user1=JSON.toJSONString(user);
     		jsonObject.put("user", user1);
     		return jsonObject;
