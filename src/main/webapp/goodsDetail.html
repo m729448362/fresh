@@ -43,6 +43,9 @@
 						$('#goodsSourceText').val(data.goodsSourceText);//产品溯源
 						$('#baseDetailText').val(data.baseDetailText);//基地详情
 						//$('#totalPrice').val(data.totalPrice+"元");//合计金额
+						if(user.user_type=='2'){
+							$('#showButton').hide();
+						}
 						changeTotalPrice();
 	             	}
 	             },
@@ -185,7 +188,7 @@
        <td><b id="totalPrice">7.80~10.1元/千克</b></td>
      </tr>
    </table>
-   <div>
+   <div id='showButton'> 
    		<input type="button" value="加入菜篮" onclick="addToMyBasket()"/>
    		<input type="button" value="立即购买" onclick="createOrder()"/>
    </div>
