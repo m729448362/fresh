@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -32,8 +31,8 @@ import com.htzhny.service.OrderService;
 import com.htzhny.service.Order_itemService;
 import com.htzhny.service.Order_logService;
 import com.htzhny.service.UserService;
-import com.htzhny.session.MySessionContext;
 import com.htzhny.util.CartItemUtil;
+import com.htzhny.util.OrderUtil;
 import com.htzhny.util.SessionUtil;
 
 import net.sf.json.JSONObject;
@@ -41,6 +40,7 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping(value="buyCart")
 public class BuyCartController {
+	
 	@Autowired
 	private GoodsService goodsService;
 	@Autowired
@@ -53,12 +53,12 @@ public class BuyCartController {
 	private Order_itemService order_itemService;
 	@Autowired
 	private Order_logService logService;
-	
+	OrderUtil orderUtil = OrderUtil.getInstance();
+	SessionUtil sessionUtil=SessionUtil.getInstance();
 	//加入购物车
 	@RequestMapping(value="addGoods")
 	public @ResponseBody JSONObject addGoods(@RequestBody Map<String, Object> params,HttpServletRequest request){
 		JSONObject jsonObject = new JSONObject();
-		SessionUtil sessionUtil=SessionUtil.getInstance();
 		HttpSession session = sessionUtil.getSession(request);
 		if(session==null){
 			session = request.getSession();
@@ -89,7 +89,7 @@ public class BuyCartController {
 	//清空购物车
 	@RequestMapping(value="clearBuyCart")
 	public  @ResponseBody JSONObject clearBuyCart(HttpServletRequest request){
-		SessionUtil sessionUtil=SessionUtil.getInstance();
+//		SessionUtil sessionUtil=SessionUtil.getInstance();
 		HttpSession session = sessionUtil.getSession(request);
 		if(session==null){
 			session = request.getSession();
@@ -109,7 +109,7 @@ public class BuyCartController {
 	//删除一个购物项
 	@RequestMapping(value="deleteItem")
 	public @ResponseBody JSONObject deleteItem(@RequestBody Map<String, Object> params,HttpServletRequest request ){
-		SessionUtil sessionUtil=SessionUtil.getInstance();
+//		SessionUtil sessionUtil=SessionUtil.getInstance();
 		HttpSession session = sessionUtil.getSession(request);
 		if(session==null){
 			session = request.getSession();
@@ -133,7 +133,7 @@ public class BuyCartController {
 	@RequestMapping(value="selectBuyCart")
 	public @ResponseBody JSONObject selectBuyCart(HttpServletRequest request ){
 		JSONObject jsonObject = new JSONObject();
-		SessionUtil sessionUtil=SessionUtil.getInstance();
+//		SessionUtil sessionUtil=SessionUtil.getInstance();
 		HttpSession session = sessionUtil.getSession(request);
 		if(session==null){
 			session = request.getSession();
@@ -151,19 +151,16 @@ public class BuyCartController {
 	//结算（生成订单）
 		@RequestMapping(value="createOrder")
 		public @ResponseBody JSONObject createOrder(@RequestBody Map<String, Object> params,HttpServletRequest request ){
-			SessionUtil sessionUtil=SessionUtil.getInstance();
+//			SessionUtil sessionUtil=SessionUtil.getInstance();
 			HttpSession session = sessionUtil.getSession(request);
 			if(session==null){
 				session = request.getSession();
 			}
 			JSONObject jsonObject = new JSONObject();
-			String uuid=UUID.randomUUID().toString();
+			String orderId = orderUtil.getOrderId();
 			User user=(User) session.getAttribute("user");
 			Integer user_id=user.getId();
-			String id=user_id.toString();
-			
-			String order_id=id+uuid;
-			jsonObject.put("order_id",order_id);
+			jsonObject.put("order_id",orderId);
 			List<Address> list=addressService.findAddressByUserId(user_id);
 			jsonObject.put("Address",list);
 			List<CartItemUtil> list1=(List<CartItemUtil>)params.get("list");
@@ -177,15 +174,13 @@ public class BuyCartController {
 					}
 				}
 			}
-				
-			
 			session.setAttribute("buyCart", buyCart);
 			return jsonObject;
 		}
 		//提交订单、、、、、、、、
 		@RequestMapping(value="submitOrder")
 		public @ResponseBody JSONObject submitOrder(@RequestBody Map<String, Object> params,HttpServletRequest request ){
-			SessionUtil sessionUtil=SessionUtil.getInstance();
+//			SessionUtil sessionUtil=SessionUtil.getInstance();
 			HttpSession session = sessionUtil.getSession(request);
 			if(session==null){
 				session = request.getSession();

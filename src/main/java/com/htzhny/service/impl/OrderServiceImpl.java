@@ -27,6 +27,7 @@ import com.htzhny.service.Order_logService;
 @Service
 @Transactional
 public class OrderServiceImpl implements OrderService{
+	private int pageSize =10;//每页显示10条记录
 	@Autowired
 	private OrderDao orderDao;
 	@Autowired
@@ -40,7 +41,7 @@ public class OrderServiceImpl implements OrderService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = orderDao.selectCountByUserByStatus(status, user_id);
@@ -71,7 +72,7 @@ public class OrderServiceImpl implements OrderService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = orderDao.selectCountByStatus(status);
@@ -94,7 +95,7 @@ public class OrderServiceImpl implements OrderService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = orderDao.selectCountByUserByBillStatus(bill_status, user_id);
@@ -116,7 +117,7 @@ public class OrderServiceImpl implements OrderService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = orderDao.selectCountByBillStatus(bill_status);

@@ -17,6 +17,7 @@ import com.htzhny.service.GoodsService;
 @Service
 @Transactional
 public class GoodsServiceImpl implements GoodsService{
+	private int pageSize =10;//每页显示10条记录
 	@Resource
 	GoodsDao goodsDao;
 
@@ -43,7 +44,7 @@ public class GoodsServiceImpl implements GoodsService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = goodsDao.selectCountByType(typeId);
@@ -77,7 +78,7 @@ public class GoodsServiceImpl implements GoodsService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = goodsDao.selectCount();

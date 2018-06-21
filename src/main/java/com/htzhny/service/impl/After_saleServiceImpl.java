@@ -20,6 +20,7 @@ import com.htzhny.service.After_saleService;
 @Service
 @Transactional
 public class After_saleServiceImpl implements After_saleService{
+	private int pageSize =10;//每页显示10条记录
 	@Resource
 	private After_saleDao after_saleDao;
 	@Resource
@@ -45,7 +46,7 @@ public class After_saleServiceImpl implements After_saleService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = after_saleDao.selectCountByUser(user_id);
@@ -68,7 +69,7 @@ public class After_saleServiceImpl implements After_saleService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = after_saleDao.selectCount();
@@ -96,7 +97,7 @@ public class After_saleServiceImpl implements After_saleService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = after_saleDao.selectCount();
@@ -119,7 +120,7 @@ public class After_saleServiceImpl implements After_saleService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = order_itemDao.selectCount(id);

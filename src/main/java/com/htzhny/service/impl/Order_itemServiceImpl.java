@@ -15,6 +15,7 @@ import com.htzhny.service.Order_itemService;
 @Service
 @Transactional
 public class Order_itemServiceImpl implements Order_itemService{
+	private int pageSize =10;//每页显示10条记录
 	@Autowired
 	private Order_itemDao order_itemDao;
 	@Override
@@ -32,7 +33,7 @@ public class Order_itemServiceImpl implements Order_itemService{
 		//封装当前页数
 		pageBean.setCurrPage(currentPage);
 		//每页显示的数据
-		int pageSize=2;
+//		int pageSize=2;
 		pageBean.setPageSize(pageSize);
 		//封装总记录数
 		int totalCount = order_itemDao.selectCount(id);

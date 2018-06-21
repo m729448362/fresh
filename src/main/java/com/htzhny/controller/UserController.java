@@ -138,8 +138,8 @@ public class UserController {
     	JSONObject jsonObject = new JSONObject();
     	Map<String,Object> map=(Map<String, Object>) params.get("user");
     	User user=JSON.parseObject(JSON.toJSONString(map),User.class);
-    	if(null!=userService.findUserByUserName(user.getUser_name())){
     		jsonObject.put("result", "user has exist!");
+    		if(null!=userService.findUserByUserName(user.getUser_name())){
     		return jsonObject;
     	}
     	Date dt =new Date(); 
@@ -156,8 +156,11 @@ public class UserController {
 			session = request.getSession();
 		}
     	if(1==result){
+    		user = userService.findUserByUserName(user.getUser_name());
     		session.setAttribute("user", user);
     		String user1=JSON.toJSONString(user);
+    		String sessionId = session.getId();
+	    	jsonObject.put("sessionId",sessionId);
     		jsonObject.put("user", user1);
     		return jsonObject;
     	}
