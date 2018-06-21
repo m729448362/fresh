@@ -28,7 +28,7 @@ public class OrderUtil {
   		String hour = getString(cal.get(Calendar.HOUR_OF_DAY));
   		String minute = getString(cal.get(Calendar.MINUTE));
   		String second = getString(cal.get(Calendar.SECOND));
-  		String mm = getString(cal.get(Calendar.MILLISECOND));
+  		String mm = getMillsecond(cal.get(Calendar.MILLISECOND));
 
   		return sBuffer.append(year).append(month).append(day).append(hour)
   		.append(minute).append(second).append(mm).toString();
@@ -36,6 +36,9 @@ public class OrderUtil {
   	}
   	private static String getString(int number){
   		return number>10?number+"":"0"+number;
+  	}
+  	private static String getMillsecond(int number){
+  		return number>10?number>100?number+"":"0"+number:"00"+number;
   	}
 
 }
